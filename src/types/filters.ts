@@ -1,0 +1,20 @@
+export type QueryFilterType = {
+  startDate?: string | null | undefined;
+  endDate?: string | null | undefined;
+  lastLoginDate?: string | null | undefined;
+  search?: string;
+  searchId?: string;
+  category?: string;
+  transactionType?: string;
+  minAmount?: string | number;
+  maxAmount?: string | number;
+  minWonAmount?: string | number;
+  maxWonAmount?: string | number;
+  status?: string;
+  userName?: string;
+  type?: string;
+  limit?: number;
+  page?: number;
+  userId?: string;
+  token?: string;
+};

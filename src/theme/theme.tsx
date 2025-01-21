@@ -9,11 +9,11 @@ const options: ThemeOptions = {
       light: GLOBAL_COLORS.PRIMARY_LIGHT,
       dark: GLOBAL_COLORS.PRIMARY_DARK,
     },
-    // success: {
-    //   main: "#009A2C",
-    //   light: "#33ae56",
-    //   dark: "#006b1e",
-    // },
+    secondary: {
+      main: GLOBAL_COLORS.SECONDARY_MAIN,
+      light: GLOBAL_COLORS.SECONDARY_LIGHT,
+      dark: GLOBAL_COLORS.SECONDARY_DARK,
+    },
   },
   typography: {
     fontFamily: "'DM sans', 'Rubik', sans-serif",

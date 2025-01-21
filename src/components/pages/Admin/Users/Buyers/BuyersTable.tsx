@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction } from "react";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,6 +16,8 @@ import dayjs from "dayjs";
 import { GLOBAL_COLORS, tableMenuStyles } from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
+import UserProfileDialog from "../UserProfileDialog/UserProfileDialog";
+// import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
 
 const headCells = [
   "User ID",
@@ -52,8 +54,29 @@ function EnhancedTableHead() {
 }
 
 function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
+  const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
+
+  const handleOpenPreviewProfile = () => {
+    setOpenPreviewProfile(true);
+  };
+  const handleClosePreviewProfile = () => {
+    setOpenPreviewProfile(false);
+  };
   return (
     <Box sx={{ width: "100%", my: 1 }}>
+      {openPreviewProfile && (
+        <UserProfileDialog
+          open={openPreviewProfile}
+          handleClose={handleClosePreviewProfile}
+        />
+      )}
+      {/* {openPreviewProfile && (
+        <DistributorProfileDialog
+          open={openPreviewProfile}
+          handleClose={handleClosePreviewProfile}
+        />
+      )} */}
+
       <TableContainer>
         <Table
           sx={{ minWidth: 750 }}
@@ -122,6 +145,15 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem
                               onClick={() => {
+                                handleOpenPreviewProfile();
+                                popupState.close();
+                              }}
+                              sx={tableMenuStyles}
+                            >
+                              Preview Profile
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
                                 // handleOpenTransactionPreview(row);
                                 popupState.close();
                               }}
@@ -129,6 +161,7 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
                             >
                               Activate
                             </MenuItem>
+
                             <MenuItem
                               onClick={() => {
                                 // handleOpenTransactionPreview(row);

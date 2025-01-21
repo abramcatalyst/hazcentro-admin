@@ -1,0 +1,63 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { alpha, useTheme } from "@mui/material/styles";
+import MedalImg from "src/assets/images/star-medal.png";
+import Star1Img from "src/assets/images/star-ticket.png";
+import Star2Img from "src/assets/images/star-ticket-2.png";
+import { currencyFormater } from "src/utils";
+
+type ButtonBoxProps = {
+  title: string;
+  image: string;
+  value: string | number;
+};
+const ButtonBox = ({ title, image, value }: ButtonBoxProps) => {
+  return (
+    <Box
+      sx={{
+        borderRadius: "6px",
+        my: 0.6,
+        height: "42px",
+        display: "flex",
+        gap: 0.9,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <img src={image} alt={title} style={{ width: "60px", height: "60px" }} />
+      <Box>
+        <Typography sx={{ fontSize: "21px", fontWeight: 500 }}>
+          {currencyFormater(value)}
+        </Typography>
+        <Typography sx={{ fontSize: "12px" }}>{title}</Typography>
+      </Box>
+    </Box>
+  );
+};
+function DistributorStats() {
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        my: 1,
+        background: alpha(theme.palette.error.light, 0.05),
+        p: 0.5,
+        borderRadius: "20px",
+        minHeight: "120px",
+        display: "flex",
+        gap: 1,
+        alignItems: "center",
+        width: "100%",
+        flexWrap: "wrap",
+      }}
+    >
+      <ButtonBox title="Total Products" value={2300} image={Star1Img} />
+
+      <ButtonBox title="Successful Sales" value={456} image={Star2Img} />
+
+      <ButtonBox title="Years Selling" value={4} image={MedalImg} />
+    </Box>
+  );
+}
+export default DistributorStats;

@@ -68,6 +68,9 @@ export const GLOBAL_COLORS = {
   CYAN_MAIN: "#47AAA7",
   CYAN_DARK: "#2e7f7d",
   YELLOW_500: "#FFCC16",
+  SECONDARY_MAIN: "#47B48E",
+  SECONDARY_DARK: "#317d63",
+  SECONDARY_LIGHT: "#6bc3a4",
 };
 
 export const CATEGORY_TYPE = "categoryType";

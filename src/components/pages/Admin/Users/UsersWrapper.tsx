@@ -55,7 +55,7 @@ const UsersWrapper = () => {
           mb: 2,
         }}
       >
-        <AppHeader text="User Mangement" />
+        <AppHeader text="User Management" />
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {usersViewTabOptions.map((item) => (
             <Box

@@ -1,0 +1,38 @@
+import Box from "@mui/material/Box";
+import { ordersTabOptions } from "./AgentProfileWrapper";
+import CustomTab from "src/components/shared/CustomTab/CustomTab";
+
+type Props = {
+  selectedTab: string;
+  setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
+};
+const AgentsProfileTab = ({ selectedTab, setSelectedTab }: Props) => {
+  const handleClick = (value: string) => {
+    setSelectedTab(value);
+  };
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box sx={{ pl: 2, display: "flex", gap: 1, mb: 2 }}>
+        {ordersTabOptions.map((item) => {
+          return (
+            <CustomTab
+              key={item.value}
+              handleClick={handleClick}
+              value={item.value}
+              title={item.title}
+              active={item.value === selectedTab}
+            />
+          );
+        })}
+      </Box>
+    </Box>
+  );
+};
+
+export default AgentsProfileTab;

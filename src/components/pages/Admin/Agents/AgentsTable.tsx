@@ -8,14 +8,22 @@ import FemaleAvatar from "src/assets/images/avatar-female.png";
 import { useTheme } from "@mui/material/styles";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useState } from "react";
+import DeleteAgentDialog from "./DeleteAgentDialog";
+import { useNavigate } from "react-router-dom";
+import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 
-type AgentCardProps = {
+type AgentType = {
   name: string;
   gender: "male" | "female";
   state: string;
 };
+type AgentCardProps = {
+  data: AgentType;
+  handleOpenDeleteDialog: () => void;
+};
 
-const tempAgents: AgentCardProps[] = [
+const tempAgents: AgentType[] = [
   { name: "Pi Colines", gender: "male", state: "Lagos" },
   { name: "John Colines", gender: "male", state: "Lagos" },
   { name: "Tasha Philip", gender: "female", state: "Abuja" },
@@ -24,8 +32,10 @@ const tempAgents: AgentCardProps[] = [
 ];
 
 const sizing = { xs: 12, sm: 6, md: 4, lg: 3 };
-const AgentCard = ({ name, gender, state }: AgentCardProps) => {
+const AgentCard = ({ data, handleOpenDeleteDialog }: AgentCardProps) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const { name, gender, state } = data;
   return (
     <Box
       sx={{
@@ -45,7 +55,13 @@ const AgentCard = ({ name, gender, state }: AgentCardProps) => {
         />
       </Box>
       <Box>
-        <Typography noWrap sx={{ fontWeight: 600, mb: 0.4 }}>
+        <Typography
+          noWrap
+          sx={{ fontWeight: 600, mb: 0.4 }}
+          onClick={() => {
+            navigate(`${ADMIN_ROUTE_LINKS.ADMIN_AGENT_PROFILE}/1234`);
+          }}
+        >
           {name}
         </Typography>
         <Box>
@@ -75,7 +91,13 @@ const AgentCard = ({ name, gender, state }: AgentCardProps) => {
           </Box>
 
           <Box sx={{ display: "flex", gap: 0.8 }}>
-            <IconButton color="error" size="small">
+            <IconButton
+              color="error"
+              size="small"
+              onClick={() => {
+                handleOpenDeleteDialog();
+              }}
+            >
               <RiDeleteBin6Line style={{ fontSize: "15px" }} />
             </IconButton>
             <IconButton size="small" color="inherit">
@@ -88,12 +110,30 @@ const AgentCard = ({ name, gender, state }: AgentCardProps) => {
   );
 };
 const AgentsTable = () => {
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
   return (
     <Box sx={{ background: "#ffffff", my: 1.5, p: 1 }}>
+      {openDeleteDialog && (
+        <DeleteAgentDialog
+          open={openDeleteDialog}
+          handleClose={handleCloseDeleteDialog}
+        />
+      )}
+
       <Grid container spacing={1}>
         {tempAgents.map((row) => (
           <Grid size={sizing}>
-            <AgentCard state={row.state} name={row.name} gender={row.gender} />
+            <AgentCard
+              data={row}
+              handleOpenDeleteDialog={handleOpenDeleteDialog}
+            />
           </Grid>
         ))}
       </Grid>

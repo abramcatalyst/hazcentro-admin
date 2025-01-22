@@ -36,6 +36,10 @@ const AgentCard = ({ data, handleOpenDeleteDialog }: AgentCardProps) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { name, gender, state } = data;
+
+  const handleViewProfile = () => {
+    navigate(`${ADMIN_ROUTE_LINKS.ADMIN_AGENT_PROFILE}/1234`);
+  };
   return (
     <Box
       sx={{
@@ -51,15 +55,18 @@ const AgentCard = ({ data, handleOpenDeleteDialog }: AgentCardProps) => {
         <img
           src={gender === "male" ? MaleAvatar : FemaleAvatar}
           alt={name}
-          style={{ width: "46px", height: "46px" }}
+          style={{ width: "46px", height: "46px", cursor: "pointer" }}
+          onClick={() => {
+            handleViewProfile();
+          }}
         />
       </Box>
       <Box>
         <Typography
           noWrap
-          sx={{ fontWeight: 600, mb: 0.4 }}
+          sx={{ fontWeight: 600, mb: 0.4, cursor: "pointer" }}
           onClick={() => {
-            navigate(`${ADMIN_ROUTE_LINKS.ADMIN_AGENT_PROFILE}/1234`);
+            handleViewProfile();
           }}
         >
           {name}

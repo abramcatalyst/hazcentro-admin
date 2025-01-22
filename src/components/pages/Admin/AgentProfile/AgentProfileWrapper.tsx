@@ -5,6 +5,8 @@ import AgentProfileTab from "./AgentsProfileTab";
 // import BuyersTable from "./Buyers/BuyersTable";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import ProfileInformation from "./ProfileInformation";
+import ActiveAssignment from "./ActiveAssignment";
+import AssignmentsTable from "./AssignmentsTable";
 
 export const usersPageTabOptionsObj = {
   ALL: "ALL",
@@ -48,14 +50,12 @@ const AgentProfileWrapper = () => {
       />
       <Box my={1}>
         <Grid container spacing={1}>
-          <Grid size={{ xs: 12, md: 8, lg: 9 }}>
-            {/* <BuyersTable
-        selectedUsers={selectedUsers}
-        setSelectedUsers={setSelectedUsers}
-      /> */}
+          <Grid size={{ xs: 12, md: 8 }}>
+            <AssignmentsTable />
           </Grid>
-          <Grid size={{ xs: 12, md: 4, lg: 3 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <ProfileInformation />
+            <ActiveAssignment />
           </Grid>
         </Grid>
       </Box>

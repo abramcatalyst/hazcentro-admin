@@ -1,4 +1,7 @@
 import Chip from "@mui/material/Chip";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/";
 
 const redStates = [
   "lost",
@@ -12,46 +15,12 @@ const redStates = [
   "offline",
   "not paid",
 ];
-const greenStates = ["approved", "success", "won", "paid"];
-export const renderSlipStatus = (stat: string | boolean) => {
-  if (stat === null) {
-    return null;
-  }
-  if (stat === false) {
-    return <Chip color="error" label={"lost"} size="small" />;
-  }
-
-  return <Chip color="success" label={"won"} size="small" />;
-};
-
-export const renderDrawStatus = (stat: boolean) => {
-  if (stat === false) {
-    return <Chip color="error" label={"Unapproved"} size="small" />;
-  }
-
-  return <Chip color="success" label={"Approved"} size="small" />;
-};
+const greenStates = ["approved", "success", "won", "paid", "active"];
+const yellowStates = ["processing", "ongoing"];
 
 const renderStatus = (stat: string | boolean | number | null | undefined) => {
-  if (stat === "blacklisted") {
-    return (
-      <Chip
-        sx={{ background: "black", color: "#fff" }}
-        label={stat}
-        size="small"
-      />
-    );
-  }
+  const theme = useTheme();
 
-  if (stat === "held") {
-    return (
-      <Chip
-        sx={{ background: "black", color: "#fff" }}
-        label={stat}
-        size="small"
-      />
-    );
-  }
   if (stat === "canceled" || stat === "cancelled") {
     return (
       <Chip
@@ -68,8 +37,22 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
     return <Chip color="error" label={stat} size="small" />;
   }
 
-  if (stat === "ongoing") {
-    return <Chip color="warning" label={stat} size="small" />;
+  if (typeof stat === "string" && yellowStates?.includes(stat)) {
+    return (
+      <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
+        <Box
+          sx={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            background: theme.palette.warning.main,
+          }}
+        />
+        <Typography sx={{ fontSize: "12.3px", textTransform: "capitalize" }}>
+          {stat || "Processing"}
+        </Typography>
+      </Box>
+    );
   }
   if (typeof stat === "boolean" && stat === true) {
     return <Chip color="success" label={"Active"} size="small" />;
@@ -78,7 +61,21 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
     return <Chip color="error" label={"Not active"} size="small" />;
   }
   if (typeof stat === "string" && greenStates?.includes(stat)) {
-    return <Chip color="success" label={stat} size="small" />;
+    return (
+      <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
+        <Box
+          sx={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            background: theme.palette.success.light,
+          }}
+        />
+        <Typography sx={{ fontSize: "12.3px", textTransform: "capitalize" }}>
+          {stat || "Active"}
+        </Typography>
+      </Box>
+    );
   }
   if (Boolean(stat) === true) {
     return <Chip color="success" label={"Active"} size="small" />;

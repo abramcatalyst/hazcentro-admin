@@ -92,7 +92,14 @@ function TopSection() {
             />
           </Grid>
           <Grid size={sizing}>
-            <Box>
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <Typography sx={{ fontSize: "18px", fontWeight: 500 }}>
                 &#8358;{currencyFormater(40000)}
               </Typography>

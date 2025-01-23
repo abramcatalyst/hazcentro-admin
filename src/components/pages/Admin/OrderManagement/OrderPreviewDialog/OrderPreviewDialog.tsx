@@ -10,6 +10,8 @@ import { useTheme } from "@mui/material/styles";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
 import TopSection from "./TopSection";
+import ProductInformation from "./ProductInformation";
+import PaymentInformationSection from "./PaymentInformationSection";
 
 type Props = {
   open: boolean;
@@ -53,8 +55,12 @@ function OrderPreviewDialog({ open, handleClose }: Props) {
         <TopSection />
         <Box>
           <Grid container spacing={1} columns={5}>
-            <Grid size={{ xs: 5, sm: 3 }}></Grid>
-            <Grid size={{ xs: 5, sm: 2 }}></Grid>
+            <Grid size={{ xs: 5, sm: 3 }}>
+              <ProductInformation />
+            </Grid>
+            <Grid size={{ xs: 5, sm: 2 }}>
+              <PaymentInformationSection />
+            </Grid>
           </Grid>
         </Box>
       </DialogContent>

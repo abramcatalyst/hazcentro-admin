@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import CustomTab from "src/components/shared/CustomTab/CustomTab";
 
-const AgentsTab = () => {
+const CategoriesTab = () => {
   const handleClick = (value: string) => {
     console.log(value);
   };
@@ -14,8 +14,8 @@ const AgentsTab = () => {
       <Box sx={{ pl: 2, display: "flex", gap: 1, mb: 2 }}>
         <CustomTab
           handleClick={handleClick}
-          value={"agents"}
-          title={"Agents"}
+          value={"all"}
+          title={"All Category"}
           active={true}
         />
       </Box>
@@ -23,4 +23,4 @@ const AgentsTab = () => {
   );
 };
 
-export default AgentsTab;
+export default CategoriesTab;

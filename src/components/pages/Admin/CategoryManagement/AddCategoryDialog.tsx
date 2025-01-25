@@ -11,6 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import { useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
 import CreateItemNotification from "src/components/shared/CreateItemNotification/CreateItemNotification";
@@ -115,6 +116,28 @@ function AddCategoryDialog({ open, handleClose }: Props) {
                   </Box>
                 );
               })}
+              <IconButton
+                sx={{
+                  width: "46px",
+                  height: "46px",
+                  background: theme.palette.grey[200],
+                  "&:hover": { background: theme.palette.grey[300] },
+                }}
+              >
+                <AddBoxOutlinedIcon />
+              </IconButton>
+            </Box>
+            <Box sx={{ mt: 1, display: "flex", justifyContent: "flex-end" }}>
+              <Button
+                variant="contained"
+                color="inherit"
+                sx={{
+                  background: theme.palette.grey[200],
+                  "&:hover": { background: theme.palette.grey[300] },
+                }}
+              >
+                Update
+              </Button>
             </Box>
           </Box>
           <br />

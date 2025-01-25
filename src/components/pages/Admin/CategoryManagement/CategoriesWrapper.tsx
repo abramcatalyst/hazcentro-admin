@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { GLOBAL_COLORS } from "src/utils";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
-import AgentsTab from "./AgentsTab";
+import CategoriesTab from "./CategoriesTab";
 import CategoriesTable from "./CategoriesTable";
 import AddCategoryDialog from "./AddCategoryDialog";
 
@@ -91,7 +91,7 @@ const CategoriesWrapper = () => {
           ))} */}
         </Box>
       </Box>
-      <AgentsTab />
+      <CategoriesTab />
       <CategoriesTable />
     </Box>
   );

@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import DeleteAgentDialog from "./DeleteAgentDialog";
@@ -38,64 +39,75 @@ const AgentCard = ({ data, handleOpenEditCategoryDialog }: AgentCardProps) => {
   const { name, image, state } = data;
 
   const handleViewProfile = () => {
-    navigate(`${ADMIN_ROUTE_LINKS.ADMIN_AGENT_PROFILE}/1234`);
+    navigate(`${ADMIN_ROUTE_LINKS.ADMIN_SINGLE_CATEGORY}/1234`);
   };
   return (
     <Box
       sx={{
-        p: 1,
         background: image === "male" ? "#FBE6C433" : "#F7F7FB",
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-        borderRadius: "12px",
       }}
     >
-      <Box>
-        <img
-          src={image}
-          alt={name}
-          style={{ width: "46px", height: "46px", cursor: "pointer" }}
-          onClick={() => {
-            handleViewProfile();
-          }}
-        />
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <IconButton>
+          <MoreVertRoundedIcon />
+        </IconButton>
       </Box>
-      <Box>
-        <Typography
-          noWrap
-          sx={{
-            fontWeight: 600,
-            mb: 0.4,
-            cursor: "pointer",
-            fontSize: { xs: "16px", sm: "20px" },
-          }}
-          onClick={() => {
-            handleViewProfile();
-          }}
-        >
-          {currencyFormater(state)}
-        </Typography>
-
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-            my: 0.4,
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography sx={{ fontSize: "13px" }}>{name}</Typography>
-          <IconButton
-            size="small"
-            sx={{ color: theme.palette.info.main }}
+      <Box
+        sx={{
+          pb: 1,
+          px: 1,
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          borderRadius: "12px",
+        }}
+      >
+        <Box>
+          <img
+            src={image}
+            alt={name}
+            style={{ width: "46px", height: "46px", cursor: "pointer" }}
             onClick={() => {
-              handleOpenEditCategoryDialog();
+              handleViewProfile();
+            }}
+          />
+        </Box>
+        <Box>
+          <Typography
+            noWrap
+            sx={{
+              fontWeight: 600,
+              mb: 0.4,
+              cursor: "pointer",
+              fontSize: { xs: "16px", sm: "20px" },
+            }}
+            onClick={() => {
+              handleViewProfile();
             }}
           >
-            <FaEdit />
-          </IconButton>
+            {currencyFormater(state)}
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              my: 0.4,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography sx={{ fontSize: "13px" }}>{name}</Typography>
+            <IconButton
+              size="small"
+              sx={{ color: theme.palette.info.main }}
+              onClick={() => {
+                handleOpenEditCategoryDialog();
+              }}
+            >
+              <FaEdit />
+            </IconButton>
+          </Box>
         </Box>
       </Box>
     </Box>

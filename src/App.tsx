@@ -24,11 +24,16 @@ import AdminHelpAndSupport from "./pages/admin/AdminHelpAndSupport";
 import AdminMessages from "./pages/admin/AdminMessages";
 import AdminAccount from "./pages/admin/AdminAccount";
 import AdminAgentProfile from "./pages/admin/AdminAgentProfile";
+import AdminSingleCategoryPage from "./pages/admin/AdminSingleCategoryPage";
 
 function App() {
   const AdminRoutes = () => (
     <Routes>
       <Route element={<SuperAdminLayout />}>
+        <Route
+          path={`${ADMIN_ROUTE_SUB_LINKS.SINGLE_CATEGORY_PAGE}/:id`}
+          element={<AdminSingleCategoryPage />}
+        />
         <Route
           path={`${ADMIN_ROUTE_SUB_LINKS.AGENT_PROFILE}/:id`}
           element={<AdminAgentProfile />}

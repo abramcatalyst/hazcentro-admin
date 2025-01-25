@@ -13,10 +13,10 @@ import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import Checkbox from "@mui/material/Checkbox";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import dayjs from "dayjs";
-import { GLOBAL_COLORS, tableMenuStyles } from "src/utils";
+import { currencyFormater, GLOBAL_COLORS, tableMenuStyles } from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
-import UserProfileDialog from "../UserProfileDialog/UserProfileDialog";
+import ProductDetailsDialog from "./ProductDetailsDialog";
 // import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
@@ -24,12 +24,12 @@ import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
 dayjs.extend(advancedFormat);
 
 const headCells = [
-  "User ID",
-  "Customer Name",
-  "Location",
-  "Date Joined",
-  "Email Address",
-  "Last Activities",
+  "Cat ID",
+  "Category Name",
+  "No. of Items",
+  "Used By (Merc.)",
+  "Created On",
+  "Tags",
   "Action",
 ];
 
@@ -57,7 +57,7 @@ function EnhancedTableHead() {
   );
 }
 
-function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
+function ProductsTable({ selectedUsers, setSelectedUsers }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
 
   const handleOpenPreviewProfile = () => {
@@ -69,7 +69,7 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openPreviewProfile && (
-        <UserProfileDialog
+        <ProductDetailsDialog
           open={openPreviewProfile}
           handleClose={handleClosePreviewProfile}
         />
@@ -94,7 +94,7 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
           <TableBody>
             {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
               const isItemSelected = selectedUsers.has(index);
-              const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `table-checkbox-${index}`;
 
               return (
                 <StyledTableRow
@@ -134,11 +134,15 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
                     />
                   </StyledTableCell>
                   <StyledTableCell>#YW627J</StyledTableCell>
-                  <StyledTableCell>{"Jerry WIlson"}</StyledTableCell>
-                  <StyledTableCell>{"Lagos, Nigeria"}</StyledTableCell>
-                  <StyledTableCell>{dayjs().format("MMM Do")}</StyledTableCell>
-                  <StyledTableCell>{"johndoe@gmail.com"}</StyledTableCell>
-                  <StyledTableCell>{"2 days ago"}</StyledTableCell>
+                  <StyledTableCell>{"Electronics"}</StyledTableCell>
+                  <StyledTableCell>
+                    {currencyFormater("234123")}
+                  </StyledTableCell>
+                  <StyledTableCell>{"Runtown corp."}</StyledTableCell>
+                  <StyledTableCell>
+                    {dayjs().format("MMM Do YYYY")}
+                  </StyledTableCell>
+                  <StyledTableCell>{"5"}</StyledTableCell>
                   <StyledTableCell>
                     <PopupState variant="popover">
                       {(popupState) => (
@@ -154,7 +158,7 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
                               }}
                               sx={tableMenuStyles}
                             >
-                              Preview Profile
+                              Preview Product
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
@@ -164,25 +168,6 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
                               sx={tableMenuStyles}
                             >
                               Activate
-                            </MenuItem>
-
-                            <MenuItem
-                              onClick={() => {
-                                // handleOpenTransactionPreview(row);
-                                popupState.close();
-                              }}
-                              sx={tableMenuStyles}
-                            >
-                              Suspend
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                // handleOpenTransactionPreview(row);
-                                popupState.close();
-                              }}
-                              sx={tableMenuStyles}
-                            >
-                              Block
                             </MenuItem>
                           </Menu>
                         </Fragment>
@@ -199,4 +184,4 @@ function BuyersTable({ selectedUsers, setSelectedUsers }: Props) {
   );
 }
 
-export default BuyersTable;
+export default ProductsTable;

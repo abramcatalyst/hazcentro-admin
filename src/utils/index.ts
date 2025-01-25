@@ -73,6 +73,13 @@ export const GLOBAL_COLORS = {
   SECONDARY_LIGHT: "#6bc3a4",
 };
 
+export const SELECTED_PAGE_VIEW = "SELECTED_PAGE_VIEW";
+export const setSelectedPageView = (val: string) => {
+  sessionStorage.setItem(SELECTED_PAGE_VIEW, val);
+};
+export const getSelectedPageView = () => {
+  return sessionStorage.getItem(SELECTED_PAGE_VIEW);
+};
 export const CATEGORY_TYPE = "categoryType";
 export const SELECTED_CATEGORY_TYPES = {
   SUB_CATEGORY: "SUB_CATEGORY",

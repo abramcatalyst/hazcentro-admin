@@ -6,7 +6,15 @@ import { GrStatusInfo } from "react-icons/gr";
 const CreateItemNotification = () => {
   const theme = useTheme();
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1, my: 0.5 }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1,
+        my: 0.5,
+        maxWidth: "550px",
+      }}
+    >
       <Box>
         <GrStatusInfo style={{ color: theme.palette.info.main }} />
       </Box>

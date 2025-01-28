@@ -1,5 +1,9 @@
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid2";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
+import AccountBalance from "./AccountBalance";
+import AccountBalanceDetails from "./AccountBalanceDetails";
+import RecentTransactions from "./RecentTransactions";
 
 const AccountWrapper = () => {
   return (
@@ -17,17 +21,19 @@ const AccountWrapper = () => {
         <AppHeader text="Admin Account" />
       </Box>
 
-      {/* <Box my={1}>
+      <Box my={1}>
         <Grid container spacing={1}>
           <Grid size={{ xs: 12, md: 8 }}>
-            <AssignmentsTable />
+            <Box sx={{ background: "#ffffff", borderRadius: "16px" }}>
+              <AccountBalance />
+              <AccountBalanceDetails />
+            </Box>{" "}
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <ProfileInformation />
-            <ActiveAssignment />
+            <RecentTransactions />
           </Grid>
         </Grid>
-      </Box> */}
+      </Box>
     </Box>
   );
 };

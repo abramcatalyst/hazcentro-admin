@@ -1,22 +1,15 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import DebitImage from "src/assets/icons/debit.svg";
-import CreditImage from "src/assets/icons/credit.svg";
-import { currencyFormater } from "src/utils";
-import { alpha, useTheme } from "@mui/material/styles";
-import dayjs from "dayjs";
+import GtcoImg from "src/assets/tempimages/gtco.png";
+import { useTheme } from "@mui/material/styles";
 
 type TransactionCardProps = {
-  transactionType: "debit" | "credit";
-  amount: number | string;
+  bankName: string;
 };
-const RecentTransactions = () => {
+const SavedAccounts = () => {
   const theme = useTheme();
-  const TransactionCard = ({
-    transactionType,
-    amount,
-  }: TransactionCardProps) => {
+  const TransactionCard = ({ bankName }: TransactionCardProps) => {
     return (
       <Box
         sx={{
@@ -43,10 +36,6 @@ const RecentTransactions = () => {
           <Box
             sx={{
               borderRadius: "6px",
-              background:
-                transactionType === "credit"
-                  ? "#47B48E1A"
-                  : alpha("#EE1616", 0.1),
               width: "52px",
               height: "52px",
               display: "flex",
@@ -55,38 +44,35 @@ const RecentTransactions = () => {
             }}
           >
             <img
-              src={transactionType === "credit" ? CreditImage : DebitImage}
+              src={GtcoImg}
               alt="trans"
-              style={{ width: "32px", height: "32px", objectFit: "contain" }}
+              style={{ width: "52px", height: "52px", objectFit: "contain" }}
             />
           </Box>
           <Box>
             <Typography sx={{ fontWeight: 500, fontSize: "18px" }}>
-              &#8358;{currencyFormater(amount)}
+              {bankName}
             </Typography>
             <Typography
               sx={{
                 fontSize: "12px",
-                color:
-                  transactionType === "credit"
-                    ? theme.palette.success.main
-                    : theme.palette.error.main,
+                color: "GrayText",
               }}
             >
-              {transactionType === "credit" ? "Credited" : "Debited"}
+              GTB - 23476237423
             </Typography>
           </Box>
         </Box>
-        <Typography variant="subtitle2">
-          {dayjs().format("MMM Do YY")}
-        </Typography>
+        <Button color="success" variant="text">
+          View
+        </Button>
       </Box>
     );
   };
   return (
     <Box
       sx={{
-        mb: 1,
+        my: 1,
         p: { xs: 1 },
         background: "#ffffff",
         borderRadius: "20px",
@@ -104,7 +90,7 @@ const RecentTransactions = () => {
         }}
       >
         <Typography variant="subtitle2" pl={1} gutterBottom>
-          Recent Transactions
+          Saved Account
         </Typography>
         <Button
           color="inherit"
@@ -114,16 +100,14 @@ const RecentTransactions = () => {
             "&:hover": { background: theme.palette.grey[200] },
           }}
         >
-          Download History
+          Add new
         </Button>
       </Box>
       <Box sx={{ my: 1, maxHeight: "300px", overflowY: "auto" }}>
-        <TransactionCard amount={345000} transactionType="credit" />
-        <TransactionCard amount={45000} transactionType="credit" />
-        <TransactionCard amount={3000} transactionType="debit" />
+        <TransactionCard bankName={"Ola Wals"} />
       </Box>
     </Box>
   );
 };
 
-export default RecentTransactions;
+export default SavedAccounts;

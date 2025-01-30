@@ -15,7 +15,14 @@ const redStates = [
   "offline",
   "not paid",
 ];
-const greenStates = ["approved", "success", "won", "paid", "active"];
+const greenStates = [
+  "approved",
+  "success",
+  "won",
+  "paid",
+  "active",
+  "delivered",
+];
 const yellowStates = ["processing", "ongoing"];
 
 const renderStatus = (stat: string | boolean | number | null | undefined) => {

@@ -8,7 +8,6 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,6 +16,7 @@ import { useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
 import { nigeriaStatesOnly } from "src/utils/nigeriaStatesOnly";
 import { GrStatusInfo } from "react-icons/gr";
+import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 // import { MdOutlineCancel } from "react-icons/md";
 type Props = {
   open: boolean;
@@ -43,7 +43,7 @@ function AddAgentDialog({ open, handleClose }: Props) {
   //   (item) => !selectedStates.has(item)
   // );
   return (
-    <Dialog
+    <StyledDialog
       fullWidth
       fullScreen={fullScreen}
       open={open}
@@ -148,7 +148,7 @@ function AddAgentDialog({ open, handleClose }: Props) {
           </Box>
         </Box>
       </DialogContent>
-    </Dialog>
+    </StyledDialog>
   );
 }
 export default AddAgentDialog;

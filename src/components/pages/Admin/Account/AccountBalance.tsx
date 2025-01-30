@@ -7,7 +7,17 @@ import Logo from "src/assets/images/logo.png";
 import { currencyFormater } from "src/utils";
 import CreateItemNotification from "src/components/shared/CreateItemNotification/CreateItemNotification";
 import { useTheme } from "@mui/material/styles";
+import { useState } from "react";
+import ChangePasswordDialog from "./ChangePasswordDialog";
 const AccountBalance = () => {
+  const [openChangePassword, setOpenChangePassword] = useState(false);
+  const handleOpenChangePasswordDialog = () => {
+    setOpenChangePassword(true);
+  };
+
+  const handleCloseChangePasswordDialog = () => {
+    setOpenChangePassword(false);
+  };
   const theme = useTheme();
   return (
     <Box
@@ -16,6 +26,12 @@ const AccountBalance = () => {
         p: { xs: 1, sm: 2 },
       }}
     >
+      {openChangePassword && (
+        <ChangePasswordDialog
+          open={openChangePassword}
+          handleClose={handleCloseChangePasswordDialog}
+        />
+      )}
       <Box>
         <Typography pl={1} gutterBottom>
           Super Admin
@@ -95,6 +111,9 @@ const AccountBalance = () => {
           sx={{
             background: theme.palette.grey[100],
             "&:hover": { background: theme.palette.grey[200] },
+          }}
+          onClick={() => {
+            handleOpenChangePasswordDialog();
           }}
         >
           Change Password

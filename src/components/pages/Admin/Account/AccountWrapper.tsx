@@ -4,6 +4,7 @@ import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import AccountBalance from "./AccountBalance";
 import AccountBalanceDetails from "./AccountBalanceDetails";
 import RecentTransactions from "./RecentTransactions";
+import SavedAccounts from "./SavedAccounts";
 
 const AccountWrapper = () => {
   return (
@@ -31,6 +32,7 @@ const AccountWrapper = () => {
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <RecentTransactions />
+            <SavedAccounts />
           </Grid>
         </Grid>
       </Box>

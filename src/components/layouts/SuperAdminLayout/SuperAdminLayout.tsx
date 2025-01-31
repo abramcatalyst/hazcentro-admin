@@ -23,7 +23,8 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
 import { GLOBAL_COLORS } from "src/utils";
 import HeaderProfileLeft from "./HeaderProfileLeft";
-
+import { FiLogOut } from "react-icons/fi";
+import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -138,6 +139,10 @@ export default function SuperAdminLayout() {
   //   setOpen(false);
   // };
 
+  const handleLogoutUser = () => {
+    navigate(GLOBAL_ROUTE_LINKS.LOGIN);
+  };
+
   const allowAdmin = (value: string): boolean => {
     if (value === "") {
       return true;
@@ -203,7 +208,9 @@ export default function SuperAdminLayout() {
             )}
           </IconButton> */}
         </Box>
-        <List sx={{ background: GLOBAL_COLORS.GREY_50, px: 0.5 }}>
+        <List
+          sx={{ background: GLOBAL_COLORS.GREY_50, px: 0.5, height: "100%" }}
+        >
           {navigation.map((row) => (
             <ListItem key={row?.id} disablePadding sx={{ display: "block" }}>
               {row?.kind === "divider" ? (
@@ -267,6 +274,42 @@ export default function SuperAdminLayout() {
               )}
             </ListItem>
           ))}
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={[
+                {
+                  minHeight: open ? 40 : 0,
+                  px: 2.5,
+                  mb: 0.5,
+                  borderLeft: "default",
+                  color: "default",
+                  borderRadius: "0px",
+                  justifyContent: open ? "initial" : "center",
+                },
+              ]}
+              onClick={() => {
+                handleLogoutUser();
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  justifyContent: "center",
+                  color: "default",
+                  mr: open ? 3 : "auto",
+                }}
+              >
+                <FiLogOut />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Logout"}
+                primaryTypographyProps={primarySubTypographyStyles}
+                sx={{
+                  opacity: open ? 1 : 0,
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Box

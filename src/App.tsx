@@ -10,7 +10,11 @@ import theme from "./theme/theme";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { ADMIN_ROUTE_LINKS, ADMIN_ROUTE_SUB_LINKS } from "./utils/routeLinks";
+import {
+  ADMIN_ROUTE_LINKS,
+  ADMIN_ROUTE_SUB_LINKS,
+  GLOBAL_ROUTE_LINKS,
+} from "./utils/routeLinks";
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminUserManagement from "./pages/admin/AdminUserManagement";
 import SuperAdminLayout from "./components/layouts/SuperAdminLayout/SuperAdminLayout";
@@ -25,6 +29,7 @@ import AdminMessages from "./pages/admin/AdminMessages";
 import AdminAccount from "./pages/admin/AdminAccount";
 import AdminAgentProfile from "./pages/admin/AdminAgentProfile";
 import AdminSingleCategoryPage from "./pages/admin/AdminSingleCategoryPage";
+import Login from "./pages/Login";
 
 function App() {
   const AdminRoutes = () => (
@@ -89,6 +94,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Root />} />
               <Route path="admin/*" element={<AdminRoutes />} />
+              <Route path={GLOBAL_ROUTE_LINKS.LOGIN} element={<Login />} />
 
               {/* <Route path="dashboard" element={<Dashboard />}>
         <Route index element={<RecentActivity />} />

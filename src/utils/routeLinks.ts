@@ -29,4 +29,6 @@ export const ADMIN_ROUTE_LINKS = {
 
 export const GLOBAL_ROUTE_LINKS = {
   NOT_FOUND: "/not-found",
+  LOGIN: "/login",
+  FORGOT_PASSWORD: "/forgot-password",
 };

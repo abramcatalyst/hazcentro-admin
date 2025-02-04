@@ -4,11 +4,7 @@ import LoginLayout from "src/components/layouts/LoginLayout/LoginLayout";
 import LoginForm from "src/components/pages/shared/LoginForm";
 const Login = () => {
   return (
-    <Box
-      sx={{
-        background: "#FBFBFB",
-      }}
-    >
+    <Box>
       <MetaDecorator title=" Login" />
       <LoginLayout title="Login to your account">
         <LoginForm />

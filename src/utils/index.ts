@@ -7,9 +7,10 @@ import rolesPermissions, { adminRoles } from "./roles-permission";
 import dayjs from "dayjs";
 
 // export const baseUrl = "https://reevaluateme.online/api";
-export const baseUrl = "http://127.0.0.1:8080/api/v1";
+export const baseUrl = "https://haz.reevaluateme.online/api/v1";
 export const PERSIST_LOGIN = "PERSIST_LOGIN";
 export const TOKEN_NAME = "HAZCENTRO_AUTH_TOKEN";
+export const PROFILE_KEY = "H_PROFILE_KEY";
 export const PREV_PATH = "prevPath";
 export const rowsPerPageOptions = [20, 50, 100];
 export const FULL_DATE_FORMAT = "DD MMM YYYY, HH:mm a";
@@ -117,6 +118,7 @@ export const reportsDateFilterFormat = {
   WEEKLY: "DD-MM-YYYY",
   MONTHLY: "MMM YYYY",
 };
+export const dialogButtonStyles = {};
 export const reportsIntervals = {
   DAILY: "daily",
   WEEKLY: "weekly",
@@ -236,8 +238,18 @@ export const getCookie = (cName: string): string | undefined => {
   });
   return res;
 };
+export const saveProfileToStorage = (profile: string) => {
+  setCookie(PROFILE_KEY, profile, 1);
+};
 export const getAuthToken = (): string | null => {
   const res = getCookie(TOKEN_NAME);
+  if (res) {
+    return res;
+  }
+  return null;
+};
+export const getProfileFromStorage = (): string | null => {
+  const res = getCookie(PROFILE_KEY);
   if (res) {
     return res;
   }
@@ -246,6 +258,7 @@ export const getAuthToken = (): string | null => {
 
 export const removeTokenFromStorage = () => {
   deleteCookie(TOKEN_NAME);
+  deleteCookie(PROFILE_KEY);
 };
 export const saveTokenToStorage = (token: string) => {
   setCookie(TOKEN_NAME, token, 1);
@@ -299,10 +312,8 @@ export const formatSuccessMessage = (successObj: any) => {
   return "Request was successful";
 };
 
-export const setDefaultHeaders = (token?: string) => {
-  axios.defaults.headers.common["x-api-key"] = `${
-    import.meta.env.VITE_APP_API_KEY
-  }`;
+export const setDefaultHeaders = () => {
+  const token = getAuthToken();
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
@@ -312,8 +323,9 @@ export const setAxiosDefaultHeaders = () => {
   axios.defaults.withCredentials = true;
 };
 
-export const isAuthTokenExpired = (token?: string): boolean => {
+export const isAuthTokenExpired = (): boolean => {
   try {
+    const token = getAuthToken();
     let decodedToken: IToken | null = null;
     if (token) {
       decodedToken = jwtDecode(token);

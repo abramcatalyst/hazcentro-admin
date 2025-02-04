@@ -7,8 +7,8 @@ const useIsUserAuthorized = () => {
     let res = false;
     try {
       let role = "";
-      if (profile?.user) {
-        role = profile?.user?.role;
+      if (profile?.id) {
+        role = profile?.role;
       }
       if (!role) {
         return false;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -21,10 +21,11 @@ import HeaderProfile from "./HeaderProfile";
 // import RequireAuth from "src/components/auth/RequireAuth";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
-import { GLOBAL_COLORS } from "src/utils";
+import { GLOBAL_COLORS, removeTokenFromStorage } from "src/utils";
 import HeaderProfileLeft from "./HeaderProfileLeft";
 import { FiLogOut } from "react-icons/fi";
 import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
+import useAuthStore from "src/store/authStore";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -113,11 +114,15 @@ const Drawer = styled(MuiDrawer, {
 export default function SuperAdminLayout() {
   const [open, setOpen] = useState(true);
   const { isAuthorized } = useIsUserAuthorized();
+  const { profile, handleLogout } = useAuthStore();
   const theme = useTheme();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  {
-  }
+  useEffect(() => {
+    if (!profile?.id) {
+      navigate(GLOBAL_ROUTE_LINKS.LOGIN);
+    }
+  }, []);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -140,6 +145,8 @@ export default function SuperAdminLayout() {
   // };
 
   const handleLogoutUser = () => {
+    handleLogout();
+    removeTokenFromStorage();
     navigate(GLOBAL_ROUTE_LINKS.LOGIN);
   };
 
@@ -192,10 +199,10 @@ export default function SuperAdminLayout() {
             <Avatar src="AD" sx={{ width: "34px", height: "34px" }} />
             <Box sx={{ width: `calc(100% - 38px)` }}>
               <Typography sx={{ fontSize: "15px", fontWeight: 600 }}>
-                Super Admin
+                {profile?.name || ""}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "GrayText" }}>
-                superadmin@gmail.com
+                {profile?.email || ""}
               </Typography>
             </Box>
           </Box>

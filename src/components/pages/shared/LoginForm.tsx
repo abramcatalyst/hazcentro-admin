@@ -7,21 +7,27 @@ import IconButton from "@mui/material/IconButton";
 import FormHelperText from "@mui/material/FormHelperText";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { IToken } from "src/types/auth";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
-import { baseUrl, formatErrorMessage } from "src/utils";
+import {
+  baseUrl,
+  formatErrorMessage,
+  saveProfileToStorage,
+  saveTokenToStorage,
+} from "src/utils";
 import toast from "react-hot-toast";
 import StyledOutlinedInput from "src/components/shared/StyledOutlinedInput/StyledOutlinedInput";
 import { LuEyeClosed } from "react-icons/lu";
 import { RxEyeOpen } from "react-icons/rx";
 import LoginFormInfoSection from "src/components/shared/LoginFormInfoSection/LoginFormInfoSection";
 
+import axios from "axios";
+import useAuthStore from "src/store/authStore";
+
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { handleLogin } = useAuthStore();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -30,21 +36,13 @@ const LoginForm = () => {
     onSubmit: async (values, helpers) => {
       try {
         const res = await axios.post(`${baseUrl}/auth/login`, values);
-        let decodedToken: IToken = await jwtDecode(res.data?.data?.data?.token);
-        console.log(decodedToken);
-        // dispatch(
-        //   setUser({
-        //     tokenData: {
-        //       firstname: decodedToken?.firstname,
-        //       lastname: decodedToken?.lastname,
-        //       userId: decodedToken?.userId,
-        //       role: decodedToken?.role,
-        //       isAgent: decodedToken?.isAgent,
-        //       lastLogin: decodedToken?.lastLogin,
-        //     },
-        //   })
-        // );
-        // await setCookie(res?.data?.data?.data?.token);
+        // const res = await axios.post(`${baseUrl}/auth/login`, values);
+        // console.log("xxxxxxxxxxxxxxxxxxxxxxx", res?.data?.access_token);
+
+        saveTokenToStorage(res?.data?.access_token);
+        saveProfileToStorage(JSON.stringify(res?.data?.data?.user));
+        handleLogin({ userProfile: res?.data?.data?.user });
+
         await navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
       } catch (error) {
         helpers.setSubmitting(false);
@@ -114,9 +112,9 @@ const LoginForm = () => {
             <InputLabel>Password</InputLabel>
             <StyledOutlinedInput
               label="Password"
-              type="email"
-              name="email"
-              value={values.email}
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
               endAdornment={
@@ -129,8 +127,8 @@ const LoginForm = () => {
                 </IconButton>
               }
             />
-            {touched.email && errors.email && (
-              <FormHelperText error>{errors.email}</FormHelperText>
+            {touched.password && errors.password && (
+              <FormHelperText error>{errors.password}</FormHelperText>
             )}
           </FormControl>
           <Box sx={{ mb: 1, mt: 3 }}>

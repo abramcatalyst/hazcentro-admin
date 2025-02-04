@@ -7,7 +7,6 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -19,6 +18,7 @@ import Cat1 from "src/assets/tempimages/cat1.png";
 import Cat2 from "src/assets/tempimages/cat2.png";
 import Cat3 from "src/assets/tempimages/cat3.png";
 import { useState } from "react";
+import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 
 const images = [Cat1, Cat2, Cat3];
 type Props = {
@@ -32,7 +32,7 @@ function AddCategoryDialog({ open, handleClose }: Props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Dialog
+    <StyledDialog
       fullWidth
       fullScreen={fullScreen}
       open={open}
@@ -158,7 +158,7 @@ function AddCategoryDialog({ open, handleClose }: Props) {
           </Box>
         </Box>
       </DialogContent>
-    </Dialog>
+    </StyledDialog>
   );
 }
 export default AddCategoryDialog;

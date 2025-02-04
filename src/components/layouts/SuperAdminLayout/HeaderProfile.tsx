@@ -137,13 +137,13 @@ export default function HeaderProfile() {
                 variant="subtitle1"
                 sx={{ minWidth: 100, textAlign: "left" }}
               >
-                {profile?.user?.name}
+                {profile?.name}
               </Typography>
               <Typography
                 variant="subtitle2"
                 sx={{ minWidth: 100, fontSize: "13px", textAlign: "left" }}
               >
-                {reformatRoleName(profile?.user?.role || "")}
+                {reformatRoleName(profile?.role || "")}
               </Typography>{" "}
             </Box>
           </Box>

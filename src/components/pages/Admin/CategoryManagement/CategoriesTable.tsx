@@ -8,35 +8,25 @@ import { useState } from "react";
 import DeleteAgentDialog from "./DeleteAgentDialog";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
-import Cat1 from "src/assets/tempimages/cat1.png";
-import Cat2 from "src/assets/tempimages/cat2.png";
-import Cat3 from "src/assets/tempimages/cat3.png";
 import { currencyFormater } from "src/utils";
 import EditCategoryDialog from "./EditCategoryDialog";
 import { FaEdit } from "react-icons/fa";
+import { CategoryType } from "src/types/categories";
+import Logo from "src/assets/images/logo.png";
 
-type CategoryType = {
-  name: string;
-  image: string;
-  state: string;
-};
-type AgentCardProps = {
+type CategoryCardProps = {
   data: CategoryType;
-  handleOpenDeleteDialog: () => void;
-  handleOpenEditCategoryDialog: () => void;
+  handleOpenDeleteDialog: (value: CategoryType) => void;
+  handleOpenEditCategoryDialog: (value: CategoryType) => void;
 };
-
-const tempAgents: CategoryType[] = [
-  { name: "Electronics", image: Cat1, state: "4532" },
-  { name: "Fashions", image: Cat2, state: "32" },
-  { name: "Cosmetics", image: Cat3, state: "42" },
-];
 
 const sizing = { xs: 12, sm: 6, md: 4, lg: 3 };
-const AgentCard = ({ data, handleOpenEditCategoryDialog }: AgentCardProps) => {
+const CategoryCard = ({
+  data,
+  handleOpenEditCategoryDialog,
+}: CategoryCardProps) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { name, image, state } = data;
 
   const handleViewProfile = () => {
     navigate(`${ADMIN_ROUTE_LINKS.ADMIN_SINGLE_CATEGORY}/1234`);
@@ -44,7 +34,9 @@ const AgentCard = ({ data, handleOpenEditCategoryDialog }: AgentCardProps) => {
   return (
     <Box
       sx={{
-        background: image === "male" ? "#FBE6C433" : "#F7F7FB",
+        // background:  "#FBE6C433" : "#F7F7FB",
+        background: "#F7F7FB",
+        borderRadius: "12px",
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -64,9 +56,14 @@ const AgentCard = ({ data, handleOpenEditCategoryDialog }: AgentCardProps) => {
       >
         <Box>
           <img
-            src={image}
-            alt={name}
-            style={{ width: "46px", height: "46px", cursor: "pointer" }}
+            src={data?.icon || Logo}
+            alt={data?.name}
+            style={{
+              width: "46px",
+              height: "46px",
+              cursor: "pointer",
+              borderRadius: "50%",
+            }}
             onClick={() => {
               handleViewProfile();
             }}
@@ -85,7 +82,7 @@ const AgentCard = ({ data, handleOpenEditCategoryDialog }: AgentCardProps) => {
               handleViewProfile();
             }}
           >
-            {currencyFormater(state)}
+            {currencyFormater(data?.total_products)}
           </Typography>
 
           <Box
@@ -97,12 +94,12 @@ const AgentCard = ({ data, handleOpenEditCategoryDialog }: AgentCardProps) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography sx={{ fontSize: "13px" }}>{name}</Typography>
+            <Typography sx={{ fontSize: "13px" }}>{data?.name}</Typography>
             <IconButton
               size="small"
               sx={{ color: theme.palette.info.main }}
               onClick={() => {
-                handleOpenEditCategoryDialog();
+                handleOpenEditCategoryDialog(data);
               }}
             >
               <FaEdit />
@@ -113,42 +110,55 @@ const AgentCard = ({ data, handleOpenEditCategoryDialog }: AgentCardProps) => {
     </Box>
   );
 };
-const CategoriesTable = () => {
+
+type Props = {
+  data: CategoryType[];
+};
+const CategoriesTable = ({ data }: Props) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditCategoryDialog, setOpenEditCategoryDialog] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
+    null
+  );
 
-  const handleOpenDeleteDialog = () => {
+  const handleOpenDeleteDialog = (value: CategoryType) => {
     setOpenDeleteDialog(true);
+    setSelectedCategory(value);
   };
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
+    setSelectedCategory(null);
   };
 
-  const handleOpenEditCategoryDialog = () => {
+  const handleOpenEditCategoryDialog = (value: CategoryType) => {
     setOpenEditCategoryDialog(true);
+    setSelectedCategory(value);
   };
   const handleCloseEditCategoryDialog = () => {
     setOpenEditCategoryDialog(false);
+    setSelectedCategory(null);
   };
   return (
     <Box sx={{ background: "#ffffff", my: 1.5, p: 1 }}>
-      {openDeleteDialog && (
+      {openDeleteDialog && selectedCategory && (
         <DeleteAgentDialog
           open={openDeleteDialog}
+          selectedCategory={selectedCategory}
           handleClose={handleCloseDeleteDialog}
         />
       )}
-      {openEditCategoryDialog && (
+      {openEditCategoryDialog && selectedCategory && (
         <EditCategoryDialog
           open={openEditCategoryDialog}
+          selectedCategory={selectedCategory}
           handleClose={handleCloseEditCategoryDialog}
         />
       )}
 
       <Grid container spacing={1}>
-        {tempAgents.map((row) => (
+        {data.map((row) => (
           <Grid size={sizing}>
-            <AgentCard
+            <CategoryCard
               data={row}
               handleOpenDeleteDialog={handleOpenDeleteDialog}
               handleOpenEditCategoryDialog={handleOpenEditCategoryDialog}

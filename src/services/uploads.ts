@@ -1,5 +1,5 @@
+import axios from "axios";
 import toast from "react-hot-toast";
-import axios from "src/api/axios";
 import { formatErrorMessage } from "src/utils";
 import { FileUploadResType, FileUploadType } from "src/utils/types";
 

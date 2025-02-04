@@ -1,3 +1,4 @@
+import { useEffect, useLayoutEffect } from "react";
 import {
   Routes,
   Route,
@@ -18,7 +19,6 @@ import {
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminUserManagement from "./pages/admin/AdminUserManagement";
 import SuperAdminLayout from "./components/layouts/SuperAdminLayout/SuperAdminLayout";
-import { useEffect } from "react";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminOrders from "./pages/admin/AdminOrders";
@@ -30,8 +30,25 @@ import AdminAccount from "./pages/admin/AdminAccount";
 import AdminAgentProfile from "./pages/admin/AdminAgentProfile";
 import AdminSingleCategoryPage from "./pages/admin/AdminSingleCategoryPage";
 import Login from "./pages/Login";
+import useAuthStore from "./store/authStore";
+import {
+  getAuthToken,
+  getProfileFromStorage,
+  isAuthTokenExpired,
+} from "./utils";
 
 function App() {
+  const { handleLogin } = useAuthStore();
+  useLayoutEffect(() => {
+    const token = getAuthToken();
+    if (token && !isAuthTokenExpired()) {
+      const fetchedProfile = getProfileFromStorage();
+      if (fetchedProfile) {
+        handleLogin({ userProfile: JSON.parse(fetchedProfile) });
+      }
+    }
+  }, []);
+
   const AdminRoutes = () => (
     <Routes>
       <Route element={<SuperAdminLayout />}>

@@ -10,9 +10,11 @@ import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWra
 
 import CustomDeleteButton from "src/components/shared/CustomDeleteButton/CustomDeleteButton";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
+import { CategoryType } from "src/types/categories";
 // import { MdOutlineCancel } from "react-icons/md";
 type Props = {
   open: boolean;
+  selectedCategory: CategoryType;
   handleClose: () => void;
 };
 

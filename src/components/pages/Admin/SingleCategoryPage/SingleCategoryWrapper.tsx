@@ -2,9 +2,24 @@ import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import SingleCategoryTab from "./SingleCategoryTab";
 import ProductsTable from "./ProductsTable";
-import { getSelectedPageView, setSelectedPageView } from "src/utils";
+import {
+  formatErrorMessage,
+  getSelectedPageView,
+  rowsPerPageOptions,
+  setSelectedPageView,
+  sLimit,
+  sPage,
+} from "src/utils";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import ProductsGridTable from "./ProductsGridTable";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import { fetchSingleCategory } from "src/services/categories";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { useParams, useSearchParams } from "react-router-dom";
 
 export const pageViewTabOptionsObj = {
   GRID: "GRID",
@@ -34,6 +49,46 @@ const SingleCategoryWrapper = () => {
   const [selectedTab, setSelectedTab] = useState(tabOptions[0].value);
   const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
 
+  const [searchParams, setSearchParams] = useSearchParams({
+    limit: rowsPerPageOptions[0].toString(),
+    page: "1",
+  });
+  const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
+  const page = Number(searchParams.get(sPage)) || 0;
+  const params = useParams();
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_CATEGORY,
+      { limit, page },
+    ],
+    queryFn: () => fetchSingleCategory(params.id || ""),
+  });
+
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setSearchParams(
+      (params) => {
+        params.set(sPage, `${newPage + 1}`);
+        return params;
+      },
+      { replace: true }
+    );
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchParams(
+      (params) => {
+        params.set(sLimit, event.target.value.toString());
+        params.set(sPage, "1");
+        return params;
+      },
+      { replace: true }
+    );
+  };
+
+  console.log("", handleChangePage, handleChangeRowsPerPage);
+
   const handleChangeView = (val: string) => {
     setView(val);
     setSelectedPageView(val);
@@ -47,6 +102,14 @@ const SingleCategoryWrapper = () => {
     }
   }, []);
 
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  if (isPending) {
+    return <HalfScreenLoader />;
+  }
+
+  console.log("dddddddddddddd", data);
   return (
     <Box>
       <Box
@@ -68,13 +131,17 @@ const SingleCategoryWrapper = () => {
         selectedUsers={selectedUsers}
         handleChangeView={handleChangeView}
       />
-      {view === pageViewTabOptionsObj.TABLE && (
-        <ProductsTable
-          selectedUsers={selectedUsers}
-          setSelectedUsers={setSelectedUsers}
-        />
-      )}
-      {view === pageViewTabOptionsObj.GRID && <ProductsGridTable />}
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        {view === pageViewTabOptionsObj.TABLE && (
+          <ProductsTable
+            selectedUsers={selectedUsers}
+            setSelectedUsers={setSelectedUsers}
+          />
+        )}
+      </ErrorBoundary>
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        {view === pageViewTabOptionsObj.GRID && <ProductsGridTable />}
+      </ErrorBoundary>
     </Box>
   );
 };

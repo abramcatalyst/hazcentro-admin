@@ -29,7 +29,7 @@ const CategoryCard = ({
   const navigate = useNavigate();
 
   const handleViewProfile = () => {
-    navigate(`${ADMIN_ROUTE_LINKS.ADMIN_SINGLE_CATEGORY}/1234`);
+    navigate(`${ADMIN_ROUTE_LINKS.ADMIN_SINGLE_CATEGORY}/${data?.id}`);
   };
   return (
     <Box

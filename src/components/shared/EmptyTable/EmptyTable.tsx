@@ -1,0 +1,59 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+// import { useTheme } from "@mui/material";
+import EmptyImage from "src/assets/images/logo.png";
+
+type Props = {
+  subText: string;
+  mainText?: string;
+  isSmall?: boolean;
+};
+const EmptyTable = ({
+  subText = "Start creating practice and quiz  to see your progress here.",
+  mainText = "No Records to Show Yet",
+  isSmall,
+}: Props) => {
+  return (
+    <Box
+      sx={{
+        minHeight: isSmall ? "160px" : "210px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+      }}
+    >
+      <img
+        src={EmptyImage}
+        alt="empty data"
+        style={{
+          width: isSmall ? "100px" : "150px",
+          height: isSmall ? "100px" : "150px",
+          objectFit: "contain",
+          margin: "5px auto",
+        }}
+      />
+      <br />
+      <Typography
+        gutterBottom
+        variant="h4"
+        fontSize={16}
+        fontWeight={500}
+        color="text.primary"
+      >
+        {mainText}
+      </Typography>
+      <Typography
+        gutterBottom
+        variant="h5"
+        fontSize={14}
+        color="text.secondary"
+      >
+        {subText}
+      </Typography>
+    </Box>
+  );
+};
+
+export default EmptyTable;

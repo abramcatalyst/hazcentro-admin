@@ -1,0 +1,33 @@
+export type SubCategoryType = {
+  id: string;
+  name: string;
+  description: string;
+  parent_id: string;
+  user_id: string;
+  icon: string | null;
+  is_featured: boolean;
+  sort_order: string | null;
+  depth: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  total_products: number;
+  media: [];
+};
+export type AgentType = {
+  id: string;
+  name: string;
+  description: string;
+  parent_id: string | null;
+  user_id: string;
+  icon: string | null;
+  is_featured: boolean;
+  sort_order: string | null;
+  depth: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  total_products: number;
+  subcategories: SubCategoryType[];
+  media: [];
+};

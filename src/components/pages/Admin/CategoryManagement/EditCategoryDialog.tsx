@@ -8,6 +8,10 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
+import FormLabel from "@mui/material/FormLabel";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DialogActions from "@mui/material/DialogActions";
@@ -52,6 +56,7 @@ function EditCategoryDialog({ open, selectedCategory, handleClose }: Props) {
     initialValues: {
       name: selectedCategory?.name || "",
       description: selectedCategory?.description || "",
+      is_featured: selectedCategory?.is_featured || "0",
     },
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
@@ -63,6 +68,8 @@ function EditCategoryDialog({ open, selectedCategory, handleClose }: Props) {
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("description", values.description);
+        formData.append("is_featured", values.is_featured.toString());
+
         if (image) {
           formData.append("icon", image);
         }
@@ -159,6 +166,18 @@ function EditCategoryDialog({ open, selectedCategory, handleClose }: Props) {
               {errors.description && touched.description && (
                 <FormHelperText error>{errors.description}</FormHelperText>
               )}
+            </FormControl>
+            <FormControl>
+              <FormLabel>Is Featured</FormLabel>
+              <RadioGroup
+                row
+                name="is_featured"
+                value={values.is_featured}
+                onChange={handleChange}
+              >
+                <FormControlLabel value="0" control={<Radio />} label="No" />
+                <FormControlLabel value="1" control={<Radio />} label="Yes" />
+              </RadioGroup>
             </FormControl>
           </Box>
           <CreateItemNotification />

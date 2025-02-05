@@ -15,6 +15,7 @@ const useManageToken = () => {
     removeTokenFromStorage();
     navigate(loginUrl);
   }, []);
+
   return { logOutUser };
 };
 

@@ -1,9 +1,10 @@
 import axios from "axios";
 import { CategoryType } from "src/types/categories";
 import { QueryFilterType } from "src/types/filters";
+import { UserType } from "src/types/users";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
-export const fetchCategories = async ({
+export const fetchUsers = async ({
   page,
   limit,
   search,
@@ -12,7 +13,7 @@ export const fetchCategories = async ({
   endDate,
   lastLoginDate,
 }: QueryFilterType): Promise<{
-  data: CategoryType[];
+  data: UserType[];
   current_page: number;
   first_page_url: string;
   from: number;
@@ -34,7 +35,7 @@ export const fetchCategories = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/global/categories?limit=${limit}${page ? `&page=${page}` : ""}${
+    `${baseUrl}/admin/users?limit=${limit}${page ? `&page=${page}` : ""}${
       startDate ? `&minCreateDate=${startDate}` : ""
     }${endDate ? `&maxCreateDate=${endDate}` : ""}${
       lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
@@ -43,10 +44,10 @@ export const fetchCategories = async ({
     }`
   );
 
-  return data;
+  return data?.users;
 };
 
-export const fetchSingleCategory = async (
+export const fetchSingleUser = async (
   id: string
 ): Promise<{
   data: CategoryType[];
@@ -70,7 +71,7 @@ export const fetchSingleCategory = async (
 }> => {
   setDefaultHeaders();
   isAuthTokenExpired();
-  const { data } = await axios.get(`${baseUrl}/global/categories/${id}`);
+  const { data } = await axios.get(`${baseUrl}/admin/users/${id}`);
 
   return data;
 };

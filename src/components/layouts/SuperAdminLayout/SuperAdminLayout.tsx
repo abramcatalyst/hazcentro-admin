@@ -21,7 +21,13 @@ import HeaderProfile from "./HeaderProfile";
 // import RequireAuth from "src/components/auth/RequireAuth";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
-import { GLOBAL_COLORS, removeTokenFromStorage } from "src/utils";
+import {
+  GLOBAL_COLORS,
+  removeTokenFromStorage,
+  getAuthToken,
+  getProfileFromStorage,
+  isAuthTokenExpired,
+} from "src/utils";
 import HeaderProfileLeft from "./HeaderProfileLeft";
 import { FiLogOut } from "react-icons/fi";
 import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
@@ -114,15 +120,25 @@ const Drawer = styled(MuiDrawer, {
 export default function SuperAdminLayout() {
   const [open, setOpen] = useState(true);
   const { isAuthorized } = useIsUserAuthorized();
-  const { profile, handleLogout } = useAuthStore();
+  const { profile, handleLogout, handleLogin } = useAuthStore();
   const theme = useTheme();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
   useEffect(() => {
-    if (!profile?.id) {
-      navigate(GLOBAL_ROUTE_LINKS.LOGIN);
+    const token = getAuthToken();
+    if (token && !isAuthTokenExpired()) {
+      const fetchedProfile = getProfileFromStorage();
+      if (fetchedProfile) {
+        handleLogin({ userProfile: JSON.parse(fetchedProfile) });
+      }
     }
   }, []);
+  // useEffect(() => {
+  //   if (!profile?.id) {
+  //     navigate(GLOBAL_ROUTE_LINKS.LOGIN);
+  //   }
+  // }, []);
   const handleDrawerOpen = () => {
     setOpen(true);
   };

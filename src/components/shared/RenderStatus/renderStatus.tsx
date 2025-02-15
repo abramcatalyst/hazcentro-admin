@@ -22,6 +22,8 @@ const greenStates = [
   "paid",
   "active",
   "delivered",
+  "complete",
+  "completed",
 ];
 const yellowStates = ["processing", "ongoing"];
 
@@ -78,7 +80,7 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
             background: theme.palette.success.light,
           }}
         />
-        <Typography sx={{ fontSize: "12.3px", textTransform: "capitalize" }}>
+        <Typography sx={{ fontSize: "12px", textTransform: "capitalize" }}>
           {stat || "Active"}
         </Typography>
       </Box>

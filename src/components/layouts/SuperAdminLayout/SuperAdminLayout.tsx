@@ -32,7 +32,7 @@ import HeaderProfileLeft from "./HeaderProfileLeft";
 import { FiLogOut } from "react-icons/fi";
 import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
-const drawerWidth = 240;
+const drawerWidth = 212;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,

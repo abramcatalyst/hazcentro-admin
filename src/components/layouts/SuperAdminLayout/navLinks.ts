@@ -46,7 +46,6 @@ export const navLinks = {
   ADD_SITE_SETTING: "/site-settings/add-site-settings",
   EDIT_SITE_SETTING: "/site-settings/edit-site-settings",
   UNAUTHORIZED: "/unauthorized",
-  USER_DETAILS: "/users/user-details",
   AGENT_DETAILS: "/agents/agent-details",
   STATIC_PAGE_DETAILS: "/all-static-pages/page-details",
   EDIT_STATIC_PAGE: "/all-static-pages/edit-details",
@@ -79,4 +78,5 @@ export const navLinks = {
   SINGLE_INVENTORIES: "/inventories/details",
   INVENTORY_CATEGORIES: "/inventory-categories",
   INVENTORY_CATEGORY_DETAILS: "/inventory-categories/details",
+  USER_DETAILS: "/users/user-details",
 };

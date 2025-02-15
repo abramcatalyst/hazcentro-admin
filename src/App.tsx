@@ -30,6 +30,7 @@ import AdminAccount from "./pages/admin/AdminAccount";
 import AdminAgentProfile from "./pages/admin/AdminAgentProfile";
 import AdminSingleCategoryPage from "./pages/admin/AdminSingleCategoryPage";
 import Login from "./pages/Login";
+import AdminUserDetailsPage from "./pages/admin/AdminUserDetailsPage";
 
 function App() {
   const AdminRoutes = () => (
@@ -39,6 +40,11 @@ function App() {
           path={`${ADMIN_ROUTE_SUB_LINKS.SINGLE_CATEGORY_PAGE}/:id`}
           element={<AdminSingleCategoryPage />}
         />
+        <Route
+          path={`${ADMIN_ROUTE_SUB_LINKS.USER_PROFILE}/:id`}
+          element={<AdminUserDetailsPage />}
+        />
+
         <Route
           path={`${ADMIN_ROUTE_SUB_LINKS.AGENT_PROFILE}/:id`}
           element={<AdminAgentProfile />}

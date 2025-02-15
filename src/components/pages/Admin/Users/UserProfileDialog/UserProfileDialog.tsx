@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Paper from "@mui/material/Paper";
@@ -15,6 +14,9 @@ import UserImg from "src/assets/tempimages/user1.png";
 import { currencyFormater } from "src/utils";
 import QuickActions from "./QuickActions";
 import ActiveOrders from "./ActiveOrders";
+import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
+import { useNavigate } from "react-router-dom";
+import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 
 type Props = {
   open: boolean;
@@ -37,9 +39,9 @@ const InfoBox = ({ title, value }: InfoBoxProps) => {
 function UserProfileDialog({ open, handleClose }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const navigate = useNavigate();
   return (
-    <Dialog
+    <StyledDialog
       fullWidth
       fullScreen={fullScreen}
       open={open}
@@ -194,12 +196,15 @@ function UserProfileDialog({ open, handleClose }: Props) {
                 color: "#ffffff",
               },
             }}
+            onClick={() => {
+              navigate(`${ADMIN_ROUTE_LINKS.ADMIN_USER_PROFILE}/8765`);
+            }}
           >
             Go to full Profile
           </Button>
         </Box>
       </DialogContent>
-    </Dialog>
+    </StyledDialog>
   );
 }
 export default UserProfileDialog;

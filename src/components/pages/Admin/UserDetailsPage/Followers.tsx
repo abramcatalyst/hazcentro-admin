@@ -2,14 +2,15 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import MachineImg from "src/assets/tempimages/machine1.jpg";
-import ProductInfoBox from "src/components/shared/ProductInfoBox/ProductInfoBox";
+import MachineImg from "src/assets/images/avatar-male.png";
+import { currencyFormater } from "src/utils";
+import FollowerInfoBox from "src/components/shared/FollowerInfoBox/FollowerInfoBox";
 
-const ActiveAssignment = () => {
+const Followers = () => {
   return (
     <Box
       component={Paper}
-      sx={{ my: 1, p: 1, borderRadius: "20px" }}
+      sx={{ mb: 1, p: 1, borderRadius: "20px" }}
       elevation={0}
     >
       <Box
@@ -22,7 +23,7 @@ const ActiveAssignment = () => {
         }}
       >
         <Typography sx={{ fontWeight: 500, fontSize: "16px" }}>
-          Active Assignment
+          Followers ({currencyFormater(40)})
         </Typography>
       </Box>
       <Box
@@ -33,17 +34,17 @@ const ActiveAssignment = () => {
           justifyContent: "space-between",
         }}
       >
-        <ProductInfoBox
+        <FollowerInfoBox
           image={MachineImg}
-          title="Oriano Ket"
-          caption1={`SKU:45678fd`}
+          title="Oriano Nig"
+          caption1={`User ID: 43ERTY6798`}
         />
-        <Button size="small" color="inherit" sx={{ background: "#FFFAE8" }}>
-          View details
+        <Button size="small" color="success" sx={{ color: "#47B48E" }}>
+          View profile
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default ActiveAssignment;
+export default Followers;

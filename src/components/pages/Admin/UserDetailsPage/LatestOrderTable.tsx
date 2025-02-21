@@ -30,6 +30,9 @@ function EnhancedTableHead() {
 const LatestOrderTable = () => {
   return (
     <Box sx={{ background: "#ffffff", borderRadius: "20px", mb: 1 }}>
+      <Box sx={{ p: 1, pl: 2 }}>
+        <Typography sx={{ my: 1.4, fontWeight: 600 }}>Latest Order</Typography>
+      </Box>
       <TableContainer>
         <Table
           sx={{ minWidth: 300 }}
@@ -40,7 +43,7 @@ const LatestOrderTable = () => {
           <TableBody>
             {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
               return (
-                <TableRow key={`${row}${index}`}>
+                <TableRow key={`${row}${index}`} hover>
                   <StyledTableCell sx={{ fontSize: "11px" }}>
                     #YTVFR
                   </StyledTableCell>

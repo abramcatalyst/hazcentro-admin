@@ -1,12 +1,11 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
-// import BuyersTable from "./Buyers/BuyersTable";
-import AppHeader from "src/components/shared/AppHeader/AppHeader";
-import ProfileInformation from "./ProfileInformation";
-import ActiveAssignment from "./ActiveAssignment";
 import SideNav from "./SideNav";
-import LatestOrderTable from "./LatestOrderTable";
+import OverviewWrapper from "./Overview/OverviewWrapper";
+import ProfileWrapper from "./Profile/ProfileWrapper";
+import FollowingsWrapper from "./Followings/FollowingsWrapper";
+import OrdersWrapper from "./Orders/OrdersWrapper";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
@@ -47,17 +46,7 @@ const UserDetailsPageWrapper = () => {
   const [selectedTab, setSelectedTab] = useState(profileTabOptions[0].value);
   return (
     <Box>
-      <Box
-        sx={{
-          display: { xs: "none", sm: "block" },
-
-          mb: 1,
-        }}
-      >
-        <AppHeader text="Agent Profile" />
-      </Box>
-
-      <Box my={1}>
+      <Box>
         <Grid container spacing={1}>
           <Grid size={{ xs: false, sm: 2 }}>
             <SideNav
@@ -65,12 +54,19 @@ const UserDetailsPageWrapper = () => {
               setSelectedTab={setSelectedTab}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 7 }}>
-            <LatestOrderTable />
-          </Grid>
-          <Grid size={{ xs: 12, md: 3 }}>
-            <ProfileInformation />
-            <ActiveAssignment />
+          <Grid size={{ xs: 12, sm: 10 }} container spacing={1}>
+            {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
+              <OverviewWrapper />
+            ) : null}
+            {selectedTab === usersPageTabOptionsObj.PROFILE ? (
+              <ProfileWrapper />
+            ) : null}
+            {selectedTab === usersPageTabOptionsObj.FOLLOWINGS ? (
+              <FollowingsWrapper />
+            ) : null}
+            {selectedTab === usersPageTabOptionsObj.ORDERS ? (
+              <OrdersWrapper />
+            ) : null}
           </Grid>
         </Grid>
       </Box>

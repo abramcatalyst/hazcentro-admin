@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid2";
 import UserHeader from "../UserHeader";
 import ActiveOrders from "../ActiveOrders";
 import Followers from "../Followers";
+import ProfileDetailsSection from "./ProfileDetailsSection";
 
 const ProfileWrapper = () => {
   return (
@@ -10,6 +11,7 @@ const ProfileWrapper = () => {
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
           <UserHeader />
+          <ProfileDetailsSection />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <ActiveOrders />

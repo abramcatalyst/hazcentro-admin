@@ -127,13 +127,18 @@ export default function SuperAdminLayout() {
 
   useEffect(() => {
     const token = getAuthToken();
+
+    if (!token || isAuthTokenExpired()) {
+      removeTokenFromStorage();
+      navigate(`${GLOBAL_ROUTE_LINKS.LOGIN}?prevPath=${pathname}`);
+    }
     if (token && !isAuthTokenExpired()) {
       const fetchedProfile = getProfileFromStorage();
       if (fetchedProfile) {
         handleLogin({ userProfile: JSON.parse(fetchedProfile) });
       }
     }
-  }, []);
+  }, [isAuthTokenExpired]);
   // useEffect(() => {
   //   if (!profile?.id) {
   //     navigate(GLOBAL_ROUTE_LINKS.LOGIN);

@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import FormHelperText from "@mui/material/FormHelperText";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 import {
   baseUrl,
@@ -28,6 +28,8 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { handleLogin } = useAuthStore();
+  const [searchParams, _setSearchParams] = useSearchParams();
+  const prevPath = searchParams.get("prevPath");
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -42,7 +44,9 @@ const LoginForm = () => {
         saveTokenToStorage(res?.data?.access_token);
         saveProfileToStorage(JSON.stringify(res?.data?.data?.user));
         handleLogin({ userProfile: res?.data?.data?.user });
-
+        if (prevPath) {
+          return await navigate(prevPath);
+        }
         await navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
       } catch (error) {
         helpers.setSubmitting(false);

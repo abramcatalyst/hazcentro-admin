@@ -74,6 +74,13 @@ export const GLOBAL_COLORS = {
   SECONDARY_LIGHT: "#6bc3a4",
 };
 
+export const statesColoursList = [
+  GLOBAL_COLORS.PRIMARY_MAIN,
+  GLOBAL_COLORS.SECONDARY_MAIN,
+  GLOBAL_COLORS.GREEN_MAIN,
+  "#AD0000",
+  "#003FAD",
+];
 export const SELECTED_PAGE_VIEW = "SELECTED_PAGE_VIEW";
 export const setSelectedPageView = (val: string) => {
   sessionStorage.setItem(SELECTED_PAGE_VIEW, val);
@@ -327,6 +334,10 @@ export const isAuthTokenExpired = (): boolean => {
   try {
     const token = getAuthToken();
     let decodedToken: IToken | null = null;
+
+    if (!token) {
+      return true;
+    }
     if (token) {
       decodedToken = jwtDecode(token);
       // console.log(decodedToken);
@@ -598,3 +609,11 @@ export function downloadCSV<T>({
   link.click(); // Trigger the download
   document.body.removeChild(link); // Clean up
 }
+
+export function generateRandomIntegerInRange(min: number = 1, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+export const generateRandomColour = () => {
+  let n = (Math.random() * 0xfffff * 1000000).toString(16);
+  return "#" + n.slice(0, 6);
+};

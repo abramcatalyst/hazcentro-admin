@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { navLinks } from "src/components/layouts/SuperAdminLayout/navLinks";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
+import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 
 type Props = {
   allowedPermission: string;
@@ -14,7 +14,7 @@ const RoleAuth = ({ children, allowedPermission }: Props) => {
   const loadUserData = async () => {
     let isAllowed = isAuthorized(allowedPermission);
     if (!isAllowed) {
-      navigate(navLinks.UNAUTHORIZED, { replace: true });
+      navigate(GLOBAL_ROUTE_LINKS.LOGIN, { replace: true });
     }
   };
   useEffect(() => {

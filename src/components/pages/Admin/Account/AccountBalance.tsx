@@ -57,6 +57,7 @@ const AccountBalance = () => {
             maxWidth: "270px",
             borderRadius: "20px",
             backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
             p: 1,
           }}
         >

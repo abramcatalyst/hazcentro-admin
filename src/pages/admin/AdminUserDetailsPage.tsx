@@ -1,4 +1,5 @@
-import SkilledWorkerDetailsPageWrapper from "src/components/pages/Admin/SkilledWorkerDetailsPage/SkilledWorkerDetailsPageWrapper";
+// import SkilledWorkerDetailsPageWrapper from "src/components/pages/Admin/SkilledWorkerUserDetailsPage/SkilledWorkerDetailsPageWrapper";
+import SkilledWorkProviderWrapper from "src/components/pages/Admin/SkilledWorkProviderDetailsPage/SkilledWorkProviderWrapper";
 // import UserDetailsPageWrapper from "src/components/pages/Admin/UserDetailsPage/UserDetailsPageWrapper";
 import MetaDecorator from "src/components/shared/MetaDecorator/MetaDecorator";
 
@@ -7,7 +8,8 @@ const AdminUserDetailsPage = () => {
     <div>
       <MetaDecorator title=" User's Profile" />
       {/* <UserDetailsPageWrapper /> */}
-      <SkilledWorkerDetailsPageWrapper />
+      {/* <SkilledWorkerDetailsPageWrapper /> */}
+      <SkilledWorkProviderWrapper />
     </div>
   );
 };

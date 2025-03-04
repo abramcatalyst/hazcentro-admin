@@ -4,15 +4,14 @@ import Grid from "@mui/material/Grid2";
 import SideNav from "./SideNav";
 import OverviewWrapper from "./Overview/OverviewWrapper";
 import ProfileWrapper from "./Profile/ProfileWrapper";
-import SavedWrapper from "./Saved/SavedWrapper";
-import RequestWrapper from "./Request/RequestWrapper";
-// import FollowingsWrapper from "./Followings/FollowingsWrapper";
-// import OrdersWrapper from "./Orders/OrdersWrapper";
+import SubscriptionWrapper from "./Subscriptions/SubscriptionWrapper";
+import NotificationsWrapper from "./Notifications/NotificationsWrapper";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
   PROFILE: "PROFILE",
-  SAVED: "SAVED",
+  SUBSCRIPTION: "SUBSCRIPTION",
+  NOTIFICATION: "NOTIFICATION",
   REQUEST: "REQUEST",
 };
 export const profileTabOptions = [
@@ -25,16 +24,16 @@ export const profileTabOptions = [
     value: usersPageTabOptionsObj.PROFILE,
   },
   {
-    title: "Saved",
-    value: usersPageTabOptionsObj.SAVED,
+    title: "Subscription",
+    value: usersPageTabOptionsObj.SUBSCRIPTION,
   },
   {
-    title: "Request",
-    value: usersPageTabOptionsObj.REQUEST,
+    title: "Notification",
+    value: usersPageTabOptionsObj.NOTIFICATION,
   },
 ];
 
-const SkilledWorkerDetailsPageWrapper = () => {
+const SkilledWorkProviderWrapper = () => {
   const [selectedTab, setSelectedTab] = useState(profileTabOptions[0].value);
   return (
     <Box>
@@ -53,12 +52,13 @@ const SkilledWorkerDetailsPageWrapper = () => {
             {selectedTab === usersPageTabOptionsObj.PROFILE ? (
               <ProfileWrapper />
             ) : null}
-            {selectedTab === usersPageTabOptionsObj.SAVED ? (
-              <SavedWrapper />
+
+            {selectedTab === usersPageTabOptionsObj.SUBSCRIPTION ? (
+              <SubscriptionWrapper />
             ) : null}
 
-            {selectedTab === usersPageTabOptionsObj.REQUEST ? (
-              <RequestWrapper />
+            {selectedTab === usersPageTabOptionsObj.NOTIFICATION ? (
+              <NotificationsWrapper />
             ) : null}
           </Grid>
         </Grid>
@@ -67,4 +67,4 @@ const SkilledWorkerDetailsPageWrapper = () => {
   );
 };
 
-export default SkilledWorkerDetailsPageWrapper;
+export default SkilledWorkProviderWrapper;

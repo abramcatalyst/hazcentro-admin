@@ -14,6 +14,7 @@ import { CssBaseline } from "@mui/material";
 import {
   ADMIN_ROUTE_LINKS,
   ADMIN_ROUTE_SUB_LINKS,
+  CUSTOMER_ROUTE_SUB_LINKS,
   GLOBAL_ROUTE_LINKS,
 } from "./utils/routeLinks";
 import AdminOverview from "./pages/admin/AdminOverview";
@@ -31,8 +32,45 @@ import AdminAgentProfile from "./pages/admin/AdminAgentProfile";
 import AdminSingleCategoryPage from "./pages/admin/AdminSingleCategoryPage";
 import Login from "./pages/Login";
 import AdminUserDetailsPage from "./pages/admin/AdminUserDetailsPage";
+import CustomerCareLayout from "./components/layouts/CustomerCareLayout/CustomerCareLayout";
+import NotFoundPage from "./pages/NotFoundPage";
+import CustomerOverview from "./pages/customercare/CustomerOverview";
+import Disputes from "./pages/customercare/Disputes";
+import CustomerDisputeDetails from "./pages/customercare/DisputeDetails";
+import Distributors from "./pages/customercare/Distributors";
+import DistributorDetails from "./pages/customercare/DistributorDetails";
 
 function App() {
+  const CustomerCareRoutes = () => (
+    <Routes>
+      <Route element={<CustomerCareLayout />}>
+        <Route
+          path={`${CUSTOMER_ROUTE_SUB_LINKS.SINGLE_DISPUTE}/:id`}
+          element={<CustomerDisputeDetails />}
+        />
+        <Route
+          path={`${CUSTOMER_ROUTE_SUB_LINKS.SINGLE_DISTRIBUTOR}/:id`}
+          element={<DistributorDetails />}
+        />
+
+        <Route
+          path={CUSTOMER_ROUTE_SUB_LINKS.OVERVIEW}
+          element={<CustomerOverview />}
+        />
+        <Route
+          path={CUSTOMER_ROUTE_SUB_LINKS.DISPUTES}
+          element={<Disputes />}
+        />
+        <Route
+          path={CUSTOMER_ROUTE_SUB_LINKS.DISTRIBUTORS}
+          element={<Distributors />}
+        />
+
+        {/* <Route path="*" element={<Navigate to="home" />} /> */}
+      </Route>
+    </Routes>
+  );
+
   const AdminRoutes = () => (
     <Routes>
       <Route element={<SuperAdminLayout />}>
@@ -91,6 +129,7 @@ function App() {
     </Routes>
   );
 
+  console.log("customer routes", CustomerCareRoutes);
   return (
     <>
       <CssBaseline />
@@ -100,10 +139,12 @@ function App() {
             <Routes>
               <Route path="/" element={<Root />} />
               <Route path="admin/*" element={<AdminRoutes />} />
-              <Route path={GLOBAL_ROUTE_LINKS.LOGIN} element={<Login />} />
+              {/* <Route path="customer-care/*" element={<CustomerCareRoutes />} /> */}
 
+              <Route path={GLOBAL_ROUTE_LINKS.LOGIN} element={<Login />} />
+              <Route path="*" element={<NotFoundPage />} />
               {/* <Route path="dashboard" element={<Dashboard />}>
-        <Route index element={<RecentActivity />} />
+      
         <Route path="project/:id" element={<Project />} />
       </Route> */}
             </Routes>

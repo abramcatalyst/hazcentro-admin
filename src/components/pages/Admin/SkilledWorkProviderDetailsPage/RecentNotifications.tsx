@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"; // ES 2015
 
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 import { IoIosNotificationsOutline } from "react-icons/io";
 
 dayjs.extend(relativeTime);
@@ -60,7 +60,7 @@ function RecentNotifications() {
       }}
     >
       <Box>
-        <ProfileTile text="Notifications" />
+        <ProfileTitle text="Notifications" />
       </Box>
 
       <Box>

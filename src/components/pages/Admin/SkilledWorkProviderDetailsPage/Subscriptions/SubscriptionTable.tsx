@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import { currencyFormater } from "src/utils";
 import Logo from "src/assets/images/logo2.png";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 
 const headCells = [
   "Order ID",
@@ -15,7 +15,7 @@ const headCells = [
   "Merchant Name",
 ];
 
-const SubscriptionItem = () => {
+export const SubscriptionItem = () => {
   return (
     <Box
       sx={{
@@ -72,7 +72,7 @@ function SubscriptionTable() {
       }}
     >
       <Box>
-        <ProfileTile text="History" />
+        <ProfileTitle text="History" />
       </Box>
 
       <Box>

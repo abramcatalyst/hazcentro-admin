@@ -3,12 +3,13 @@ import Typography from "@mui/material/Typography";
 type Props = {
   text: string;
 };
-const ProfileTile = ({ text }: Props) => {
+const ProfileTitle = ({ text }: Props) => {
   return (
     <Typography
       gutterBottom
       sx={{
-        fontSize: { xs: "15px", sm: "17px", fontWeight: { xs: 500, sm: 600 } },
+        fontSize: { xs: "15px", sm: "17px" },
+        fontWeight: { xs: 500, sm: 600 },
       }}
     >
       {text}
@@ -16,4 +17,4 @@ const ProfileTile = ({ text }: Props) => {
   );
 };
 
-export default ProfileTile;
+export default ProfileTitle;

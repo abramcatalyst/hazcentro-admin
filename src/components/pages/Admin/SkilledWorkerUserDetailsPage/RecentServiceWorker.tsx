@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import MachineImg from "src/assets/tempimages/user1.png";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 import RecentCloseItem from "src/components/shared/RecentCloseItem/RecentCloseItem";
 
 const RecentServiceWorker = () => {
@@ -20,7 +20,7 @@ const RecentServiceWorker = () => {
           mb: 1,
         }}
       >
-        <ProfileTile text="Recent Service Worker" />
+        <ProfileTitle text="Recent Service Worker" />
       </Box>
       <Box
         sx={{

@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import MachineImg from "src/assets/tempimages/machine1.jpg";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 
 type CategoryInfoBoxProps = {
   image: string;
@@ -93,7 +93,7 @@ const VisitedCategories = () => {
           mb: 1,
         }}
       >
-        <ProfileTile text="Visited Categories" />
+        <ProfileTitle text="Visited Categories" />
       </Box>
       <Box
         sx={{

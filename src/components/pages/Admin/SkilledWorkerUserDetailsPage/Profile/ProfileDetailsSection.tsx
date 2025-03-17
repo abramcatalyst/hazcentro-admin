@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import MaleAvatar from "src/assets/tempimages/user1.png";
 import ProfileInfoBox from "src/components/shared/ProfileInfoBox/ProfileInfoBox";
 import QuickActions from "./QuickActions";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 
 const sizing = { xs: 12, sm: 6, md: 4, lg: 3 };
 const ProfileDetailsSection = () => {
@@ -22,7 +22,7 @@ const ProfileDetailsSection = () => {
       elevation={0}
     >
       <Box sx={{ my: 1 }}>
-        <ProfileTile text="Profile Info" />
+        <ProfileTitle text="Profile Info" />
       </Box>
 
       <Box

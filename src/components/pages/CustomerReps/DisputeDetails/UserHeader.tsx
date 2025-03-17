@@ -1,0 +1,104 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
+import { useTheme } from "@mui/material/styles";
+import MaleAvatar from "src/assets/images/avatar-male.png";
+import { FiCopy } from "react-icons/fi";
+import { GLOBAL_COLORS } from "src/utils";
+const UserHeader = () => {
+  const theme = useTheme();
+  return (
+    <Box
+      component={Paper}
+      sx={{
+        p: 1,
+        borderRadius: "12px",
+        display: "flex",
+        gap: 1,
+        alignItems: "center",
+        justifyContent: "space-between",
+        mb: 2,
+        width: "100%",
+      }}
+      elevation={0}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          gap: 0.2,
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 1,
+          }}
+        >
+          <IconButton>
+            <ChevronLeftRoundedIcon />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            alignItems: "center",
+          }}
+        >
+          <Box sx={{ borderRadius: "50%", width: "45px", height: "45px" }}>
+            <img alt="user" src={MaleAvatar} style={{ objectFit: "cover" }} />
+          </Box>
+          <Box sx={{ my: 2 }}>
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: 600,
+              }}
+            >
+              Jason Suter
+            </Typography>{" "}
+            <Typography
+              sx={{
+                fontSize: "12px",
+
+                color: theme.palette.grey[800],
+              }}
+            >
+              User ID: 123457865
+            </Typography>{" "}
+          </Box>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 0.3,
+          alignItems: "center",
+          color: GLOBAL_COLORS.GREEN_MAIN,
+          background: "#47B48E0D",
+          py: 0.3,
+          px: 1,
+          borderRadius: "12px",
+        }}
+      >
+        <Typography variant="subtitle2">234812345612</Typography>
+        <IconButton size="small">
+          <FiCopy
+            style={{
+              color: GLOBAL_COLORS.GREEN_MAIN,
+            }}
+          />
+        </IconButton>
+      </Box>
+    </Box>
+  );
+};
+
+export default UserHeader;

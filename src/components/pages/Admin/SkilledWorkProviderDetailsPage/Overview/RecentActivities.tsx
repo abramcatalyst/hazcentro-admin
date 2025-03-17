@@ -5,7 +5,7 @@ import Chip from "@mui/material/Chip";
 import MachineImg from "src/assets/tempimages/machine1.jpg";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 
 dayjs.extend(relativeTime);
 
@@ -111,7 +111,7 @@ const RecentActivities = () => {
           mb: 1,
         }}
       >
-        <ProfileTile text="Map Activities" />
+        <ProfileTitle text="Map Activities" />
       </Box>
       <Box
         sx={{

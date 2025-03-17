@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import MachineImg from "src/assets/tempimages/user1.png";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 
 type RequestInfoBoxProps = {
   image: string;
@@ -105,7 +105,7 @@ const SavedWorkersSection = () => {
       elevation={0}
     >
       <Box sx={{ my: 1 }}>
-        <ProfileTile text="Requests" />
+        <ProfileTitle text="Requests" />
       </Box>
 
       {[1, 2, 3].map((item, idx) => (

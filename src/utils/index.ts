@@ -81,6 +81,10 @@ export const statesColoursList = [
   "#AD0000",
   "#003FAD",
 ];
+export const linkStyle = {
+  color: "inherit",
+  textDecoration: "none",
+};
 export const SELECTED_PAGE_VIEW = "SELECTED_PAGE_VIEW";
 export const setSelectedPageView = (val: string) => {
   sessionStorage.setItem(SELECTED_PAGE_VIEW, val);
@@ -371,17 +375,23 @@ export function currencyFormater(
   let parsedString = parseFloat(x?.toString()).toFixed(dp);
   return parsedString?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-export const currencyFormater2 = (x: string | number | undefined) => {
+export const currencyFormater2 = (x: string | number | undefined | null) => {
   if (!x) {
     return 0;
   }
-  const formatCash = Intl.NumberFormat("en-US", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(+x);
-  return formatCash;
+  const amount = parseFloat(x as string);
+  if (amount >= 1_000_000) {
+    return (amount / 1_000_000).toFixed(1) + "m";
+  } else if (amount >= 1_000) {
+    return (amount / 1_000).toFixed(1) + "k";
+  } else {
+    return amount.toString();
+  }
 };
 
+export function valueFormatter(value: number | null) {
+  return `${currencyFormater2(value)}`;
+}
 export const getWindowQueryString = (name: string) => {
   let result = "";
   if (typeof window === "object") {

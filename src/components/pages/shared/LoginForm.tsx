@@ -8,7 +8,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
+import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 import {
   baseUrl,
   formatErrorMessage,
@@ -47,11 +47,12 @@ const LoginForm = () => {
         if (prevPath) {
           return await navigate(prevPath);
         }
-        await navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
+        await navigate(CUSTOMER_ROUTE_LINKS.CUSTOMER_OVERVIEW);
+        // await navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
       } catch (error) {
         helpers.setSubmitting(false);
         let errMsg = formatErrorMessage(error);
-
+        console.log(ADMIN_ROUTE_LINKS);
         return toast.error(errMsg);
       }
     },

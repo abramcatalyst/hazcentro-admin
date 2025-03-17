@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import { alpha } from "@mui/material/styles";
 import Map from "src/assets/tempimages/map.png";
 import { generateRandomIntegerInRange, statesColoursList } from "src/utils";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 
 const states = ["Delta", "Abuja", "Kaduna"];
 const RecentCoveredAreas = () => {
@@ -15,7 +15,7 @@ const RecentCoveredAreas = () => {
       elevation={0}
     >
       <Box sx={{ mb: 2, pl: 1.5 }}>
-        <ProfileTile text="Recent Covered Areas" />
+        <ProfileTitle text="Recent Covered Areas" />
       </Box>
       <Box sx={{ height: "300px", maxHeight: "300px" }}>
         <img

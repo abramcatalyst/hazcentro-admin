@@ -6,12 +6,12 @@ import Star1Img from "src/assets/images/star-ticket.png";
 import Star2Img from "src/assets/images/star-ticket-2.png";
 import { currencyFormater } from "src/utils";
 
-type ButtonBoxProps = {
+type StatsBoxProps = {
   title: string;
   image: string;
   value: string | number;
 };
-const ButtonBox = ({ title, image, value }: ButtonBoxProps) => {
+export const StatsBox = ({ title, image, value }: StatsBoxProps) => {
   return (
     <Box
       sx={{
@@ -52,11 +52,11 @@ function DistributorStats() {
         flexWrap: "wrap",
       }}
     >
-      <ButtonBox title="Total Products" value={2300} image={Star1Img} />
+      <StatsBox title="Total Products" value={2300} image={Star1Img} />
 
-      <ButtonBox title="Successful Sales" value={456} image={Star2Img} />
+      <StatsBox title="Successful Sales" value={456} image={Star2Img} />
 
-      <ButtonBox title="Years Selling" value={4} image={MedalImg} />
+      <StatsBox title="Years Selling" value={4} image={MedalImg} />
     </Box>
   );
 }

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Map from "src/assets/tempimages/map.png";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 
 const MapActivities = () => {
   return (
@@ -12,7 +12,7 @@ const MapActivities = () => {
       elevation={0}
     >
       <Box sx={{ mb: 2, pl: 1.5 }}>
-        <ProfileTile text="Map Activities" />
+        <ProfileTitle text="Map Activities" />
       </Box>
       <Box sx={{ height: "300px", maxHeight: "300px" }}>
         <img

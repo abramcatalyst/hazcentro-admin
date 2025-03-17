@@ -1116,24 +1116,6 @@ export type AppSettingsContentType = {
   value: string;
 };
 
-export type PayoutType = {
-  id: number;
-  payoutId: string;
-  userId: string;
-  ticketId: string;
-  bankDetails: string;
-  amount: string;
-  winningRedemptionMethod: string;
-  isPaid: boolean;
-  paymentDate: string;
-  receipientCode: null | string;
-  attempts: number;
-  info: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type CommissionReportType = {
   TotalCommission: {
     string: number;

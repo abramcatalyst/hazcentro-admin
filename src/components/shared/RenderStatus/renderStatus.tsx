@@ -14,6 +14,8 @@ const redStates = [
   "ended",
   "offline",
   "not paid",
+  "cancelled",
+  "canceled",
 ];
 const greenStates = [
   "approved",
@@ -25,23 +27,11 @@ const greenStates = [
   "complete",
   "completed",
 ];
-const yellowStates = ["processing", "ongoing"];
+const yellowStates = ["processing", "ongoing", "pending", "not claimed"];
 
 const renderStatus = (stat: string | boolean | number | null | undefined) => {
   const theme = useTheme();
 
-  if (stat === "canceled" || stat === "cancelled") {
-    return (
-      <Chip
-        sx={{ background: "black", color: "#fff" }}
-        label={stat}
-        size="small"
-      />
-    );
-  }
-  if (stat === "pending" || stat === "Not Claimed") {
-    return <Chip color="warning" label={stat} size="small" />;
-  }
   if (typeof stat === "string" && redStates.includes(stat)) {
     return <Chip color="error" label={stat} size="small" />;
   }
@@ -57,7 +47,13 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
             background: theme.palette.warning.main,
           }}
         />
-        <Typography sx={{ fontSize: "12.3px", textTransform: "capitalize" }}>
+        <Typography
+          sx={{
+            fontSize: "12.3px",
+            textTransform: "capitalize",
+            color: theme.palette.warning.main,
+          }}
+        >
           {stat || "Processing"}
         </Typography>
       </Box>
@@ -92,9 +88,7 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
   if (Boolean(stat) === false) {
     return <Chip color="error" label={"Not active"} size="small" />;
   }
-  if (stat === "Claimed") {
-    return <Chip color="success" label={stat} size="small" />;
-  }
+
   if (typeof stat === "undefined") {
     return <Chip color="error" label={"Error"} size="small" />;
   }

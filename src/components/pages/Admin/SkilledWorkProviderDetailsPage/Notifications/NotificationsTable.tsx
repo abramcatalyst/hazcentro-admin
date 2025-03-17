@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"; // ES 2015
 
 import Logo from "src/assets/images/logo2.png";
-import ProfileTile from "src/components/shared/ProfileTitle/ProfileTile";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { GLOBAL_COLORS } from "src/utils";
 
@@ -109,7 +109,7 @@ function NotificationsTable() {
       }}
     >
       <Box>
-        <ProfileTile text="Notifications" />
+        <ProfileTitle text="Notifications" />
       </Box>
 
       <Box>

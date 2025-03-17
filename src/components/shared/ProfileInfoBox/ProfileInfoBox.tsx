@@ -27,6 +27,10 @@ const ProfileInfoBox = ({
   const handleClosePreview = () => {
     setOpenPreview(false);
   };
+  let splitValue = 16;
+  if (enableDownload && enablePreview) {
+    splitValue = 11;
+  }
   return (
     <Box sx={{ my: 1 }}>
       {openPreview && (
@@ -49,11 +53,13 @@ const ProfileInfoBox = ({
           <Typography
             sx={{
               color: "GrayText",
-              fontSize: "15px",
+              fontSize: "14px",
               fontWeight: 600,
             }}
+            title={value}
           >
-            {value}
+            {value?.substring(0, splitValue)}
+            {value?.length > splitValue ? "..." : ""}
           </Typography>{" "}
           {enableDownload && (
             <IconButton size="small">

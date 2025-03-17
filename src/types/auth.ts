@@ -43,7 +43,7 @@ export type LoginResponseProfileType = {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-  role: "admin";
+  role: "admin" | "customercare";
   roles: LoginRoleType[];
 };
 export type LoginResponseType = {

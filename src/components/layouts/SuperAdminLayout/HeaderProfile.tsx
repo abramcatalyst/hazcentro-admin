@@ -49,7 +49,7 @@ export default function HeaderProfile() {
           display: "flex",
           alignItems: "center",
           textAlign: "center",
-          ml: "auto",
+          ml: { xs: "0px", sm: "auto" },
           color: "black",
           gap: 1,
         }}

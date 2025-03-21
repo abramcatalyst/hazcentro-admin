@@ -12,6 +12,7 @@ import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWra
 import TopSection from "./TopSection";
 import ProductInformation from "./ProductInformation";
 import PaymentInformationSection from "./PaymentInformationSection";
+import OrderStages from "./OrderStages";
 
 type Props = {
   open: boolean;
@@ -62,6 +63,7 @@ function OrderPreviewDialog({ open, handleClose }: Props) {
               <PaymentInformationSection />
             </Grid>
           </Grid>
+          <OrderStages />
         </Box>
       </DialogContent>
     </StyledDialog>

@@ -11,7 +11,7 @@ import PeopleImg from "src/assets/icons/people_fill_icon.svg";
 
 import { BiSolidRightTopArrowCircle } from "react-icons/bi";
 
-const itemSizing = { xs: 2, sm: 2, md: 1 };
+const itemSizing = { xs: 5, sm: 2, md: 1 };
 
 type StatsCardProps = {
   kind: "sale" | "order" | "user" | "distributor" | "visitor";

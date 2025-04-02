@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,15 +11,52 @@ import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWra
 
 import CustomDeleteButton from "src/components/shared/CustomDeleteButton/CustomDeleteButton";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
+import { AgentType } from "src/types/agents";
+import axios from "axios";
+import {
+  baseUrl,
+  formatErrorMessage,
+  formatSuccessMessage,
+  isAuthTokenExpired,
+  setDefaultHeaders,
+} from "src/utils";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 // import { MdOutlineCancel } from "react-icons/md";
 type Props = {
+  selectedAgent: AgentType;
   open: boolean;
   handleClose: () => void;
 };
 
-function DeleteAgentDialog({ open, handleClose }: Props) {
+function DeleteAgentDialog({ selectedAgent, open, handleClose }: Props) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
   const handleCloseDialog = () => {
     handleClose();
+  };
+  const handleSubmitDelete = async () => {
+    try {
+      setDefaultHeaders();
+      isAuthTokenExpired();
+      setIsSubmitting(true);
+
+      const res = await axios.delete(
+        `${baseUrl}/admin/agents/${selectedAgent?.id}`
+      );
+      const successMsg = formatSuccessMessage(res?.data);
+      toast.success(successMsg);
+      queryClient.invalidateQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENTS],
+      });
+      handleClose();
+    } catch (error) {
+      const errorMsg = formatErrorMessage(error);
+      toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <StyledDialog fullWidth open={open} onClose={handleClose} maxWidth="sm">
@@ -48,7 +86,7 @@ function DeleteAgentDialog({ open, handleClose }: Props) {
 
         <Box mt={1}>
           <Typography sx={{ my: 1, color: "GrayText" }}>
-            Are you sure you want to delete “Lydia John”
+            Are you sure you want to delete “{selectedAgent?.name}”
           </Typography>
         </Box>
 
@@ -65,7 +103,11 @@ function DeleteAgentDialog({ open, handleClose }: Props) {
           >
             Cancel
           </Button>
-          <CustomDeleteButton />
+          <CustomDeleteButton
+            disabled={isSubmitting}
+            isSubmitting={isSubmitting}
+            handleClick={handleSubmitDelete}
+          />
         </Box>
       </DialogContent>
     </StyledDialog>

@@ -34,7 +34,7 @@ export const fetchAgents = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/global/categories?limit=${limit}${page ? `&page=${page}` : ""}${
+    `${baseUrl}/admin/agents?limit=${limit}${page ? `&page=${page}` : ""}${
       startDate ? `&minCreateDate=${startDate}` : ""
     }${endDate ? `&maxCreateDate=${endDate}` : ""}${
       lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
@@ -43,5 +43,5 @@ export const fetchAgents = async ({
     }`
   );
 
-  return data;
+  return data?.data;
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Box from "@mui/material/Box";
@@ -25,8 +25,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { LuEyeClosed } from "react-icons/lu";
-import { RxEyeOpen } from "react-icons/rx";
+// import { LuEyeClosed } from "react-icons/lu";
+// import { RxEyeOpen } from "react-icons/rx";
 import {
   baseUrl,
   formatErrorMessage,
@@ -36,6 +36,7 @@ import {
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { AgentType } from "src/types/agents";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -51,15 +52,17 @@ const MenuProps = {
 // import { MdOutlineCancel } from "react-icons/md";
 type Props = {
   open: boolean;
+  selectedAgent: AgentType;
   handleClose: () => void;
 };
 
-function AddAgentDialog({ open, handleClose }: Props) {
+function EditAgentDialog({ open, selectedAgent, handleClose }: Props) {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
-  const [showPassword, setShowPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const queryClient = useQueryClient();
+
   const handleChangeState = (
     event: SelectChangeEvent<typeof selectedStates>
   ) => {
@@ -84,20 +87,33 @@ function AddAgentDialog({ open, handleClose }: Props) {
   // );
   type FormType = {
     email: string;
-    password: string;
     name: string;
     gender: string;
     states: string[];
   };
   let initialValues: FormType = {
     email: "",
-    password: "",
     name: "",
     gender: "",
     states: [],
   };
+
+  if (selectedAgent) {
+    initialValues.name = selectedAgent.name;
+    initialValues.email = selectedAgent.email;
+    initialValues.gender = selectedAgent.gender;
+  }
+  useEffect(() => {
+    let newStates = [...selectedAgent?.states.map((item) => item.state)];
+    setSelectedStates(newStates);
+    return () => {
+      setSelectedStates([]);
+    };
+  }, [open]);
+
   const formik = useFormik({
     initialValues,
+    enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       setDefaultHeaders();
       if (selectedStates?.length === 0) {
@@ -107,7 +123,10 @@ function AddAgentDialog({ open, handleClose }: Props) {
         values.states = selectedStates;
 
         helpers.setSubmitting(true);
-        const res = await axios.post(`${baseUrl}/admin/agents`, values);
+        const res = await axios.put(
+          `${baseUrl}/admin/agents/${selectedAgent?.id}`,
+          values
+        );
         // const res = await axios.post(`${baseUrl}/auth/login`, values);
         // console.log("xxxxxxxxxxxxxxxxxxxxxxx", res?.data?.access_token);
         await queryClient.invalidateQueries({
@@ -126,7 +145,6 @@ function AddAgentDialog({ open, handleClose }: Props) {
       email: yup.string().required().label("Email"),
       name: yup.string().required().label("Name"),
       gender: yup.string().required().label("Gender"),
-      password: yup.string().min(6).required().label("Password"),
     }),
   });
 
@@ -159,7 +177,7 @@ function AddAgentDialog({ open, handleClose }: Props) {
           }}
         >
           <Typography variant="h6" sx={{ color: "GrayText" }}>
-            Add Agent
+            Edit Agent Profile
           </Typography>
           <DialogCloseButtonWrapper>
             <IconButton onClick={handleClose} color="error">
@@ -238,29 +256,6 @@ function AddAgentDialog({ open, handleClose }: Props) {
                 <FormHelperText error>{errors.gender}</FormHelperText>
               )}
             </FormControl>
-            <FormControl fullWidth sx={{ my: 1 }}>
-              <InputLabel>Enter Agent's Password</InputLabel>
-              <OutlinedInput
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                label="Enter Agent's Password"
-                endAdornment={
-                  <IconButton
-                    onClick={() => {
-                      setShowPassword((curr) => !curr);
-                    }}
-                  >
-                    {showPassword ? <RxEyeOpen /> : <LuEyeClosed />}
-                  </IconButton>
-                }
-              />
-              {touched.password && errors.password && (
-                <FormHelperText error>{errors.password}</FormHelperText>
-              )}
-            </FormControl>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Box>
@@ -285,7 +280,7 @@ function AddAgentDialog({ open, handleClose }: Props) {
               }}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Processing" : "Add Agent"}
+              {isSubmitting ? "Processing" : "Update profile"}
             </Button>
           </Box>
         </Box>
@@ -293,4 +288,4 @@ function AddAgentDialog({ open, handleClose }: Props) {
     </StyledDialog>
   );
 }
-export default AddAgentDialog;
+export default EditAgentDialog;

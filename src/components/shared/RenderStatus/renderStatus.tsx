@@ -16,6 +16,7 @@ const redStates = [
   "not paid",
   "cancelled",
   "canceled",
+  "suspended",
 ];
 const greenStates = [
   "approved",
@@ -33,7 +34,21 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
   const theme = useTheme();
 
   if (typeof stat === "string" && redStates.includes(stat)) {
-    return <Chip color="error" label={stat} size="small" />;
+    return (
+      <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
+        <Box
+          sx={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            background: theme.palette.error.light,
+          }}
+        />
+        <Typography sx={{ fontSize: "12px", textTransform: "capitalize" }}>
+          {stat || "Not active"}
+        </Typography>
+      </Box>
+    );
   }
 
   if (typeof stat === "string" && yellowStates?.includes(stat)) {

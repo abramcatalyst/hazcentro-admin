@@ -6,6 +6,8 @@ import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import AgentsTab from "./AgentsTab";
 import AgentsTable from "./AgentsTable";
 import AddAgentDialog from "./AddAgentDialog";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 const AgentsWrapper = () => {
   const [openAddAgentDialog, setOpenAddAgentDialog] = useState(false);
@@ -92,7 +94,9 @@ const AgentsWrapper = () => {
         </Box>
       </Box>
       <AgentsTab />
-      <AgentsTable />
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <AgentsTable />
+      </ErrorBoundary>
     </Box>
   );
 };

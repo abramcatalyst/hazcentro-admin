@@ -12,16 +12,20 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import dayjs from "dayjs";
 import { currencyFormater, GLOBAL_COLORS, tableMenuStyles } from "src/utils";
 import ProductDetailsDialog from "./ProductDetailsDialog";
-import ProductImg from "src/assets/tempimages/img1.png";
+import ProductImg from "src/assets/images/logo.png";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
 import { useTheme } from "@mui/material/styles";
+import { SingleCategoryType } from "src/types/categories";
 
 dayjs.extend(advancedFormat);
 
 const sizing = { xs: 6, sm: 4, md: 3, lg: 2 };
 
-function ProductsGridTable() {
+type Props = {
+  data: SingleCategoryType;
+};
+function ProductsGridTable({ data }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
   const theme = useTheme();
   const handleOpenPreviewProfile = () => {
@@ -41,7 +45,7 @@ function ProductsGridTable() {
 
       <Box>
         <Grid container spacing={2}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => {
+          {data?.products?.data?.map((row) => {
             return (
               <Grid size={sizing} key={`${row}`}>
                 <Box
@@ -73,11 +77,11 @@ function ProductsGridTable() {
                       }}
                     >
                       <Typography sx={{ fontSize: "12px" }}>
-                        &#8358;{currencyFormater(300000)}
+                        &#8358;{currencyFormater(row?.price, 2)}
                       </Typography>
                     </Box>
                     <img
-                      src={ProductImg}
+                      src={row?.media[0]?.original_url || ProductImg}
                       alt="product"
                       style={{
                         width: "100%",
@@ -97,10 +101,10 @@ function ProductsGridTable() {
                   >
                     <Box>
                       <Typography sx={{ fontSize: "13px", fontWeight: 500 }}>
-                        Product Name
+                        {row?.name}
                       </Typography>
                       <Typography sx={{ fontSize: "12px", color: "GrayText" }}>
-                        Created : {dayjs().format("MM Do YYYY")}
+                        Created : {dayjs(row?.created_at).format("MM Do YYYY")}
                       </Typography>
                     </Box>
 

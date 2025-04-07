@@ -17,7 +17,7 @@ import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import { fetchSingleCategory } from "src/services/categories";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { useParams, useSearchParams } from "react-router-dom";
 
@@ -55,7 +55,9 @@ const SingleCategoryWrapper = () => {
   });
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 0;
+
   const params = useParams();
+  const queryClient = useQueryClient();
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_CATEGORY,
@@ -63,6 +65,14 @@ const SingleCategoryWrapper = () => {
     ],
     queryFn: () => fetchSingleCategory(params.id || ""),
   });
+
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_CATEGORY],
+      });
+    };
+  }, [params?.id]);
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setSearchParams(
@@ -122,7 +132,7 @@ const SingleCategoryWrapper = () => {
           mb: 2,
         }}
       >
-        <AppHeader text="Electronics" />
+        <AppHeader text={data?.name || ""} />
       </Box>
       <SingleCategoryTab
         selectedTab={selectedTab}
@@ -134,13 +144,16 @@ const SingleCategoryWrapper = () => {
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
         {view === pageViewTabOptionsObj.TABLE && (
           <ProductsTable
+            data={data}
             selectedUsers={selectedUsers}
             setSelectedUsers={setSelectedUsers}
           />
         )}
       </ErrorBoundary>
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
-        {view === pageViewTabOptionsObj.GRID && <ProductsGridTable />}
+        {view === pageViewTabOptionsObj.GRID && (
+          <ProductsGridTable data={data} />
+        )}
       </ErrorBoundary>
     </Box>
   );

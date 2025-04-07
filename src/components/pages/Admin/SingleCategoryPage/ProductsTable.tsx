@@ -10,30 +10,32 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-import Checkbox from "@mui/material/Checkbox";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import dayjs from "dayjs";
-import { currencyFormater, GLOBAL_COLORS, tableMenuStyles } from "src/utils";
+import { currencyFormater, tableMenuStyles } from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
 import ProductDetailsDialog from "./ProductDetailsDialog";
 // import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
+import ProductImg from "src/assets/images/logo.png";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
+import { SingleCategoryType } from "src/types/categories";
 
 dayjs.extend(advancedFormat);
 
 const headCells = [
-  "Cat ID",
-  "Category Name",
-  "No. of Items",
-  "Used By (Merc.)",
+  "Image",
+  "Name",
+  "Price",
+  "Warranty",
   "Created On",
-  "Tags",
+  "Business Name",
   "Action",
 ];
 
 type Props = {
+  data: SingleCategoryType;
   selectedUsers: Set<number>;
   setSelectedUsers: Dispatch<SetStateAction<Set<number>>>;
 };
@@ -41,14 +43,14 @@ function EnhancedTableHead() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox
             size="small"
             color="warning"
 
-            // onChange={onSelectAllClick}
+            onChange={onSelectAllClick}
           />
-        </TableCell>
+        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell key={headCell}>{headCell}</TableCell>
         ))}
@@ -57,7 +59,7 @@ function EnhancedTableHead() {
   );
 }
 
-function ProductsTable({ selectedUsers, setSelectedUsers }: Props) {
+function ProductsTable({ data }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
 
   const handleOpenPreviewProfile = () => {
@@ -92,10 +94,7 @@ function ProductsTable({ selectedUsers, setSelectedUsers }: Props) {
           //   onSelectAllClick={handleSelectAllClick}
           />
           <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
-              const isItemSelected = selectedUsers.has(index);
-              const labelId = `table-checkbox-${index}`;
-
+            {data?.products?.data?.map((row) => {
               return (
                 <StyledTableRow
                   hover
@@ -103,16 +102,15 @@ function ProductsTable({ selectedUsers, setSelectedUsers }: Props) {
                   role="checkbox"
                   // aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row}
-                  selected={isItemSelected}
-                  sx={{
-                    cursor: "pointer",
-                    background: isItemSelected
-                      ? GLOBAL_COLORS.YELLOW_500
-                      : "default",
-                  }}
+                  key={row?.id}
+                  // sx={{
+                  //   cursor: "pointer",
+                  //   background: isItemSelected
+                  //     ? GLOBAL_COLORS.YELLOW_500
+                  //     : "default",
+                  // }}
                 >
-                  <StyledTableCell padding="checkbox">
+                  {/* <StyledTableCell padding="checkbox">
                     <Checkbox
                       color="warning"
                       size="small"
@@ -132,17 +130,30 @@ function ProductsTable({ selectedUsers, setSelectedUsers }: Props) {
                         "aria-labelledby": labelId,
                       }}
                     />
-                  </StyledTableCell>
-                  <StyledTableCell>#YW627J</StyledTableCell>
-                  <StyledTableCell>{"Electronics"}</StyledTableCell>
+                  </StyledTableCell> */}
                   <StyledTableCell>
-                    {currencyFormater("234123")}
+                    <img
+                      src={row?.media[0]?.original_url || ProductImg}
+                      alt="product"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        objectFit: "cover",
+                        borderRadius: "6px",
+                      }}
+                    />
                   </StyledTableCell>
-                  <StyledTableCell>{"Runtown corp."}</StyledTableCell>
+                  <StyledTableCell>{row?.name}</StyledTableCell>
                   <StyledTableCell>
-                    {dayjs().format("MMM Do YYYY")}
+                    &#8358;{currencyFormater(row?.price, 2)}
                   </StyledTableCell>
-                  <StyledTableCell>{"5"}</StyledTableCell>
+                  <StyledTableCell>{row?.warranty}</StyledTableCell>
+                  <StyledTableCell>
+                    {dayjs(row?.created_at).format("MMM Do YYYY")}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {row?.vendor?.business_name}
+                  </StyledTableCell>
                   <StyledTableCell>
                     <PopupState variant="popover">
                       {(popupState) => (

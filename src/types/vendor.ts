@@ -1,0 +1,54 @@
+export type VendorType = {
+  id: string;
+  user_id: string;
+  business_name: string;
+  business_registration_number: string | null;
+  nature_of_business: string;
+  sector_industry: string;
+  website_url: string | null;
+  business_phone_number: string | null;
+  role_position: string | null;
+  means_of_identification: string;
+  id_number: string;
+  type_of_products: string;
+  description_of_products: string;
+  region_territory_covered: string;
+  warehouse_location: string;
+  is_registered: number;
+  created_at: string;
+  updated_at: string;
+  user: {
+    id: string;
+    unique_user_id: string;
+    name: string;
+    email: string;
+    gender: string;
+    state: string;
+    country: string;
+    country_code: string;
+    phone_number: string;
+    status: string;
+    push_notification_status: string;
+    longitude: string;
+    latitude: string;
+    address: string | null;
+    kyc_status: string;
+    email_verified_at: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+    role: string;
+    roles: {
+      id: string;
+      name: string;
+      guard_name: string;
+      created_at: string;
+      updated_at: string;
+      pivot: {
+        model_type: string;
+        model_id: string;
+        role_id: string;
+      };
+    }[];
+  };
+};

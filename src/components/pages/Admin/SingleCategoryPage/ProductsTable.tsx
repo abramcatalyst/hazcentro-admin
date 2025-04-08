@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction, useState } from "react";
+import { Fragment } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,12 +15,10 @@ import dayjs from "dayjs";
 import { currencyFormater, tableMenuStyles } from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
-import ProductDetailsDialog from "./ProductDetailsDialog";
-// import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
 import ProductImg from "src/assets/images/logo.png";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
-import { SingleCategoryType } from "src/types/categories";
+import { ProductTableProps } from "./SingleCategoryWrapper";
 
 dayjs.extend(advancedFormat);
 
@@ -34,11 +32,6 @@ const headCells = [
   "Action",
 ];
 
-type Props = {
-  data: SingleCategoryType;
-  selectedUsers: Set<number>;
-  setSelectedUsers: Dispatch<SetStateAction<Set<number>>>;
-};
 function EnhancedTableHead() {
   return (
     <TableHead>
@@ -59,30 +52,9 @@ function EnhancedTableHead() {
   );
 }
 
-function ProductsTable({ data }: Props) {
-  const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
-
-  const handleOpenPreviewProfile = () => {
-    setOpenPreviewProfile(true);
-  };
-  const handleClosePreviewProfile = () => {
-    setOpenPreviewProfile(false);
-  };
+function ProductsTable({ data, handleOpenPreview }: ProductTableProps) {
   return (
     <Box sx={{ width: "100%", my: 1 }}>
-      {openPreviewProfile && (
-        <ProductDetailsDialog
-          open={openPreviewProfile}
-          handleClose={handleClosePreviewProfile}
-        />
-      )}
-      {/* {openPreviewProfile && (
-        <DistributorProfileDialog
-          open={openPreviewProfile}
-          handleClose={handleClosePreviewProfile}
-        />
-      )} */}
-
       <TableContainer>
         <Table
           sx={{ minWidth: 750 }}
@@ -164,7 +136,7 @@ function ProductsTable({ data }: Props) {
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem
                               onClick={() => {
-                                handleOpenPreviewProfile();
+                                handleOpenPreview(row);
                                 popupState.close();
                               }}
                               sx={tableMenuStyles}

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
@@ -11,38 +11,21 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 
 import dayjs from "dayjs";
 import { currencyFormater, GLOBAL_COLORS, tableMenuStyles } from "src/utils";
-import ProductDetailsDialog from "./ProductDetailsDialog";
 import ProductImg from "src/assets/images/logo.png";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
 import { useTheme } from "@mui/material/styles";
-import { SingleCategoryType } from "src/types/categories";
+import { ProductTableProps } from "./SingleCategoryWrapper";
 
 dayjs.extend(advancedFormat);
 
 const sizing = { xs: 6, sm: 4, md: 3, lg: 2 };
 
-type Props = {
-  data: SingleCategoryType;
-};
-function ProductsGridTable({ data }: Props) {
-  const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
+function ProductsGridTable({ data, handleOpenPreview }: ProductTableProps) {
   const theme = useTheme();
-  const handleOpenPreviewProfile = () => {
-    setOpenPreviewProfile(true);
-  };
-  const handleClosePreviewProfile = () => {
-    setOpenPreviewProfile(false);
-  };
+
   return (
     <Box sx={{ width: "100%", my: 1 }}>
-      {openPreviewProfile && (
-        <ProductDetailsDialog
-          open={openPreviewProfile}
-          handleClose={handleClosePreviewProfile}
-        />
-      )}
-
       <Box>
         <Grid container spacing={2}>
           {data?.products?.data?.map((row) => {
@@ -117,7 +100,7 @@ function ProductsGridTable({ data }: Props) {
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem
                               onClick={() => {
-                                handleOpenPreviewProfile();
+                                handleOpenPreview(row);
                                 popupState.close();
                               }}
                               sx={tableMenuStyles}

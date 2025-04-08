@@ -7,7 +7,7 @@ import CustomTab from "src/components/shared/CustomTab/CustomTab";
 
 type Props = {
   selectedTab: string;
-  selectedUsers: Set<number | string>;
+
   view: string;
   setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
   handleChangeView: (val: string) => void;

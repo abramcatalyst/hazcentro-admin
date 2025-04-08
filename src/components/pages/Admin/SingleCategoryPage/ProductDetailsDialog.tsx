@@ -1,26 +1,49 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import IconButton from "@mui/material/IconButton";
+import NavigateNextSharpIcon from "@mui/icons-material/NavigateNextSharp";
+import NavigateBeforeSharpIcon from "@mui/icons-material/NavigateBeforeSharp";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import ProductImg from "src/assets/tempimages/img1.png";
+import ProductImg from "src/assets/images/logo.png";
 import { currencyFormater } from "src/utils";
+import { ProductFromCategoryType } from "src/types/products";
 import dayjs from "dayjs";
-
 type Props = {
   open: boolean;
   handleClose: () => void;
+  selectedProduct: ProductFromCategoryType;
 };
 
-function ProductDetailsDialog({ open, handleClose }: Props) {
+function ProductDetailsDialog({ open, selectedProduct, handleClose }: Props) {
+  const [current, setCurrent] = useState(0);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
+  console.log("bbbbbbbbbbbbbb", selectedProduct);
+  const handleClickNext = () => {
+    setCurrent((curr) => {
+      if (curr === selectedProduct?.media?.length - 1) {
+        return 0;
+      }
+      return curr + 1;
+    });
+  };
+  const handleClickPrev = () => {
+    setCurrent((curr) => {
+      if (curr === 0) {
+        return selectedProduct?.media?.length - 1;
+      }
+      return curr - 1;
+    });
+  };
+  const currentImage =
+    selectedProduct?.media[current]?.original_url || ProductImg;
   return (
     <Dialog
       fullWidth
@@ -62,21 +85,45 @@ function ProductDetailsDialog({ open, handleClose }: Props) {
       <DialogContent>
         <Box>
           <Box
-            sx={{ width: "100%", height: "308px", borderRadius: "12px", mb: 1 }}
+            sx={{ width: "100%", height: "280px", borderRadius: "12px", mb: 1 }}
           >
             <img
-              src={ProductImg}
+              src={currentImage}
               alt="Product"
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
             />
           </Box>
-
+          {selectedProduct?.media?.length > 0 && (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <IconButton
+                onClick={() => {
+                  handleClickPrev();
+                }}
+              >
+                <NavigateBeforeSharpIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  handleClickNext();
+                }}
+              >
+                <NavigateNextSharpIcon />
+              </IconButton>
+            </Box>
+          )}
           <Box>
             <Typography
               noWrap
               sx={{ fontWeigh: 600, fontSize: { xs: "17px", sm: "22px" } }}
             >
-              iPhone 34 Pro Max
+              {selectedProduct?.name}
             </Typography>
             <Box
               sx={{
@@ -98,10 +145,11 @@ function ProductDetailsDialog({ open, handleClose }: Props) {
                   }}
                 >
                   <Typography sx={{ color: "GrayText" }} variant="body2">
-                    SKU:128jBG9
+                    {selectedProduct?.sku}
                   </Typography>
                   <Typography sx={{ color: "GrayText" }} variant="body2">
-                    Created: {dayjs().format("MM Do, YYYY")}
+                    Created:{" "}
+                    {dayjs(selectedProduct?.created_at).format("MM Do, YYYY")}
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -121,17 +169,14 @@ function ProductDetailsDialog({ open, handleClose }: Props) {
                   fontSize: { xs: "17px", sm: "22px" },
                 }}
               >
-                &#8358;{currencyFormater(50000)}
+                &#8358;{currencyFormater(selectedProduct?.price, 2)}
               </Typography>
             </Box>
           </Box>
 
           <Box sx={{ my: 1 }}>
             <Typography variant="body2" sx={{ color: "GrayText" }}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
-              eos temporibus officiis velit nisi placeat quam itaque natus
-              maiores sit illum tempore, nihil labore ipsa repellat a magnam
-              molestiae! Voluptas!
+              {selectedProduct?.description}
             </Typography>
           </Box>
         </Box>

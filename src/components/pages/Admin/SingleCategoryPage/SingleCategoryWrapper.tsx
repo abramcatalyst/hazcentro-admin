@@ -20,6 +20,9 @@ import { fetchSingleCategory } from "src/services/categories";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { useParams, useSearchParams } from "react-router-dom";
+import ProductDetailsDialog from "./ProductDetailsDialog";
+import { ProductFromCategoryType } from "src/types/products";
+import { SingleCategoryType } from "src/types/categories";
 
 export const pageViewTabOptionsObj = {
   GRID: "GRID",
@@ -44,10 +47,26 @@ export const usersViewTabOptions = [
     value: pageViewTabOptionsObj.TABLE,
   },
 ];
+export type ProductTableProps = {
+  data: SingleCategoryType;
+  handleOpenPreview: (info: ProductFromCategoryType) => void;
+};
 const SingleCategoryWrapper = () => {
   const [view, setView] = useState(usersViewTabOptions[0].value);
   const [selectedTab, setSelectedTab] = useState(tabOptions[0].value);
-  const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
+
+  const [openPreview, setOpenPreview] = useState(false);
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductFromCategoryType | null>(null);
+
+  const handleOpenPreview = (info: ProductFromCategoryType) => {
+    setOpenPreview(true);
+    setSelectedProduct(info);
+  };
+  const handleClosePreview = () => {
+    setOpenPreview(false);
+    setSelectedProduct(null);
+  };
 
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
@@ -122,6 +141,13 @@ const SingleCategoryWrapper = () => {
   console.log("dddddddddddddd", data);
   return (
     <Box>
+      {openPreview && selectedProduct && (
+        <ProductDetailsDialog
+          open={openPreview}
+          selectedProduct={selectedProduct}
+          handleClose={handleClosePreview}
+        />
+      )}
       <Box
         sx={{
           display: "flex",
@@ -138,21 +164,19 @@ const SingleCategoryWrapper = () => {
         selectedTab={selectedTab}
         view={view}
         setSelectedTab={setSelectedTab}
-        selectedUsers={selectedUsers}
         handleChangeView={handleChangeView}
       />
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
         {view === pageViewTabOptionsObj.TABLE && (
-          <ProductsTable
-            data={data}
-            selectedUsers={selectedUsers}
-            setSelectedUsers={setSelectedUsers}
-          />
+          <ProductsTable data={data} handleOpenPreview={handleOpenPreview} />
         )}
       </ErrorBoundary>
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
         {view === pageViewTabOptionsObj.GRID && (
-          <ProductsGridTable data={data} />
+          <ProductsGridTable
+            data={data}
+            handleOpenPreview={handleOpenPreview}
+          />
         )}
       </ErrorBoundary>
     </Box>

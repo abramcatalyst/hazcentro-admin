@@ -13,16 +13,19 @@ import TopSection from "./TopSection";
 import ProductInformation from "./ProductInformation";
 import PaymentInformationSection from "./PaymentInformationSection";
 import OrderStages from "./OrderStages";
+import { OrderType } from "src/types/orders";
 
 type Props = {
   open: boolean;
+  selectedOrder: OrderType;
   handleClose: () => void;
 };
 
-function OrderPreviewDialog({ open, handleClose }: Props) {
+function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  console.log("ssssssssssssss", selectedOrder);
   return (
     <StyledDialog
       fullWidth
@@ -53,14 +56,14 @@ function OrderPreviewDialog({ open, handleClose }: Props) {
         </Box>
       </DialogActions>
       <DialogContent>
-        <TopSection />
+        <TopSection selectedOrder={selectedOrder} />
         <Box>
           <Grid container spacing={1} columns={5}>
             <Grid size={{ xs: 5, sm: 3 }}>
-              <ProductInformation />
+              <ProductInformation selectedOrder={selectedOrder} />
             </Grid>
             <Grid size={{ xs: 5, sm: 2 }}>
-              <PaymentInformationSection />
+              <PaymentInformationSection selectedOrder={selectedOrder} />
             </Grid>
           </Grid>
           <OrderStages />

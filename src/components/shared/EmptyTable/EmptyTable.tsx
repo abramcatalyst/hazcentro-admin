@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 // import { useTheme } from "@mui/material";
-import EmptyImage from "src/assets/images/logo.png";
+import EmptyImage from "src/assets/images/empty.png";
 
 type Props = {
   subText: string;
@@ -28,13 +28,13 @@ const EmptyTable = ({
         src={EmptyImage}
         alt="empty data"
         style={{
-          width: isSmall ? "100px" : "150px",
-          height: isSmall ? "100px" : "150px",
+          width: isSmall ? "70px" : "120px",
+          height: isSmall ? "70px" : "120px",
           objectFit: "contain",
           margin: "5px auto",
         }}
       />
-      <br />
+
       <Typography
         gutterBottom
         variant="h4"

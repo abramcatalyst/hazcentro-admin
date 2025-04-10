@@ -1,3 +1,5 @@
+import { RoleType } from "./agents";
+
 export type UserType = {
   id: string;
   name: string;
@@ -17,16 +19,5 @@ export type UserType = {
   updated_at: string;
   deleted_at: string | null;
   role: string;
-  roles: {
-    id: string;
-    name: string;
-    guard_name: "web";
-    created_at: string;
-    updated_at: string;
-    pivot: {
-      model_type: string;
-      model_id: string;
-      role_id: string;
-    };
-  }[];
+  roles: RoleType[];
 };

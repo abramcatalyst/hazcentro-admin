@@ -2,6 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { GLOBAL_COLORS } from "src/utils";
+import { OrderType } from "src/types/orders";
 
 const optionsObj = {
   OVERVIEW: "Overview",
@@ -15,7 +16,10 @@ const options = [
   optionsObj.WARRANTY,
   optionsObj.REVIEWS,
 ];
-function ProductInformation() {
+type Props = {
+  selectedOrder: OrderType;
+};
+function ProductInformation({ selectedOrder }: Props) {
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
   return (
@@ -69,6 +73,7 @@ function ProductInformation() {
             expedita possimus reiciendis impedit necessitatibus provident earum
             debitis in? Provident corrupti quasi necessitatibus minus fuga
             explicabo asperiores molestiae delectus quo!
+            {selectedOrder?.status}
           </Typography>
         )}
         {selectedOption === optionsObj.DESCRIPTION && (

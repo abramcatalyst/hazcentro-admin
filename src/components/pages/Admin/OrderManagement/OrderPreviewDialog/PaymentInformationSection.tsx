@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import dayjs from "dayjs";
+import { OrderType } from "src/types/orders";
 
 const optionsObj = {
   DETAILS: "Details",
@@ -17,6 +18,9 @@ type InfoBoxProps = {
   addBoldness?: boolean;
   addUnderline?: boolean;
   addCurrency?: boolean;
+};
+type Props = {
+  selectedOrder: OrderType;
 };
 const InfoBox = ({
   title,
@@ -49,23 +53,27 @@ const InfoBox = ({
     </Box>
   );
 };
-const Details = () => {
+const Details = ({ selectedOrder }: Props) => {
   return (
     <Box>
-      <InfoBox title="Order Number" value={"F164926629462002"} />
-      <InfoBox title="Order Date" value={dayjs().format("DD mmm YYYY")} />
+      <InfoBox title="Order Number" value={selectedOrder?.id} />
+      <InfoBox
+        title="Order Date"
+        value={dayjs(selectedOrder?.created_at).format("DD mmm YYYY")}
+      />
       <InfoBox
         title="Sold By"
         value={"Runtown Mart"}
         addBoldness
         addUnderline
       />
-      <InfoBox title="Tracking ID" value={"F164926629462002"} />
+      <InfoBox title="Tracking ID" value={selectedOrder?.tracking_id} />
       <InfoBox title="Delivery Fee" value={"3500"} addCurrency />
     </Box>
   );
 };
-function PaymentInformationSection() {
+
+function PaymentInformationSection({ selectedOrder }: Props) {
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
   return (
@@ -116,7 +124,11 @@ function PaymentInformationSection() {
           );
         })}
       </Box>
-      <Box>{selectedOption === optionsObj.DETAILS && <Details />}</Box>
+      <Box>
+        {selectedOption === optionsObj.DETAILS && (
+          <Details selectedOrder={selectedOrder} />
+        )}
+      </Box>
     </Box>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import TablePagination from "@mui/material/TablePagination";
 import {
   formatErrorMessage,
   GLOBAL_COLORS,
@@ -27,7 +28,7 @@ const CategoriesWrapper = () => {
     page: "1",
   });
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
-  const page = Number(searchParams.get(sPage)) || 0;
+  const page = Number(searchParams.get(sPage)) || 1;
   const { isPending, error, data, isError } = useQuery({
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CATEGORIES, { limit, page }],
     queryFn: () => fetchCategories({ limit: limit, page }),
@@ -69,7 +70,7 @@ const CategoriesWrapper = () => {
   const handleOpenAddAgentDialog = () => {
     setOpenAddAgentDialog(true);
   };
-  console.log("dddddddddd", handleChangePage, handleChangeRowsPerPage);
+
   return (
     <Box>
       {openAddAgentDialog && (
@@ -117,36 +118,21 @@ const CategoriesWrapper = () => {
           >
             Manage
           </Button>
-          {/* {usersViewTabOptions.map((item) => (
-            <Box
-              sx={{
-                height: "42px",
-                minWidth: "88px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                p: 1,
-                background:
-                  item.value === view ? "#47B48E0D" : GLOBAL_COLORS.GREY_10,
-                color: item.value === view ? "#47B48E" : "GrayText",
-                borderRadius: "12px",
-                border: item.value === view ? `2px solid #47B48E` : "none",
-                cursor: "pointer",
-              }}
-              key={item.title}
-              onClick={() => {
-                setView(item.value);
-              }}
-            >
-              <Typography sx={{ fontSize: "13px", fontWeight: 600 }}>
-                Add Agent
-              </Typography>
-            </Box>
-          ))} */}
         </Box>
       </Box>
       <CategoriesTab />
       <CategoriesTable data={data?.data} />
+      <Box sx={{ my: 1 }}>
+        <TablePagination
+          rowsPerPageOptions={rowsPerPageOptions}
+          component="div"
+          count={data?.total || 0}
+          rowsPerPage={limit || rowsPerPageOptions[0]}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
     </Box>
   );
 };

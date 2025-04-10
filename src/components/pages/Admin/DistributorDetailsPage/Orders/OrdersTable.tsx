@@ -52,14 +52,15 @@ function OrdersTable() {
   const handleClosePreviewProfile = () => {
     setOpenPreview(false);
   };
+  console.log(openPreview, handleClosePreviewProfile, OrderPreviewDialog);
   return (
     <Box sx={{ width: "100%", my: 1 }}>
-      {openPreview && (
+      {/* {openPreview && (
         <OrderPreviewDialog
           open={openPreview}
           handleClose={handleClosePreviewProfile}
         />
-      )}
+      )} */}
 
       <TableContainer>
         <Table

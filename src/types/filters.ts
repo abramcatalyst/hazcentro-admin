@@ -17,4 +17,5 @@ export type QueryFilterType = {
   page?: number;
   userId?: string;
   token?: string;
+  id?: string;
 };

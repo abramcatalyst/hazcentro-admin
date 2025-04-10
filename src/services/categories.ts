@@ -46,12 +46,16 @@ export const fetchCategories = async ({
   return data;
 };
 
-export const fetchSingleCategory = async (
-  id: string
-): Promise<SingleCategoryType> => {
+export const fetchSingleCategory = async ({
+  id,
+  limit,
+  page,
+}: QueryFilterType): Promise<SingleCategoryType> => {
   setDefaultHeaders();
   isAuthTokenExpired();
-  const { data } = await axios.get(`${baseUrl}/global/categories/${id}`);
+  const { data } = await axios.get(
+    `${baseUrl}/global/categories/${id}?limit=${limit}&page=${page}`
+  );
 
   return data;
 };

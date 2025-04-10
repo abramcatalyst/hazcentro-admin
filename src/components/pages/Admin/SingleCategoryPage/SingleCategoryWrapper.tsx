@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
+import TablePagination from "@mui/material/TablePagination";
 import SingleCategoryTab from "./SingleCategoryTab";
 import ProductsTable from "./ProductsTable";
 import {
@@ -73,7 +74,7 @@ const SingleCategoryWrapper = () => {
     page: "1",
   });
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
-  const page = Number(searchParams.get(sPage)) || 0;
+  const page = Number(searchParams.get(sPage)) || 1;
 
   const params = useParams();
   const queryClient = useQueryClient();
@@ -82,7 +83,7 @@ const SingleCategoryWrapper = () => {
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_CATEGORY,
       { limit, page },
     ],
-    queryFn: () => fetchSingleCategory(params.id || ""),
+    queryFn: () => fetchSingleCategory({ id: params.id || "", limit, page }),
   });
 
   useEffect(() => {
@@ -179,6 +180,17 @@ const SingleCategoryWrapper = () => {
           />
         )}
       </ErrorBoundary>
+      <Box sx={{ my: 1 }}>
+        <TablePagination
+          rowsPerPageOptions={rowsPerPageOptions}
+          component="div"
+          count={data?.products?.total || 0}
+          rowsPerPage={limit || rowsPerPageOptions[0]}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
     </Box>
   );
 };

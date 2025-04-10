@@ -1,6 +1,6 @@
 import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
+// import Chip from "@mui/material/Chip";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,25 +11,31 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-import Checkbox from "@mui/material/Checkbox";
+// import Checkbox from "@mui/material/Checkbox";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
 import { currencyFormater, GLOBAL_COLORS, tableMenuStyles } from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import OrderPreviewDialog from "./OrderPreviewDialog/OrderPreviewDialog";
+import { OrderType } from "src/types/orders";
 // import UserProfileDialog from "../UserProfileDialog/UserProfileDialog";
 // import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
+import relativeTime from "dayjs/plugin/relativeTime";
 
+dayjs.extend(relativeTime);
+dayjs.extend(advancedFormat);
 const headCells = [
   "Order ID",
   "Order Name",
   "Amount",
   "Date Created",
   "Buyer Name",
-  "Merchant Name",
-  "Category",
+  // "Merchant Name",
+  // "Category",
   "Status",
   "Action",
 ];
@@ -37,19 +43,12 @@ const headCells = [
 type Props = {
   selectedUsers: Set<number>;
   setSelectedUsers: Dispatch<SetStateAction<Set<number>>>;
+  data: OrderType[];
 };
 function EnhancedTableHead() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            size="small"
-            color="warning"
-
-            // onChange={onSelectAllClick}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell key={headCell}>{headCell}</TableCell>
         ))}
@@ -58,20 +57,23 @@ function EnhancedTableHead() {
   );
 }
 
-function OrdersTable({ selectedUsers, setSelectedUsers }: Props) {
+function OrdersTable({ selectedUsers, data }: Props) {
   const [openPreview, setOpenPreview] = useState(false);
-
-  const handleOpenPreview = () => {
+  const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
+  const handleOpenPreview = (item: OrderType) => {
+    setSelectedOrder(item);
     setOpenPreview(true);
   };
   const handleClosePreviewProfile = () => {
     setOpenPreview(false);
+    setSelectedOrder(null);
   };
   return (
     <Box sx={{ width: "100%", my: 1 }}>
-      {openPreview && (
+      {openPreview && selectedOrder && (
         <OrderPreviewDialog
           open={openPreview}
+          selectedOrder={selectedOrder}
           handleClose={handleClosePreviewProfile}
         />
       )}
@@ -87,9 +89,8 @@ function OrdersTable({ selectedUsers, setSelectedUsers }: Props) {
           //   onSelectAllClick={handleSelectAllClick}
           />
           <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
+            {data?.map((row, index) => {
               const isItemSelected = selectedUsers.has(index);
-              const labelId = `enhanced-table-${index}`;
 
               return (
                 <StyledTableRow
@@ -98,7 +99,7 @@ function OrdersTable({ selectedUsers, setSelectedUsers }: Props) {
                   role="checkbox"
                   // aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row}
+                  key={row?.id}
                   selected={isItemSelected}
                   sx={{
                     cursor: "pointer",
@@ -107,40 +108,22 @@ function OrdersTable({ selectedUsers, setSelectedUsers }: Props) {
                       : "default",
                   }}
                 >
-                  <StyledTableCell padding="checkbox">
-                    <Checkbox
-                      color="warning"
-                      size="small"
-                      checked={isItemSelected}
-                      onChange={() => {
-                        if (selectedUsers.has(index)) {
-                          setSelectedUsers((prev) => {
-                            const newSet = new Set(prev);
-                            newSet.delete(index);
-                            return newSet;
-                          });
-                        } else {
-                          setSelectedUsers((prev) => new Set(prev).add(index));
-                        }
-                      }}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell>#YW627J</StyledTableCell>
-                  <StyledTableCell>{"Jerry WIlson"}</StyledTableCell>
+                  <StyledTableCell>{row?.tracking_id}</StyledTableCell>
+                  <StyledTableCell>{row?.buyer?.name}</StyledTableCell>
                   <StyledTableCell>
-                    &#8358;{currencyFormater(40000)}
+                    &#8358;{currencyFormater(row?.total_price, 2)}
                   </StyledTableCell>
-                  <StyledTableCell>{dayjs().format("MMM ddo")}</StyledTableCell>
-                  <StyledTableCell>{"Kerry Wilson"}</StyledTableCell>
+                  <StyledTableCell>
+                    {dayjs(row?.created_at).format("MMM do YYYY")}
+                  </StyledTableCell>
+                  <StyledTableCell>{row?.buyer?.name}</StyledTableCell>
 
-                  <StyledTableCell>{"Oriano, Nigeria"}</StyledTableCell>
-                  <StyledTableCell>
+                  {/* <StyledTableCell>{row?.user?.name}</StyledTableCell> */}
+
+                  {/* <StyledTableCell>
                     <Chip size="small" label="Electronic" />
-                  </StyledTableCell>
-                  <StyledTableCell>{renderStatus("success")}</StyledTableCell>
+                  </StyledTableCell> */}
+                  <StyledTableCell>{renderStatus(row?.status)}</StyledTableCell>
                   <StyledTableCell>
                     <PopupState variant="popover">
                       {(popupState) => (
@@ -151,7 +134,7 @@ function OrdersTable({ selectedUsers, setSelectedUsers }: Props) {
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem
                               onClick={() => {
-                                handleOpenPreview();
+                                handleOpenPreview(row);
                                 popupState.close();
                               }}
                               sx={tableMenuStyles}

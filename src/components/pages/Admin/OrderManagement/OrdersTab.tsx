@@ -7,11 +7,9 @@ type Props = {
   selectedTab: string;
   selectedUsers: Set<number | string>;
   setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
+  handleChangeTab: (val: string) => void;
 };
-const OrdersTab = ({ selectedTab, setSelectedTab, selectedUsers }: Props) => {
-  const handleClick = (value: string) => {
-    setSelectedTab(value);
-  };
+const OrdersTab = ({ selectedTab, selectedUsers, handleChangeTab }: Props) => {
   return (
     <Box
       sx={{
@@ -25,7 +23,7 @@ const OrdersTab = ({ selectedTab, setSelectedTab, selectedUsers }: Props) => {
           return (
             <CustomTab
               key={item.value}
-              handleClick={handleClick}
+              handleClick={handleChangeTab}
               value={item.value}
               title={item.title}
               active={item.value === selectedTab}

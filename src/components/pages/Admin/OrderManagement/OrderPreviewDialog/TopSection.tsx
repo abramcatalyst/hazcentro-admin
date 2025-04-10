@@ -2,12 +2,18 @@ import Grid from "@mui/material/Grid2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ProductImage from "src/assets/tempimages/machine1.jpg";
+import UserImage from "src/assets/images/avatar-male.png";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import ProductInfoBox from "src/components/shared/ProductInfoBox/ProductInfoBox";
+import { OrderType } from "src/types/orders";
 
 const sizing = { xs: 12, sm: 4, md: 3 };
 
-function TopSection() {
+type Props = {
+  selectedOrder: OrderType;
+};
+
+function TopSection({ selectedOrder }: Props) {
   return (
     <Box
       sx={{
@@ -36,12 +42,12 @@ function TopSection() {
             >
               <Box>
                 <img
-                  src={ProductImage}
+                  src={UserImage}
                   alt="user"
                   style={{
                     width: "72px",
                     height: "72px",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     borderRadius: "6px",
                     marginTop: "2px",
                   }}
@@ -55,16 +61,16 @@ function TopSection() {
                     color: GLOBAL_COLORS.SECONDARY_MAIN,
                   }}
                 >
-                  {"Jack Bauerrr"}
+                  {selectedOrder?.buyer?.name}
                 </Typography>
-                <Typography
+                {/* <Typography
                   sx={{
                     color: "GrayText",
                     fontSize: "13px",
                   }}
                 >
                   {`ID:34568JUI`}
-                </Typography>
+                </Typography> */}
                 <Typography
                   sx={{
                     color: "GrayText",
@@ -101,7 +107,7 @@ function TopSection() {
               }}
             >
               <Typography sx={{ fontSize: "18px", fontWeight: 500 }}>
-                &#8358;{currencyFormater(40000)}
+                &#8358;{currencyFormater(selectedOrder?.total_price, 2)}
               </Typography>
             </Box>
           </Grid>

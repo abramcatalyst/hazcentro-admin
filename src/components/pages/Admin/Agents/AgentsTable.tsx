@@ -126,10 +126,10 @@ const AgentsTable = () => {
   const [selectedAgent, setSelectedAgent] = useState<AgentType | null>(null);
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
-    page: "0",
+    page: "1",
   });
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
-  const page = Number(searchParams.get(sPage)) || 0;
+  const page = Number(searchParams.get(sPage)) || 1;
   const { isPending, error, data, isError } = useQuery({
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENTS, { limit, page }],
     queryFn: () => fetchAgents({ limit: limit, page }),
@@ -215,10 +215,11 @@ const AgentsTable = () => {
       <TablePagination
         component="div"
         count={data?.total || 0}
-        page={page}
+        page={page - 1}
         onPageChange={handleChangePage}
-        rowsPerPage={limit}
+        rowsPerPage={limit || rowsPerPageOptions[0]}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={rowsPerPageOptions}
       />
     </Box>
   );

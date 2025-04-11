@@ -66,7 +66,7 @@ function App() {
           element={<Distributors />}
         />
 
-        {/* <Route path="*" element={<Navigate to="home" />} /> */}
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
@@ -124,12 +124,11 @@ function App() {
           path={ADMIN_ROUTE_SUB_LINKS.ACCOUNT}
           element={<AdminAccount />}
         />
-        {/* <Route path="*" element={<Navigate to="home" />} /> */}
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
 
-  console.log("customer routes", CustomerCareRoutes);
   return (
     <>
       <CssBaseline />
@@ -139,7 +138,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Root />} />
               <Route path="admin/*" element={<AdminRoutes />} />
-              {/* <Route path="customer-care/*" element={<CustomerCareRoutes />} /> */}
+              <Route path="customer-care/*" element={<CustomerCareRoutes />} />
 
               <Route path={GLOBAL_ROUTE_LINKS.LOGIN} element={<Login />} />
               <Route path="*" element={<NotFoundPage />} />

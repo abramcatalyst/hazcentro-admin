@@ -19,7 +19,7 @@ const NotFoundPage = () => {
       <MetaDecorator title=" Page Not Found" />
       <Box
         sx={{
-          minHeight: "100vh",
+          minHeight: "80vh",
           display: "flex",
           flexDirection: "column",
           gap: 1,

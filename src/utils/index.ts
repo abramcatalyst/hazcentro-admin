@@ -12,7 +12,7 @@ export const PERSIST_LOGIN = "PERSIST_LOGIN";
 export const TOKEN_NAME = "HAZCENTRO_AUTH_TOKEN";
 export const PROFILE_KEY = "H_PROFILE_KEY";
 export const PREV_PATH = "prevPath";
-export const rowsPerPageOptions = [2, 50, 100];
+export const rowsPerPageOptions = [20, 50, 100];
 export const FULL_DATE_FORMAT = "MMM Do YYYY, HH:mm";
 
 export const INDOOR_GAME = "indoor-game";

@@ -19,7 +19,7 @@ import {
   isAuthTokenExpired,
 } from "src/utils";
 import HeaderProfileLeft from "./HeaderProfileLeft";
-import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
+import { CUSTOMER_ROUTE_LINKS, GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
 import AppNavigation from "./AppNavigation";
 const drawerWidth = 212;
@@ -126,7 +126,13 @@ export default function SuperAdminLayout() {
     if (token && !isAuthTokenExpired()) {
       const fetchedProfile = getProfileFromStorage();
       if (fetchedProfile) {
-        handleLogin({ userProfile: JSON.parse(fetchedProfile) });
+        const parsedData = JSON.parse(fetchedProfile);
+        if (fetchedProfile) {
+          handleLogin({ userProfile: parsedData });
+        }
+        if (parsedData?.role && parsedData?.role === "agent") {
+          navigate(CUSTOMER_ROUTE_LINKS.CUSTOMER_OVERVIEW);
+        }
       }
     }
   }, [isAuthTokenExpired]);

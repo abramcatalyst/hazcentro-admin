@@ -1,27 +1,32 @@
-import { useState } from "react";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Logo from "src/assets/images/logo.png";
+
 import Typography from "@mui/material/Typography";
-import { GLOBAL_COLORS } from "src/utils";
+import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import { OrderType } from "src/types/orders";
 
-const optionsObj = {
-  OVERVIEW: "Overview",
-  DESCRIPTION: "Description",
-  WARRANTY: "Warranty",
-  REVIEWS: "Reviews",
-};
-const options = [
-  optionsObj.OVERVIEW,
-  optionsObj.DESCRIPTION,
-  optionsObj.WARRANTY,
-  optionsObj.REVIEWS,
-];
 type Props = {
   selectedOrder: OrderType;
 };
-function ProductInformation({ selectedOrder }: Props) {
-  const [selectedOption, setSelectedOption] = useState(options[0]);
 
+const headCells = [
+  "S/N",
+  "Image",
+  "Title",
+  "Price",
+  "Discount Price",
+  "Warranty",
+  "Vendor",
+];
+const tableCellStyles = { fontSize: "13px" };
+function ProductInformation({ selectedOrder }: Props) {
   return (
     <Box
       sx={{
@@ -31,7 +36,7 @@ function ProductInformation({ selectedOrder }: Props) {
         borderRadius: "16px",
       }}
     >
-      <Box
+      {/* <Box
         sx={{
           my: 1,
           background: "#F1F1F1",
@@ -65,28 +70,61 @@ function ProductInformation({ selectedOrder }: Props) {
             </Box>
           );
         })}
-      </Box>
+      </Box> */}
       <Box>
-        {selectedOption === optionsObj.OVERVIEW && (
-          <Typography>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nam
-            expedita possimus reiciendis impedit necessitatibus provident earum
-            debitis in? Provident corrupti quasi necessitatibus minus fuga
-            explicabo asperiores molestiae delectus quo!
-            {selectedOrder?.status}
-          </Typography>
-        )}
-        {selectedOption === optionsObj.DESCRIPTION && (
-          <Typography>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nam
-            expedita possimus reiciendis impedit necessitatibus provident earum
-            debitis in? Provident corrupti quasi necessitatibus minus fuga
-            explicabo asperiores molestiae delectus quo! expedita possimus
-            reiciendis impedit necessitatibus provident earum debitis in?
-            Provident corrupti quasi necessitatibus minus fuga explicabo
-            asperiores molestiae delectus quo!
-          </Typography>
-        )}
+        <Typography sx={{ fontSize: "14px", fontWeight: 600, mb: 0.6, ml: 1 }}>
+          Ordered Items
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                {headCells.map((item) => (
+                  <TableCell key={item} component="th">
+                    {item}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {selectedOrder?.order_items?.map((row, idx) => (
+                <TableRow key={row?.id}>
+                  <TableCell sx={tableCellStyles}>{idx + 1}</TableCell>
+                  <TableCell>
+                    <Box>
+                      <img
+                        src={row?.product?.media[0]?.original_url || Logo}
+                        alt={"Product"}
+                        style={{
+                          width: "42px",
+                          height: "42px",
+                          cursor: "pointer",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={tableCellStyles}>
+                    {row?.product?.name}
+                  </TableCell>
+
+                  <TableCell sx={tableCellStyles}>
+                    &#8358;{currencyFormater(row?.product?.price, 2)}
+                  </TableCell>
+                  <TableCell sx={tableCellStyles}>
+                    &#8358;{currencyFormater(row?.product?.discounted_price, 2)}
+                  </TableCell>
+                  <TableCell sx={tableCellStyles}>
+                    {row?.product?.warranty}
+                  </TableCell>
+                  <TableCell sx={tableCellStyles}>
+                    {row?.product?.vendor?.business_name}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
     </Box>
   );

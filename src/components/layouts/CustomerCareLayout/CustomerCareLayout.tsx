@@ -30,7 +30,7 @@ import {
 } from "src/utils";
 import HeaderProfileLeft from "./HeaderProfileLeft";
 import { FiLogOut } from "react-icons/fi";
-import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
+import { ADMIN_ROUTE_LINKS, GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
 const drawerWidth = 212;
 
@@ -135,7 +135,13 @@ export default function CustomerCareLayout() {
     if (token && !isAuthTokenExpired()) {
       const fetchedProfile = getProfileFromStorage();
       if (fetchedProfile) {
-        handleLogin({ userProfile: JSON.parse(fetchedProfile) });
+        const parsedData = JSON.parse(fetchedProfile);
+        if (fetchedProfile) {
+          handleLogin({ userProfile: parsedData });
+        }
+        if (parsedData?.role && parsedData?.role === "admin") {
+          navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
+        }
       }
     }
   }, [isAuthTokenExpired]);

@@ -42,13 +42,18 @@ const LoginForm = () => {
         // console.log("xxxxxxxxxxxxxxxxxxxxxxx", res?.data?.access_token);
 
         saveTokenToStorage(res?.data?.access_token);
-        saveProfileToStorage(JSON.stringify(res?.data?.data?.user));
-        handleLogin({ userProfile: res?.data?.data?.user });
+        const user = res?.data?.data?.user;
+
+        saveProfileToStorage(JSON.stringify(user));
+        handleLogin({ userProfile: user });
         if (prevPath) {
           return await navigate(prevPath);
         }
-        await navigate(CUSTOMER_ROUTE_LINKS.CUSTOMER_OVERVIEW);
-        // await navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
+        if (user?.role === "admin") {
+          await navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
+        } else {
+          await navigate(CUSTOMER_ROUTE_LINKS.CUSTOMER_OVERVIEW);
+        }
       } catch (error) {
         helpers.setSubmitting(false);
         let errMsg = formatErrorMessage(error);

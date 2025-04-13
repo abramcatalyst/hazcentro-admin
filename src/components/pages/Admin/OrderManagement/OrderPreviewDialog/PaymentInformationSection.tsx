@@ -10,7 +10,7 @@ const optionsObj = {
   PAYMENT: "Payment Info.",
   DELIVERY: "Delivery Info.",
 };
-const options = [optionsObj.DETAILS, optionsObj.PAYMENT, optionsObj.DELIVERY];
+const options = [optionsObj.PAYMENT, optionsObj.DELIVERY];
 
 type InfoBoxProps = {
   title: string;
@@ -39,7 +39,9 @@ const InfoBox = ({
         mb: 1,
       }}
     >
-      <Typography sx={{ fontSize: "13px" }}>{title}</Typography>
+      <Typography sx={{ fontSize: "13px", minWidth: "100px" }}>
+        {title}
+      </Typography>
       <Typography
         sx={{
           fontSize: "13px",
@@ -53,22 +55,51 @@ const InfoBox = ({
     </Box>
   );
 };
-const Details = ({ selectedOrder }: Props) => {
+const Payment = ({ selectedOrder }: Props) => {
   return (
     <Box>
       <InfoBox title="Order Number" value={selectedOrder?.id} />
       <InfoBox
         title="Order Date"
-        value={dayjs(selectedOrder?.created_at).format("DD mmm YYYY")}
+        value={dayjs(selectedOrder?.created_at).format("HH:MMa, DD MMM YYYY")}
       />
       <InfoBox
-        title="Sold By"
-        value={"Runtown Mart"}
+        title="Payment Ref."
+        value={selectedOrder?.payment_reference}
         addBoldness
-        addUnderline
+      />
+      <InfoBox
+        title="Payment Status"
+        value={selectedOrder?.payment_status}
+        addBoldness
       />
       <InfoBox title="Tracking ID" value={selectedOrder?.tracking_id} />
-      <InfoBox title="Delivery Fee" value={"3500"} addCurrency />
+    </Box>
+  );
+};
+const Delivery = ({ selectedOrder }: Props) => {
+  return (
+    <Box>
+      <InfoBox title="Address" value={selectedOrder?.order_delivery?.address} />
+      <InfoBox title="City" value={selectedOrder?.order_delivery?.city} />
+      <InfoBox title="State" value={selectedOrder?.order_delivery?.state} />
+      <InfoBox title="Country" value={selectedOrder?.order_delivery?.country} />
+      <InfoBox
+        title="Zip Code"
+        value={selectedOrder?.order_delivery?.zip_code}
+      />
+      <InfoBox
+        title="Latitude"
+        value={selectedOrder?.order_delivery?.latitude}
+      />
+      <InfoBox
+        title="Longitude"
+        value={selectedOrder?.order_delivery?.longitude}
+      />
+      <InfoBox
+        title="Phone Number"
+        value={selectedOrder?.order_delivery?.phone_number}
+      />
     </Box>
   );
 };
@@ -125,8 +156,11 @@ function PaymentInformationSection({ selectedOrder }: Props) {
         })}
       </Box>
       <Box>
-        {selectedOption === optionsObj.DETAILS && (
-          <Details selectedOrder={selectedOrder} />
+        {selectedOption === optionsObj.PAYMENT && (
+          <Payment selectedOrder={selectedOrder} />
+        )}
+        {selectedOption === optionsObj.DELIVERY && (
+          <Delivery selectedOrder={selectedOrder} />
         )}
       </Box>
     </Box>

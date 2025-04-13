@@ -28,7 +28,8 @@ const greenStates = [
   "complete",
   "completed",
 ];
-const yellowStates = ["processing", "ongoing", "pending", "not claimed"];
+const yellowStates = ["ongoing", "pending", "not claimed"];
+const blueStates = ["processing"];
 
 const renderStatus = (stat: string | boolean | number | null | undefined) => {
   const theme = useTheme();
@@ -67,6 +68,29 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
             fontSize: "12.3px",
             textTransform: "capitalize",
             color: theme.palette.warning.main,
+          }}
+        >
+          {stat || "Processing"}
+        </Typography>
+      </Box>
+    );
+  }
+  if (typeof stat === "string" && blueStates?.includes(stat)) {
+    return (
+      <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
+        <Box
+          sx={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            background: theme.palette.info.main,
+          }}
+        />
+        <Typography
+          sx={{
+            fontSize: "12.3px",
+            textTransform: "capitalize",
+            color: theme.palette.info.main,
           }}
         >
           {stat || "Processing"}

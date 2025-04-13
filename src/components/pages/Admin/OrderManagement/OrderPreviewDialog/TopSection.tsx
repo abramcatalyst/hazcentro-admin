@@ -1,10 +1,10 @@
 import Grid from "@mui/material/Grid2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ProductImage from "src/assets/tempimages/machine1.jpg";
+// import ProductImage from "src/assets/tempimages/machine1.jpg";
 import UserImage from "src/assets/images/avatar-male.png";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
-import ProductInfoBox from "src/components/shared/ProductInfoBox/ProductInfoBox";
+// import ProductInfoBox from "src/components/shared/ProductInfoBox/ProductInfoBox";
 import { OrderType } from "src/types/orders";
 
 const sizing = { xs: 12, sm: 4, md: 3 };
@@ -82,21 +82,21 @@ function TopSection({ selectedOrder }: Props) {
               </Box>
             </Box>
           </Grid>
-          <Grid size={sizing}>
+          {/* <Grid size={sizing}>
             <ProductInfoBox
               image={ProductImage}
               title="Oriano Pod"
               caption1={`ID:23456`}
             />
-          </Grid>
-          <Grid size={sizing}>
+          </Grid> */}
+          {/* <Grid size={sizing}>
             <ProductInfoBox
               image={ProductImage}
               title="Oriano Store"
               caption1={`ID:23456`}
               caption2="Merchant"
             />
-          </Grid>
+          </Grid> */}
           <Grid size={sizing}>
             <Box
               sx={{

@@ -32,7 +32,7 @@ function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
       fullScreen={fullScreen}
       open={open}
       onClose={handleClose}
-      maxWidth="md"
+      maxWidth="lg"
     >
       <DialogActions>
         <Box
@@ -58,11 +58,11 @@ function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
       <DialogContent>
         <TopSection selectedOrder={selectedOrder} />
         <Box>
-          <Grid container spacing={1} columns={5}>
-            <Grid size={{ xs: 5, sm: 3 }}>
+          <Grid container spacing={1} columns={6}>
+            <Grid size={{ xs: 6, sm: 4 }}>
               <ProductInformation selectedOrder={selectedOrder} />
             </Grid>
-            <Grid size={{ xs: 5, sm: 2 }}>
+            <Grid size={{ xs: 6, sm: 2 }}>
               <PaymentInformationSection selectedOrder={selectedOrder} />
             </Grid>
           </Grid>

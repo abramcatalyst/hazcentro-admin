@@ -29,8 +29,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat);
 const headCells = [
-  "Order ID",
-  "Order Name",
+  "Tracking ID",
+  "Number of Items",
   "Amount",
   "Date Created",
   "Buyer Name",
@@ -109,7 +109,7 @@ function OrdersTable({ selectedUsers, data }: Props) {
                   }}
                 >
                   <StyledTableCell>{row?.tracking_id}</StyledTableCell>
-                  <StyledTableCell>{row?.buyer?.name}</StyledTableCell>
+                  <StyledTableCell>{row?.order_items?.length}</StyledTableCell>
                   <StyledTableCell>
                     &#8358;{currencyFormater(row?.total_price, 2)}
                   </StyledTableCell>

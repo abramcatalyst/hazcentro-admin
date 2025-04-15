@@ -41,10 +41,10 @@ const AgentCard = ({
   handleOpenEditDialog,
 }: AgentCardProps) => {
   const navigate = useNavigate();
-  const { name, gender, state } = data;
+  const { name, gender, state, id } = data;
 
   const handleViewProfile = () => {
-    navigate(`${ADMIN_ROUTE_LINKS.ADMIN_AGENT_PROFILE}/1234`);
+    navigate(`${ADMIN_ROUTE_LINKS.ADMIN_AGENT_PROFILE}/${id}`);
   };
   return (
     <Box

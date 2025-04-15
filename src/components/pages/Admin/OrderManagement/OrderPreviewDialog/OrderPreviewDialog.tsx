@@ -14,6 +14,13 @@ import ProductInformation from "./ProductInformation";
 import PaymentInformationSection from "./PaymentInformationSection";
 import OrderStages from "./OrderStages";
 import { OrderType } from "src/types/orders";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { formatErrorMessage } from "src/utils";
+import { fetchSingleOrder } from "src/services/orders";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import { useEffect } from "react";
 
 type Props = {
   open: boolean;
@@ -24,8 +31,54 @@ type Props = {
 function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const queryClient = useQueryClient();
+  const { error, data, isError } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_ORDER,
+      { selectedOrder, open },
+    ],
+    queryFn: () => fetchSingleOrder(selectedOrder?.id),
+  });
 
-  console.log("ssssssssssssss", selectedOrder);
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_ORDER],
+      });
+    };
+  }, []);
+
+  let content = (
+    <DialogContent>
+      <HalfScreenLoader />
+    </DialogContent>
+  );
+
+  if (isError) {
+    content = (
+      <DialogContent>
+        <HalfScreenError text={formatErrorMessage(error)} />
+      </DialogContent>
+    );
+  }
+  if (data) {
+    content = (
+      <DialogContent>
+        <TopSection selectedOrder={data} />
+        <Box>
+          <Grid container spacing={1} columns={6}>
+            <Grid size={{ xs: 6, sm: 4 }}>
+              <ProductInformation selectedOrder={data} />
+            </Grid>
+            <Grid size={{ xs: 6, sm: 2 }}>
+              <PaymentInformationSection selectedOrder={data} />
+            </Grid>
+          </Grid>
+          <OrderStages selectedOrder={data} />
+        </Box>
+      </DialogContent>
+    );
+  }
   return (
     <StyledDialog
       fullWidth
@@ -55,20 +108,7 @@ function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
           </DialogCloseButtonWrapper>
         </Box>
       </DialogActions>
-      <DialogContent>
-        <TopSection selectedOrder={selectedOrder} />
-        <Box>
-          <Grid container spacing={1} columns={6}>
-            <Grid size={{ xs: 6, sm: 4 }}>
-              <ProductInformation selectedOrder={selectedOrder} />
-            </Grid>
-            <Grid size={{ xs: 6, sm: 2 }}>
-              <PaymentInformationSection selectedOrder={selectedOrder} />
-            </Grid>
-          </Grid>
-          <OrderStages />
-        </Box>
-      </DialogContent>
+      {content}
     </StyledDialog>
   );
 }

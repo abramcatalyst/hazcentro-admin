@@ -45,3 +45,11 @@ export const fetchAgents = async ({
 
   return data?.data;
 };
+
+export const fetchSingleAgent = async (id: string): Promise<AgentType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/admin/agents/${id}`);
+
+  return data?.agent;
+};

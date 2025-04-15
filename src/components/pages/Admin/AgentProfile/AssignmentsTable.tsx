@@ -2,23 +2,39 @@ import Box from "@mui/material/Box";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
-import ProductInfoBox from "src/components/shared/ProductInfoBox/ProductInfoBox";
-import MachineImg from "src/assets/tempimages/machine1.jpg";
-import { currencyFormater } from "src/utils";
-import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 
-const headCells = [
-  "Buyer ID",
-  "Merc. ID",
-  "Product Detail",
-  "Amount",
-  "Status",
-];
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
+import {
+  currencyFormater,
+  formatErrorMessage,
+  rowsPerPageOptions,
+  sLimit,
+  sPage,
+  tableMenuStyles,
+} from "src/utils";
+import renderStatus from "src/components/shared/RenderStatus/renderStatus";
+import { Fragment, memo, useState } from "react";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import { fetchAgentAssignedOrders } from "src/services/orders";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import OrderPreviewDialog from "../OrderManagement/OrderPreviewDialog/OrderPreviewDialog";
+import { OrderType } from "src/types/orders";
+
+const headCells = ["Buyer ", "Product Detail", "Amount", "Status", "Actions"];
 
 function EnhancedTableHead() {
   return (
@@ -32,84 +48,151 @@ function EnhancedTableHead() {
   );
 }
 
-const AssignmentsTable = () => {
-  // const renderStatus = (stat:string) => {
-  //   if(stat === 'processing'){
-  //     return (
-  //       <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
-  //         <Box
-  //           sx={{
-  //             width: "7px",
-  //             height: "7px",
-  //             borderRadius: "50%",
-  //             background: theme.palette.success.light,
-  //           }}
-  //         />
-  //         <Typography sx={{ fontSize: "12.3px", textTransform: "capitalize" }}>
-  //           {stat || "Active"}
-  //         </Typography>
-  //       </Box>
-  //     );
-  //   }
-  // }
+type Props = {
+  selectedTab: string;
+};
+const AssignmentsTable = ({ selectedTab }: Props) => {
+  const [openPreview, setOpenPreview] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
+  const handleOpenPreview = (item: OrderType) => {
+    setSelectedOrder(item);
+    setOpenPreview(true);
+  };
+  const handleClosePreviewProfile = () => {
+    setOpenPreview(false);
+    setSelectedOrder(null);
+  };
+  const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams({
+    limit: rowsPerPageOptions[0].toString(),
+    page: "1",
+  });
+  const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
+  const page = Number(searchParams.get(sPage)) || 1;
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_ASSIGNED_ORDERS,
+      { limit, page, id, selectedTab },
+    ],
+    queryFn: () =>
+      fetchAgentAssignedOrders({
+        limit: limit,
+        page,
+        userId: id,
+        status: selectedTab,
+      }),
+  });
+
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setSearchParams(
+      (params) => {
+        params.set(sPage, `${newPage + 1}`);
+        return params;
+      },
+      { replace: true }
+    );
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchParams(
+      (params) => {
+        params.set(sLimit, event.target.value.toString());
+        params.set(sPage, "1");
+        return params;
+      },
+      { replace: true }
+    );
+  };
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  if (isPending) {
+    return <HalfScreenLoader />;
+  }
+
+  console.log("bbbbbbbbbbbbbbb", data);
   return (
     <Box sx={{ background: "#ffffff", p: 1, borderRadius: "20px", mb: 1 }}>
-      {/* {openDeleteDialog && (
-        <DeleteAgentDialog
-          open={openDeleteDialog}
-          handleClose={handleCloseDeleteDialog}
+      {openPreview && selectedOrder && (
+        <OrderPreviewDialog
+          open={openPreview}
+          selectedOrder={selectedOrder}
+          handleClose={handleClosePreviewProfile}
         />
-      )} */}
+      )}
 
       <TableContainer>
-        <Table
-          sx={{ minWidth: 750 }}
-          aria-labelledby="tableTitle"
-          size={"small"}
-        >
-          <EnhancedTableHead />
-          <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
-              return (
-                <TableRow key={`${row}${index}`}>
-                  <StyledTableCell sx={{ minWidth: "120px" }}>
-                    <Box>
-                      <ProductInfoBox
-                        direction="column"
-                        image={MachineImg}
-                        title={"Bright Okon"}
-                        caption1="ID:234123AW"
-                      />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ minWidth: "120px" }}>
-                    <Box>
-                      <ProductInfoBox
-                        direction="column"
-                        image={MachineImg}
-                        title={"Bright Okon"}
-                        caption1="ID:234123AW"
-                      />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Typography sx={{ fontSize: "13px" }}>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Consectetur ad delectus blanditiis.
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    &#8358;{currencyFormater(40000)}
-                  </StyledTableCell>
-                  <StyledTableCell>{renderStatus("completed")}</StyledTableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+        {data?.data?.length === 0 ? (
+          <EmptyTable subText="No orders found" />
+        ) : (
+          <Table sx={{ minWidth: 650 }} size={"small"}>
+            <EnhancedTableHead />
+            <TableBody>
+              {data?.data?.map((row) => {
+                return (
+                  <TableRow key={row?.id}>
+                    <StyledTableCell sx={{ minWidth: "120px" }}>
+                      {row?.buyer?.name || "N/A"}
+                    </StyledTableCell>
+
+                    <StyledTableCell>
+                      <Typography sx={{ fontSize: "13px" }}>
+                        {row?.order_items?.length}{" "}
+                        {row?.order_items?.length > 1 ? "items" : "item"}{" "}
+                        ordered
+                      </Typography>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      &#8358;{currencyFormater(row?.total_price)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderStatus(row?.status)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <PopupState variant="popover">
+                        {(popupState) => (
+                          <Fragment>
+                            <IconButton {...bindTrigger(popupState)}>
+                              <MoreHorizRoundedIcon />
+                            </IconButton>
+                            <Menu {...bindMenu(popupState)}>
+                              <MenuItem
+                                onClick={() => {
+                                  handleOpenPreview(row);
+                                  popupState.close();
+                                }}
+                                sx={tableMenuStyles}
+                              >
+                                Preview Order
+                              </MenuItem>
+                            </Menu>
+                          </Fragment>
+                        )}
+                      </PopupState>
+                    </StyledTableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        )}
       </TableContainer>
+      <Box sx={{ my: 1 }}>
+        <TablePagination
+          rowsPerPageOptions={rowsPerPageOptions}
+          component="div"
+          count={data?.pagination?.total || 0}
+          rowsPerPage={limit || rowsPerPageOptions[0]}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
     </Box>
   );
 };
 
-export default AssignmentsTable;
+export default memo(AssignmentsTable);

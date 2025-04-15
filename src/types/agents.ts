@@ -14,6 +14,19 @@ export type SubCategoryType = {
   total_products: number;
   media: [];
 };
+export type ManagedOrderType = {
+  id: string;
+  user_id: string | null;
+  agent_id: string;
+  total_price: string;
+  payment_status: string;
+  payment_reference: string | null;
+  status: string;
+  buyer_confirmed_at: string | null;
+  tracking_id: string;
+  created_at: string;
+  updated_at: string;
+};
 export type RoleType = {
   id: string;
   name: string;
@@ -53,6 +66,6 @@ export type AgentType = {
     updated_at: string;
     user_id: string;
   }[];
-  managed_orders: [];
+  managed_orders: ManagedOrderType[];
   roles: RoleType[];
 };

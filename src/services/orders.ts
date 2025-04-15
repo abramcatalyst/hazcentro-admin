@@ -33,3 +33,42 @@ export const fetchOrders = async ({
 
   return data;
 };
+
+export const fetchSingleOrder = async (id: string): Promise<OrderType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/admin/orders/${id}`);
+
+  return data?.data;
+};
+
+export const fetchAgentAssignedOrders = async ({
+  page,
+  limit,
+  search,
+  status,
+  startDate,
+  lastLoginDate,
+  userId,
+}: QueryFilterType): Promise<{
+  data: OrderType[];
+  pagination: {
+    current_page: number;
+    last_page: number;
+    next_page: number;
+    per_page: number;
+    total: number;
+  };
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/orders?limit=${limit}${page ? `&page=${page}` : ""}${
+      startDate ? `&minCreateDate=${startDate}` : ""
+    }${userId ? `&agent_id=${userId}` : ""}${
+      lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
+    }${status ? `&status=${status}` : ""}${search ? `&search=${search}` : ""}`
+  );
+
+  return data;
+};

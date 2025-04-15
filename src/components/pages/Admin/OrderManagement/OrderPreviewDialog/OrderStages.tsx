@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -14,6 +14,18 @@ import { BiBadgeCheck } from "react-icons/bi";
 import { TbBus } from "react-icons/tb";
 import { LuPackageCheck } from "react-icons/lu";
 import { PiHandCoins } from "react-icons/pi";
+import { OrderType } from "src/types/orders";
+import axios from "axios";
+import {
+  baseUrl,
+  formatErrorMessage,
+  formatSuccessMessage,
+  isAuthTokenExpired,
+  setDefaultHeaders,
+} from "src/utils";
+import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -104,8 +116,77 @@ const steps = [
   "Order Delivered",
 ];
 
-const OrderStages = () => {
+type Props = {
+  selectedOrder: OrderType;
+};
+const OrderStages = ({ selectedOrder }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (selectedOrder?.order_delivery?.status === "order-placed") {
+      setActiveStep(1);
+    }
+    if (selectedOrder?.order_delivery?.status === "order-confirmed") {
+      setActiveStep(2);
+    }
+    if (selectedOrder?.order_delivery?.status === "in-transit") {
+      setActiveStep(3);
+    }
+    if (selectedOrder?.order_delivery?.status === "pickup-ready") {
+      setActiveStep(4);
+    }
+    if (selectedOrder?.order_delivery?.status === "order-delivered") {
+      setActiveStep(5);
+    }
+  }, [selectedOrder, isSubmitting]);
+
+  const renderStatus = (val: number) => {
+    if (val === 1) {
+      return "order-placed";
+    }
+    if (val === 2) {
+      return "order-confirmed";
+    }
+    if (val === 3) {
+      return "in-transit";
+    }
+    if (val === 4) {
+      return "pickup-ready";
+    }
+    return "order-delivered";
+  };
+  const handleSubmitUpdateStatus = async (index: number) => {
+    console.log("bbbbbbbbbb", index);
+    try {
+      setDefaultHeaders();
+      isAuthTokenExpired();
+      setIsSubmitting(true);
+
+      const payload = {
+        delivery_status: renderStatus(index),
+      };
+      const res = await axios.patch(
+        `${baseUrl}/admin/orders/${selectedOrder?.id}/delivery-status`,
+        payload
+      );
+      const successMsg = formatSuccessMessage(res?.data);
+      toast.success(successMsg);
+
+      await queryClient.invalidateQueries({
+        queryKey: [
+          TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_ORDER,
+          TANSTACK_REQUEST_CACHE_TAGS.FETCH_ORDERS,
+        ],
+      });
+      setActiveStep(index + 1);
+    } catch (error) {
+      const errorMsg = formatErrorMessage(error);
+      toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
@@ -132,10 +213,11 @@ const OrderStages = () => {
               }}
             >
               <Checkbox
+                disabled={isSubmitting}
                 size="small"
                 checked={index + 1 <= activeStep}
                 onChange={() => {
-                  setActiveStep(index + 1);
+                  handleSubmitUpdateStatus(index + 1);
                 }}
               />
             </Box>

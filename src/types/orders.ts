@@ -77,7 +77,7 @@ export type OrderType = {
     email: string;
     role: string;
     roles: RoleType[];
-  };
+  } | null;
   order_items: OrderItemType[];
   order_delivery: {
     id: string;
@@ -91,7 +91,12 @@ export type OrderType = {
     longitude: string;
     latitude: string;
     phone_number: string;
-    status: string;
+    status:
+      | "order-placed"
+      | "order-confirmed"
+      | "in-transit"
+      | "pickup-ready"
+      | "order-delivered";
     created_at: string;
     updated_at: string;
     delivery_method: {

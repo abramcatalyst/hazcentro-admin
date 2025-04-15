@@ -4,11 +4,19 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import { GLOBAL_COLORS } from "src/utils";
+import { formatErrorMessage, GLOBAL_COLORS } from "src/utils";
 import MaleAvatar from "src/assets/images/avatar-male.png";
+import FemaleAvatar from "src/assets/images/avatar-female.png";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
+import { memo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import { useParams } from "react-router-dom";
+import { fetchSingleAgent } from "src/services/agents";
 
 dayjs.extend(advancedFormat);
 type InfoBoxProps = {
@@ -65,6 +73,20 @@ export const InverseInfoBox = ({ title, value }: InfoBoxProps) => {
 const ProfileInformation = () => {
   const theme = useTheme();
   const sizing = { xs: 12, sm: 6 };
+  const { id } = useParams();
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_AGENT, {}],
+    queryFn: () => fetchSingleAgent(id || ""),
+  });
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  if (isPending) {
+    return <HalfScreenLoader text={formatErrorMessage(error)} />;
+  }
+
+  console.log("bbbbbbbbbbb", data);
   return (
     <Box component={Paper} sx={{ p: 1, borderRadius: "20px" }} elevation={0}>
       <Box
@@ -111,7 +133,7 @@ const ProfileInformation = () => {
             }}
           >
             <img
-              src={MaleAvatar}
+              src={data?.gender === "male" ? MaleAvatar : FemaleAvatar}
               alt={"user"}
               style={{
                 width: "46px",
@@ -123,11 +145,11 @@ const ProfileInformation = () => {
           </Box>
           <Box>
             <Typography noWrap sx={{ fontSize: { xs: "14px", sm: "18px" } }}>
-              Anthony Gregson
+              {data?.name}
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography>Lagos</Typography>
-              {renderStatus("active")}
+              <Typography>{data?.state}</Typography>
+              {renderStatus(data?.status)}
             </Box>
           </Box>
         </Box>
@@ -153,16 +175,19 @@ const ProfileInformation = () => {
       >
         <Grid container spacing={1}>
           <Grid size={sizing}>
-            <InfoBox title="Full Name" value={"Anthony Greg"} />
+            <InfoBox title="Full Name" value={data?.name} />
           </Grid>
           <Grid size={sizing}>
-            <InfoBox title="State/Region" value={"Lagos state"} />
+            <InfoBox
+              title="State/Region"
+              value={`${data?.state}/${data?.country}`}
+            />
           </Grid>
           <Grid size={sizing}>
-            <InfoBox title="Phone Number" value={"2348109870987"} />
+            <InfoBox title="Phone Number" value={data?.phone_number} />
           </Grid>
           <Grid size={sizing}>
-            <InfoBox title="Gender" value={"Male"} />
+            <InfoBox title="Gender" value={data?.gender} />
           </Grid>
         </Grid>
       </Box>
@@ -185,11 +210,11 @@ const ProfileInformation = () => {
       </Box>
       <Box>
         <Typography variant="subtitle2" align="right">
-          Agent Added: {dayjs().format("MMM Do, YYYY")}
+          Agent Added: {dayjs(data?.created_at).format("MMM Do, YYYY")}
         </Typography>
       </Box>
     </Box>
   );
 };
 
-export default ProfileInformation;
+export default memo(ProfileInformation);

@@ -9,10 +9,11 @@ import ActiveAssignment from "./ActiveAssignment";
 import AssignmentsTable from "./AssignmentsTable";
 
 export const usersPageTabOptionsObj = {
-  ALL: "ALL",
-  COMPLETED: "COMPLETED",
-  INCOMPLETE: "INCOMPLETE",
+  ALL: "",
+  COMPLETED: "completed",
+  INCOMPLETE: "processing",
 };
+
 export const ordersTabOptions = [
   {
     title: "All",
@@ -51,7 +52,7 @@ const AgentProfileWrapper = () => {
       <Box my={1}>
         <Grid container spacing={1}>
           <Grid size={{ xs: 12, md: 8 }}>
-            <AssignmentsTable />
+            <AssignmentsTable selectedTab={selectedTab} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <ProfileInformation />

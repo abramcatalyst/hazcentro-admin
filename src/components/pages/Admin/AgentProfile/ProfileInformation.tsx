@@ -1,3 +1,4 @@
+import { memo, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -10,18 +11,16 @@ import FemaleAvatar from "src/assets/images/avatar-female.png";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
-import { memo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
-import { useParams } from "react-router-dom";
-import { fetchSingleAgent } from "src/services/agents";
+import { AgentType } from "src/types/agents";
+import EditAgentDialog from "../Agents/EditAgentDialog";
 
 dayjs.extend(advancedFormat);
 type InfoBoxProps = {
   title: string;
-  value: string;
+  value: string | number;
 };
 
 export const InfoBox = ({ title, value }: InfoBoxProps) => {
@@ -70,25 +69,45 @@ export const InverseInfoBox = ({ title, value }: InfoBoxProps) => {
     </Box>
   );
 };
-const ProfileInformation = () => {
+export type AgentProfileProps = {
+  isPending: boolean;
+  error: Error | null;
+  isError: boolean;
+  data: AgentType | undefined;
+};
+const ProfileInformation = ({
+  isPending,
+  isError,
+  error,
+  data,
+}: AgentProfileProps) => {
+  const [openEditDialog, setOpenEditDialog] = useState(false);
   const theme = useTheme();
   const sizing = { xs: 12, sm: 6 };
-  const { id } = useParams();
-  const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_AGENT, {}],
-    queryFn: () => fetchSingleAgent(id || ""),
-  });
 
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
   if (isPending) {
-    return <HalfScreenLoader text={formatErrorMessage(error)} />;
+    return <HalfScreenLoader />;
   }
 
-  console.log("bbbbbbbbbbb", data);
-  return (
+  const handleOpenEditDialog = () => {
+    setOpenEditDialog(true);
+  };
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+  };
+
+  return data ? (
     <Box component={Paper} sx={{ p: 1, borderRadius: "20px" }} elevation={0}>
+      {openEditDialog && (
+        <EditAgentDialog
+          open={openEditDialog}
+          selectedAgent={data}
+          handleClose={handleCloseEditDialog}
+        />
+      )}
       <Box
         sx={{
           display: "flex",
@@ -107,6 +126,7 @@ const ProfileInformation = () => {
             background: theme.palette.grey[100],
             "&:hover": { background: theme.palette.grey[200] },
           }}
+          onClick={() => handleOpenEditDialog()}
         >
           Edit
         </Button>
@@ -201,10 +221,16 @@ const ProfileInformation = () => {
       >
         <Grid container spacing={1}>
           <Grid size={sizing}>
-            <InverseInfoBox title="Complete Order" value={"50"} />
+            <InverseInfoBox
+              title="Complete Order"
+              value={data?.completed_orders}
+            />
           </Grid>
           <Grid size={sizing}>
-            <InverseInfoBox title="Incomplete Order" value={"3"} />
+            <InverseInfoBox
+              title="Incomplete Order"
+              value={data?.incomplete_orders}
+            />
           </Grid>
         </Grid>
       </Box>
@@ -214,7 +240,7 @@ const ProfileInformation = () => {
         </Typography>
       </Box>
     </Box>
-  );
+  ) : null;
 };
 
 export default memo(ProfileInformation);

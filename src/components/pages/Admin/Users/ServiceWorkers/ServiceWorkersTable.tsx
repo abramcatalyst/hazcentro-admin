@@ -56,13 +56,6 @@ function EnhancedTableHead() {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            size="small"
-            color="warning"
-
-          />
-        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell key={headCell}>{headCell}</TableCell>
         ))}
@@ -71,7 +64,7 @@ function EnhancedTableHead() {
   );
 }
 
-function BuyersTable({ selectedUsers }: Props) {
+function ServiceWorkersTable({ selectedUsers }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const [searchParams, setSearchParams] = useSearchParams({
@@ -81,11 +74,8 @@ function BuyersTable({ selectedUsers }: Props) {
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 0;
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [
-      TANSTACK_REQUEST_CACHE_TAGS.FETCH_E_COMMERCE_BUYERS,
-      { limit, page },
-    ],
-    queryFn: () => fetchUsers({ limit: limit, page: page, role: "user" }),
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ALl_WORKERS, { limit, page }],
+    queryFn: () => fetchUsers({ limit: limit, page: page, role: "worker" }),
   });
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -168,29 +158,6 @@ function BuyersTable({ selectedUsers }: Props) {
                           : "default",
                       }}
                     >
-                      {/* <StyledTableCell padding="checkbox">
-                        <Checkbox
-                          color="warning"
-                          size="small"
-                          checked={isItemSelected}
-                          onChange={() => {
-                            if (selectedUsers.has(index)) {
-                              setSelectedUsers((prev) => {
-                                const newSet = new Set(prev);
-                                newSet.delete(index);
-                                return newSet;
-                              });
-                            } else {
-                              setSelectedUsers((prev) =>
-                                new Set(prev).add(index)
-                              );
-                            }
-                          }}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </StyledTableCell> */}
                       <StyledTableCell>{row?.unique_user_id}</StyledTableCell>
                       <StyledTableCell>{row?.name}</StyledTableCell>
                       <StyledTableCell>{`${row?.state}, ${row?.country}`}</StyledTableCell>
@@ -271,4 +238,4 @@ function BuyersTable({ selectedUsers }: Props) {
   );
 }
 
-export default BuyersTable;
+export default ServiceWorkersTable;

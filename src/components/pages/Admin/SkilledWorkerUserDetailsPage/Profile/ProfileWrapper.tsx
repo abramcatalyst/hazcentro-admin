@@ -4,14 +4,18 @@ import UserHeader from "../UserHeader";
 import ActiveOrders from "../Overview/VisitedCategories";
 import ProfileDetailsSection from "./ProfileDetailsSection";
 import RecentClose from "../Overview/RecentClose";
+import { UserType } from "src/types/users";
 
-const ProfileWrapper = () => {
+type Props = {
+  data: UserType;
+};
+const ProfileWrapper = ({ data }: Props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <UserHeader />
-          <ProfileDetailsSection />
+          <UserHeader data={data} />
+          <ProfileDetailsSection data={data} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <ActiveOrders />

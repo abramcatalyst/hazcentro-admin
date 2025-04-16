@@ -6,6 +6,7 @@ import OverviewWrapper from "./Overview/OverviewWrapper";
 import ProfileWrapper from "./Profile/ProfileWrapper";
 import SavedWrapper from "./Saved/SavedWrapper";
 import RequestWrapper from "./Request/RequestWrapper";
+import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
 // import FollowingsWrapper from "./Followings/FollowingsWrapper";
 // import OrdersWrapper from "./Orders/OrdersWrapper";
 
@@ -34,7 +35,7 @@ export const profileTabOptions = [
   },
 ];
 
-const SkilledWorkerUserDetailsPage = () => {
+const SkilledWorkerUserDetailsPage = ({ data }: UserDetailsPageProps) => {
   const [selectedTab, setSelectedTab] = useState(profileTabOptions[0].value);
   return (
     <Box>
@@ -48,17 +49,17 @@ const SkilledWorkerUserDetailsPage = () => {
           </Grid>
           <Grid size={{ xs: 12, sm: 10 }} container spacing={1}>
             {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
-              <OverviewWrapper />
+              <OverviewWrapper data={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.PROFILE ? (
-              <ProfileWrapper />
+              <ProfileWrapper data={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.SAVED ? (
-              <SavedWrapper />
+              <SavedWrapper data={data} />
             ) : null}
 
             {selectedTab === usersPageTabOptionsObj.REQUEST ? (
-              <RequestWrapper />
+              <RequestWrapper data={data} />
             ) : null}
           </Grid>
         </Grid>

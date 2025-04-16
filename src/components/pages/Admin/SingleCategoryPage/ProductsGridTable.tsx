@@ -109,7 +109,6 @@ function ProductsGridTable({ data, handleOpenPreview }: ProductTableProps) {
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
-                                // handleOpenTransactionPreview(row);
                                 popupState.close();
                               }}
                               sx={{

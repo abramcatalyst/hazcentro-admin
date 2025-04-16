@@ -143,48 +143,6 @@ export type AssignedBonusType = {
   prize: string;
   quantity: number;
 };
-export type UserType = {
-  userId: string;
-  firstname: string;
-  lastname: string;
-  avatarUrl: string | null;
-  email: string;
-  phone: string;
-  walletBalance: string;
-  commissionBalance: string;
-  bonusWallet: string;
-  bonusStatus: string;
-  bundleWallet: string;
-  dailyLimit: string;
-  cancellationLimit: string;
-  hasVerifiedEmail: boolean;
-  hasMinimumDailyWalletBalance: boolean;
-  status: boolean;
-  role: string;
-  isAgent: boolean;
-  hasSetPin: boolean;
-  referredBy: string | null;
-  referralCode: string;
-  multiplier: string;
-  lastLogin: string;
-  loginCount: number;
-  bankName: string | null;
-  bankCode: string;
-  accountNumber: string;
-  accountName: string;
-  imageUrl: string;
-  portfolio: string;
-  downlines: DownlineType[];
-  excludedAgentBetTypes: {
-    lotteryId: string;
-    lotteryName: string;
-    betTypes: string[];
-  }[];
-  AssignedBonus: null | AssignedBonusType;
-  agentAgg: AgentAggType;
-  createdAt: string;
-  updatedAt: string;
-};
 
 export type AgentAggType = {
   portfolio: null | number;

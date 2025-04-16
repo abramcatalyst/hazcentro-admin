@@ -5,7 +5,12 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import { useTheme } from "@mui/material/styles";
 import MaleAvatar from "src/assets/images/avatar-male.png";
-const UserHeader = () => {
+import { UserType } from "src/types/users";
+
+type Props = {
+  data: UserType;
+};
+const UserHeader = ({ data }: Props) => {
   const theme = useTheme();
   return (
     <Box
@@ -51,7 +56,7 @@ const UserHeader = () => {
               fontWeight: 600,
             }}
           >
-            Jason Suter
+            {data?.name}
           </Typography>{" "}
           <Typography
             sx={{
@@ -60,7 +65,7 @@ const UserHeader = () => {
               color: theme.palette.grey[800],
             }}
           >
-            User ID: 123457865
+            User ID: {data?.unique_user_id}
           </Typography>{" "}
         </Box>
       </Box>

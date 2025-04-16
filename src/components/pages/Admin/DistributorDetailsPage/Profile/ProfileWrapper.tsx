@@ -6,6 +6,7 @@ import ProfileDetailsSection from "./ProfileDetailsSection";
 import PerformanceStats from "../PerformanceStats";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
+import { UserType } from "src/types/users";
 
 export const tabOptionsObj = {
   PROFILE: "PROFILE",
@@ -31,13 +32,16 @@ export const profileTabOptions = [
     value: tabOptionsObj.PAYMENT,
   },
 ];
-const ProfileWrapper = () => {
+type Props = {
+  data: UserType;
+};
+const ProfileWrapper = ({ data }: Props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
           <ErrorBoundary FallbackComponent={ErrorFallBack}>
-            <UserHeader />
+            <UserHeader data={data} />
           </ErrorBoundary>
           <ErrorBoundary FallbackComponent={ErrorFallBack}>
             <ProfileDetailsSection />

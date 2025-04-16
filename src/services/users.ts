@@ -1,5 +1,4 @@
 import axios from "axios";
-import { CategoryType } from "src/types/categories";
 import { QueryFilterType } from "src/types/filters";
 import { UserType } from "src/types/users";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
@@ -9,7 +8,7 @@ export const fetchUsers = async ({
   limit,
   search,
   status,
-  startDate,
+  role,
   endDate,
   lastLoginDate,
 }: QueryFilterType): Promise<{
@@ -36,7 +35,7 @@ export const fetchUsers = async ({
   isAuthTokenExpired();
   const { data } = await axios.get(
     `${baseUrl}/admin/users?limit=${limit}${page ? `&page=${page}` : ""}${
-      startDate ? `&minCreateDate=${startDate}` : ""
+      role ? `&role=${role}` : ""
     }${endDate ? `&maxCreateDate=${endDate}` : ""}${
       lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
     }${status ? `&status=${status === "true" ? true : false}` : ""}${
@@ -47,31 +46,10 @@ export const fetchUsers = async ({
   return data?.users;
 };
 
-export const fetchSingleUser = async (
-  id: string
-): Promise<{
-  data: CategoryType[];
-  current_page: number;
-  first_page_url: string;
-  from: number;
-  last_page: number;
-  last_page_url: string;
-  lings: {
-    url: null | string;
-    label: string;
-    active: boolean;
-  }[];
-  next_page: number;
-  next_page_url: string;
-  path: string;
-  per_page: number;
-  prev_page_url: null | string;
-  to: number;
-  total: number;
-}> => {
+export const fetchSingleUser = async (id: string): Promise<UserType> => {
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(`${baseUrl}/admin/users/${id}`);
 
-  return data;
+  return data?.user;
 };

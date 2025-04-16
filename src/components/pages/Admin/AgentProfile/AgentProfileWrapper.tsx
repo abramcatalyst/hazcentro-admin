@@ -7,6 +7,10 @@ import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import ProfileInformation from "./ProfileInformation";
 import ActiveAssignment from "./ActiveAssignment";
 import AssignmentsTable from "./AssignmentsTable";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { useParams } from "react-router-dom";
+import { fetchSingleAgent } from "src/services/agents";
 
 export const usersPageTabOptionsObj = {
   ALL: "",
@@ -31,6 +35,11 @@ export const ordersTabOptions = [
 
 const AgentProfileWrapper = () => {
   const [selectedTab, setSelectedTab] = useState(ordersTabOptions[0].value);
+  const { id } = useParams();
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_AGENT, {}],
+    queryFn: () => fetchSingleAgent(id || ""),
+  });
   return (
     <Box>
       <Box
@@ -55,8 +64,18 @@ const AgentProfileWrapper = () => {
             <AssignmentsTable selectedTab={selectedTab} />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <ProfileInformation />
-            <ActiveAssignment />
+            <ProfileInformation
+              isPending={isPending}
+              isError={isError}
+              error={error}
+              data={data}
+            />
+            <ActiveAssignment
+              isPending={isPending}
+              isError={isError}
+              error={error}
+              data={data}
+            />
           </Grid>
         </Grid>
       </Box>

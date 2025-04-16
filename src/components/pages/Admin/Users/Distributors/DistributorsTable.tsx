@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+// import Checkbox from "@mui/material/Checkbox";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import dayjs from "dayjs";
 import {
@@ -23,8 +24,7 @@ import {
 } from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
-import UserProfileDialog from "../UserProfileDialog/UserProfileDialog";
-// import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
+import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
@@ -71,9 +71,10 @@ function EnhancedTableHead() {
   );
 }
 
-function BuyersTable({ selectedUsers }: Props) {
+function DistributorsTable({ selectedUsers }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
@@ -82,10 +83,10 @@ function BuyersTable({ selectedUsers }: Props) {
   const page = Number(searchParams.get(sPage)) || 0;
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
-      TANSTACK_REQUEST_CACHE_TAGS.FETCH_E_COMMERCE_BUYERS,
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_E_COMMERCE_DISTRIBUTORS,
       { limit, page },
     ],
-    queryFn: () => fetchUsers({ limit: limit, page: page, role: "user" }),
+    queryFn: () => fetchUsers({ limit: limit, page: page, role: "vendor" }),
   });
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -113,11 +114,12 @@ function BuyersTable({ selectedUsers }: Props) {
 
   const handleOpenPreviewProfile = (info: UserType) => {
     setSelectedUser(info);
+
     setOpenPreviewProfile(true);
   };
   const handleClosePreviewProfile = () => {
-    setOpenPreviewProfile(false);
     setSelectedUser(null);
+    setOpenPreviewProfile(false);
   };
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
@@ -128,23 +130,17 @@ function BuyersTable({ selectedUsers }: Props) {
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openPreviewProfile && selectedUser && (
-        <UserProfileDialog
+        <DistributorProfileDialog
           open={openPreviewProfile}
           selectedUser={selectedUser}
           handleClose={handleClosePreviewProfile}
         />
       )}
-      {/* {openPreviewProfile && (
-        <DistributorProfileDialog
-          open={openPreviewProfile}
-          handleClose={handleClosePreviewProfile}
-        />
-      )} */}
 
       <TableContainer>
         {data?.total > 0 ? (
           <Box>
-            <Table sx={{ minWidth: 750 }} size={"small"}>
+            <Table sx={{ minWidth: 700 }} size={"small"}>
               <EnhancedTableHead
 
               //   onSelectAllClick={handleSelectAllClick}
@@ -152,7 +148,6 @@ function BuyersTable({ selectedUsers }: Props) {
               <TableBody>
                 {data?.data?.map((row, index) => {
                   const isItemSelected = selectedUsers.has(index);
-
                   return (
                     <StyledTableRow
                       hover
@@ -216,31 +211,6 @@ function BuyersTable({ selectedUsers }: Props) {
                                 >
                                   Preview Profile
                                 </MenuItem>
-                                {/* <MenuItem
-                                onClick={() => {
-                                  popupState.close();
-                                }}
-                                sx={tableMenuStyles}
-                              >
-                                Activate
-                              </MenuItem> */}
-
-                                {/* <MenuItem
-                                onClick={() => {
-                                  popupState.close();
-                                }}
-                                sx={tableMenuStyles}
-                              >
-                                Suspend
-                              </MenuItem> */}
-                                {/* <MenuItem
-                                onClick={() => {
-                                  popupState.close();
-                                }}
-                                sx={tableMenuStyles}
-                              >
-                                Block
-                              </MenuItem> */}
                               </Menu>
                             </Fragment>
                           )}
@@ -271,4 +241,4 @@ function BuyersTable({ selectedUsers }: Props) {
   );
 }
 
-export default BuyersTable;
+export default DistributorsTable;

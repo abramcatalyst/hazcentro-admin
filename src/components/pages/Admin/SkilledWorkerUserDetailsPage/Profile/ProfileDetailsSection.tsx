@@ -7,9 +7,13 @@ import MaleAvatar from "src/assets/tempimages/user1.png";
 import ProfileInfoBox from "src/components/shared/ProfileInfoBox/ProfileInfoBox";
 import QuickActions from "./QuickActions";
 import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
+import { UserType } from "src/types/users";
 
-const sizing = { xs: 12, sm: 6, md: 4, lg: 3 };
-const ProfileDetailsSection = () => {
+type Props = {
+  data: UserType;
+};
+const sizing = { xs: 12, sm: 6, md: 4 };
+const ProfileDetailsSection = ({ data }: Props) => {
   const theme = useTheme();
   return (
     <Box
@@ -51,7 +55,7 @@ const ProfileDetailsSection = () => {
               fontWeight: 500,
             }}
           >
-            Jason Suter
+            {data?.name}
           </Typography>{" "}
           <Typography
             sx={{
@@ -60,7 +64,7 @@ const ProfileDetailsSection = () => {
               color: theme.palette.grey[800],
             }}
           >
-            User ID: 123457865
+            User ID: {data?.unique_user_id}
           </Typography>{" "}
           <Box
             sx={{
@@ -77,7 +81,7 @@ const ProfileDetailsSection = () => {
                 textAlign: "center",
               }}
             >
-              Wuse, Abuja
+              {data?.state}, {data?.country}
             </Typography>{" "}
           </Box>{" "}
         </Box>
@@ -85,25 +89,20 @@ const ProfileDetailsSection = () => {
       <Box my={2}>
         <Grid container spacing={1}>
           <Grid size={sizing}>
-            <ProfileInfoBox title="First Name" value="Esther" />
+            <ProfileInfoBox title="Name" value={data?.name} />
+          </Grid>
+
+          <Grid size={sizing}>
+            <ProfileInfoBox title="Email Address" value={data?.email} />
           </Grid>
           <Grid size={sizing}>
-            <ProfileInfoBox title="Last Name" value="Esther" />
+            <ProfileInfoBox title="Phone" value={data?.phone_number} />
           </Grid>
           <Grid size={sizing}>
-            <ProfileInfoBox title="Middle Name" value="Esther" />
+            <ProfileInfoBox title="Country" value={data?.country} />
           </Grid>
           <Grid size={sizing}>
-            <ProfileInfoBox title="Email Address" value="johndoe@gmail.com" />
-          </Grid>
-          <Grid size={sizing}>
-            <ProfileInfoBox title="Country" value="Nigeria" />
-          </Grid>
-          <Grid size={sizing}>
-            <ProfileInfoBox title="State" value="Delta" />
-          </Grid>
-          <Grid size={sizing}>
-            <ProfileInfoBox title="Phone" value="23487909808" />
+            <ProfileInfoBox title="State" value={data?.state} />
           </Grid>
         </Grid>
       </Box>

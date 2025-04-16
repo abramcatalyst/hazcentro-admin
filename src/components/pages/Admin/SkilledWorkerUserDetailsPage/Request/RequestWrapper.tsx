@@ -4,13 +4,17 @@ import UserHeader from "../UserHeader";
 import ActiveOrders from "../Overview/VisitedCategories";
 import RequestTable from "./RequestTable";
 import RecentServiceWorker from "../RecentServiceWorker";
+import { UserType } from "src/types/users";
 
-const RequestWrapper = () => {
+type Props = {
+  data: UserType;
+};
+const RequestWrapper = ({ data }: Props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <UserHeader />
+          <UserHeader data={data} />
           <RequestTable />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>

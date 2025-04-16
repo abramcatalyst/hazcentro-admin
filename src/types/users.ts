@@ -2,6 +2,7 @@ import { RoleType } from "./agents";
 
 export type UserType = {
   id: string;
+  unique_user_id: string;
   name: string;
   email: string;
   gender: string;
@@ -18,6 +19,6 @@ export type UserType = {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-  role: string;
+  role: "user" | "vendor" | "worker";
   roles: RoleType[];
 };

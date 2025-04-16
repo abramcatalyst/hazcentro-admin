@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import UsersTab from "./UsersTab";
 import BuyersTable from "./Buyers/BuyersTable";
-import { GLOBAL_COLORS } from "src/utils";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
+import DistributorsTable from "./Distributors/DistributorsTable";
+import ServiceWorkersTable from "./ServiceWorkers/ServiceWorkersTable";
 
 export const usersViewTabOptionsObj = {
   E_COMMERCE: "E_COMMERCE",
@@ -13,7 +13,7 @@ export const usersViewTabOptionsObj = {
 export const usersPageTabOptionsObj = {
   BUYERS: "BUYERS",
   DISTRIBUTORS: "DISTRIBUTORS",
-  GUESTS: "GUESTS",
+  SERVICE_WORKERS: "SERVICE_WORKERS",
 };
 export const usersTabOptions = [
   {
@@ -25,8 +25,8 @@ export const usersTabOptions = [
     value: usersPageTabOptionsObj.DISTRIBUTORS,
   },
   {
-    title: "Guests",
-    value: usersPageTabOptionsObj.GUESTS,
+    title: "Service Workers",
+    value: usersPageTabOptionsObj.SERVICE_WORKERS,
   },
 ];
 export const usersViewTabOptions = [
@@ -40,7 +40,6 @@ export const usersViewTabOptions = [
   },
 ];
 const UsersWrapper = () => {
-  const [view, setView] = useState(usersViewTabOptions[0].value);
   const [selectedTab, setSelectedTab] = useState(usersTabOptions[0].value);
   const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
   return (
@@ -56,44 +55,30 @@ const UsersWrapper = () => {
         }}
       >
         <AppHeader text="User Management" />
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          {usersViewTabOptions.map((item) => (
-            <Box
-              sx={{
-                height: "42px",
-                minWidth: "88px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                p: 1,
-                background:
-                  item.value === view ? "#47B48E0D" : GLOBAL_COLORS.GREY_10,
-                color: item.value === view ? "#47B48E" : "GrayText",
-                borderRadius: "12px",
-                border: item.value === view ? `2px solid #47B48E` : "none",
-                cursor: "pointer",
-              }}
-              key={item.title}
-              onClick={() => {
-                setView(item.value);
-              }}
-            >
-              <Typography sx={{ fontSize: "13px", fontWeight: 600 }}>
-                {item?.title}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
       </Box>
       <UsersTab
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
         selectedUsers={selectedUsers}
       />
-      <BuyersTable
-        selectedUsers={selectedUsers}
-        setSelectedUsers={setSelectedUsers}
-      />
+      {selectedTab === usersPageTabOptionsObj.BUYERS && (
+        <BuyersTable
+          selectedUsers={selectedUsers}
+          setSelectedUsers={setSelectedUsers}
+        />
+      )}
+      {selectedTab === usersPageTabOptionsObj.DISTRIBUTORS && (
+        <DistributorsTable
+          selectedUsers={selectedUsers}
+          setSelectedUsers={setSelectedUsers}
+        />
+      )}
+      {selectedTab === usersPageTabOptionsObj.SERVICE_WORKERS && (
+        <ServiceWorkersTable
+          selectedUsers={selectedUsers}
+          setSelectedUsers={setSelectedUsers}
+        />
+      )}
     </Box>
   );
 };

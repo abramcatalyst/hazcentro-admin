@@ -5,13 +5,17 @@ import RecentActivities from "./RecentActivities";
 import VisitedCategories from "./VisitedCategories";
 import RecentCoveredAreas from "./RecentCoveredAreas";
 import RecentClose from "./RecentClose";
+import { UserType } from "src/types/users";
 
-const OverviewWrapper = () => {
+type Props = {
+  data: UserType;
+};
+const OverviewWrapper = ({ data }: Props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <UserHeader />
+          <UserHeader data={data} />
           <RecentCoveredAreas />
           <RecentActivities />
         </Grid>

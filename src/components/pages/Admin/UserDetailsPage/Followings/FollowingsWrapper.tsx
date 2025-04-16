@@ -4,13 +4,17 @@ import UserHeader from "../UserHeader";
 import ActiveOrders from "../ActiveOrders";
 import Followers from "../Followers";
 import FollowersTable from "./FollowersTable";
+import { UserType } from "src/types/users";
 
-const FollowingsWrapper = () => {
+type Props = {
+  data: UserType;
+};
+const FollowingsWrapper = ({ data }: Props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <UserHeader />
+          <UserHeader data={data} />
           <FollowersTable />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>

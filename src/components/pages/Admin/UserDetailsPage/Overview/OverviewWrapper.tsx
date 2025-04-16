@@ -5,13 +5,17 @@ import UserStats from "../UserStats";
 import LatestOrderTable from "../LatestOrderTable";
 import ActiveOrders from "../ActiveOrders";
 import Followers from "../Followers";
+import { UserType } from "src/types/users";
 
-const OverviewWrapper = () => {
+type Props = {
+  data: UserType;
+};
+const OverviewWrapper = ({ data }: Props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <UserHeader />
+          <UserHeader data={data} />
           <UserStats />
           <LatestOrderTable />
         </Grid>

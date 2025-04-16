@@ -145,7 +145,6 @@ function ProductsTable({ data, handleOpenPreview }: ProductTableProps) {
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
-                                // handleOpenTransactionPreview(row);
                                 popupState.close();
                               }}
                               sx={tableMenuStyles}

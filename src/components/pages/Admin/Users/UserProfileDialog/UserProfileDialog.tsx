@@ -11,15 +11,23 @@ import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import UserImg from "src/assets/tempimages/user1.png";
-import { currencyFormater } from "src/utils";
+import { currencyFormater, formatErrorMessage } from "src/utils";
 import QuickActions from "./QuickActions";
 import ActiveOrders from "./ActiveOrders";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
+import { UserType } from "src/types/users";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchSingleUser } from "src/services/users";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 
 type Props = {
   open: boolean;
+  selectedUser: UserType;
   handleClose: () => void;
 };
 
@@ -36,10 +44,172 @@ const InfoBox = ({ title, value }: InfoBoxProps) => {
     </Box>
   );
 };
-function UserProfileDialog({ open, handleClose }: Props) {
+function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  const { error, data, isError } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER,
+      { selectedUser, open },
+    ],
+    queryFn: () => fetchSingleUser(selectedUser?.id),
+  });
+
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER],
+      });
+    };
+  }, []);
+
+  let content = (
+    <DialogContent>
+      <HalfScreenLoader />
+    </DialogContent>
+  );
+
+  if (isError) {
+    content = (
+      <DialogContent>
+        <HalfScreenError text={formatErrorMessage(error)} />
+      </DialogContent>
+    );
+  }
+  if (data) {
+    content = (
+      <DialogContent>
+        <Box
+          component={Paper}
+          sx={{
+            minHeight: "147px",
+            borderRadius: "20px",
+            display: "flex",
+            gap: 1,
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: "center",
+            justifyContent: { xs: "center", sm: "space-between" },
+            p: { xs: 1, sm: 2 },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+            }}
+          >
+            <Box
+              sx={{
+                width: { xs: "46px", sm: "76px" },
+                height: { xs: "46px", sm: "76px" },
+                borderRadius: "50%",
+              }}
+            >
+              <img
+                src={UserImg}
+                alt="user"
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+              />
+            </Box>
+            <Box>
+              <Typography
+                noWrap
+                sx={{ fontWeigh: 600, fontSize: { xs: "17px", sm: "22px" } }}
+              >
+                {selectedUser?.name}
+              </Typography>
+              <Typography sx={{ color: "GrayText" }} variant="body2">
+                ID:{selectedUser?.unique_user_id}
+              </Typography>
+              <Typography sx={{ color: "GrayText" }} variant="body2">
+                Following:100 Dist.
+              </Typography>
+            </Box>
+          </Box>
+          <Typography sx={{ color: "GrayText" }} variant="body2"></Typography>
+        </Box>
+        <Box sx={{ my: 1 }}>
+          <Typography gutterBottom>Basic Information</Typography>
+          <Box
+            component={Paper}
+            sx={{
+              my: 1,
+              borderRadius: "20px",
+              p: { xs: 1, sm: 2 },
+              minHeight: "157px",
+            }}
+          >
+            <Grid container spacing={1}>
+              <Grid size={sizing}>
+                <InfoBox title="Email Address" value={selectedUser?.email} />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox title="Gender" value={selectedUser?.gender} />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox title="State of Origin" value={selectedUser?.state} />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox
+                  title="Phone Number"
+                  value={selectedUser?.phone_number}
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox title="Balance" value={currencyFormater(453256)} />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox title="Following" value={"100"} />
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        {data?.role === "user" ? <ActiveOrders /> : null}
+        <QuickActions />
+        <Divider />
+        <Box sx={{ my: 1, display: "flex", gap: 1 }}>
+          <Button
+            size="large"
+            fullWidth
+            sx={{
+              height: "55px",
+              background: theme.palette.grey[100],
+              color: "#000000",
+              "&:hover": {
+                background: theme.palette.grey[800],
+                color: "#ffffff",
+              },
+            }}
+          >
+            Send Message
+          </Button>
+          <Button
+            size="large"
+            fullWidth
+            sx={{
+              height: "55px",
+              background: "#FBF5E3",
+              color: "#000000",
+              "&:hover": {
+                background: theme.palette.error.light,
+                color: "#ffffff",
+              },
+            }}
+            onClick={() => {
+              navigate(
+                `${ADMIN_ROUTE_LINKS.ADMIN_USER_PROFILE}/${selectedUser?.id}`
+              );
+            }}
+          >
+            Go to full Profile
+          </Button>
+        </Box>
+      </DialogContent>
+    );
+  }
   return (
     <StyledDialog
       fullWidth
@@ -80,130 +250,7 @@ function UserProfileDialog({ open, handleClose }: Props) {
           </Box>
         </Box>
       </DialogActions>
-      <DialogContent>
-        <Box
-          component={Paper}
-          sx={{
-            minHeight: "147px",
-            borderRadius: "20px",
-            display: "flex",
-            gap: 1,
-            flexDirection: { xs: "column", sm: "row" },
-            alignItems: "center",
-            justifyContent: { xs: "center", sm: "space-between" },
-            p: { xs: 1, sm: 2 },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-            }}
-          >
-            <Box
-              sx={{
-                width: { xs: "46px", sm: "76px" },
-                height: { xs: "46px", sm: "76px" },
-                borderRadius: "50%",
-              }}
-            >
-              <img
-                src={UserImg}
-                alt="user"
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
-              />
-            </Box>
-            <Box>
-              <Typography
-                noWrap
-                sx={{ fontWeigh: 600, fontSize: { xs: "17px", sm: "22px" } }}
-              >
-                James Elsin
-              </Typography>
-              <Typography sx={{ color: "GrayText" }} variant="body2">
-                ID:128jBG9
-              </Typography>
-              <Typography sx={{ color: "GrayText" }} variant="body2">
-                Following:100 Dist.
-              </Typography>
-            </Box>
-          </Box>
-          <Typography sx={{ color: "GrayText" }} variant="body2">
-            Last Seen: 2 Min, ago
-          </Typography>
-        </Box>
-        <Box sx={{ my: 1 }}>
-          <Typography gutterBottom>Basic Information</Typography>
-          <Box
-            component={Paper}
-            sx={{
-              my: 1,
-              borderRadius: "20px",
-              p: { xs: 1, sm: 2 },
-              minHeight: "157px",
-            }}
-          >
-            <Grid container spacing={1}>
-              <Grid size={sizing}>
-                <InfoBox title="Email Address" value={"johndoe@gmail.com"} />
-              </Grid>
-              <Grid size={sizing}>
-                <InfoBox title="Gender" value={"Female"} />
-              </Grid>
-              <Grid size={sizing}>
-                <InfoBox title="State of Origin" value={"Lagos"} />
-              </Grid>
-              <Grid size={sizing}>
-                <InfoBox title="Phone Number" value={"2348101234567"} />
-              </Grid>
-              <Grid size={sizing}>
-                <InfoBox title="Balance" value={currencyFormater(453256)} />
-              </Grid>
-              <Grid size={sizing}>
-                <InfoBox title="Following" value={"100"} />
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <ActiveOrders />
-        <QuickActions />
-        <Divider />
-        <Box sx={{ my: 1, display: "flex", gap: 1 }}>
-          <Button
-            size="large"
-            fullWidth
-            sx={{
-              height: "55px",
-              background: theme.palette.grey[100],
-              color: "#000000",
-              "&:hover": {
-                background: theme.palette.grey[800],
-                color: "#ffffff",
-              },
-            }}
-          >
-            Send Message
-          </Button>
-          <Button
-            size="large"
-            fullWidth
-            sx={{
-              height: "55px",
-              background: "#FBF5E3",
-              color: "#000000",
-              "&:hover": {
-                background: theme.palette.error.light,
-                color: "#ffffff",
-              },
-            }}
-            onClick={() => {
-              navigate(`${ADMIN_ROUTE_LINKS.ADMIN_USER_PROFILE}/8765`);
-            }}
-          >
-            Go to full Profile
-          </Button>
-        </Box>
-      </DialogContent>
+      {content}
     </StyledDialog>
   );
 }

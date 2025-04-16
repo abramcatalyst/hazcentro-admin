@@ -7,6 +7,7 @@ import ProfileWrapper from "./Profile/ProfileWrapper";
 import FollowingsWrapper from "./Followings/FollowingsWrapper";
 import OrdersWrapper from "./Orders/OrdersWrapper";
 import SubscriptionWrapper from "./Subscriptions/SubscriptionWrapper";
+import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
@@ -61,7 +62,7 @@ export const profileTabOptions = [
   },
 ];
 
-const DistributorDetailsPageWrapper = () => {
+const DistributorDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {
   const [selectedTab, setSelectedTab] = useState(profileTabOptions[0].value);
   return (
     <Box>
@@ -75,13 +76,13 @@ const DistributorDetailsPageWrapper = () => {
           </Grid>
           <Grid size={{ xs: 15, sm: 13 }} container spacing={1}>
             {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
-              <OverviewWrapper />
+              <OverviewWrapper data={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.PROFILE ? (
-              <ProfileWrapper />
+              <ProfileWrapper data={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.FOLLOWINGS ? (
-              <FollowingsWrapper />
+              <FollowingsWrapper data={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.ORDERS ? (
               <OrdersWrapper />

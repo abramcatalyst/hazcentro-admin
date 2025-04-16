@@ -44,6 +44,8 @@ export type AgentType = {
   unique_user_id: string;
   name: string;
   email: string;
+  completed_orders: number;
+  incomplete_orders: number;
   gender: "female" | "male";
   state: string;
   country: string;
@@ -68,4 +70,11 @@ export type AgentType = {
   }[];
   managed_orders: ManagedOrderType[];
   roles: RoleType[];
+  recent_orders: {
+    created_at: string;
+    id: string;
+    status: string;
+    total_price: number;
+    tracking_id: string;
+  }[];
 };

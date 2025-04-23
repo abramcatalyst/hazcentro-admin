@@ -32,7 +32,7 @@ function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const queryClient = useQueryClient();
-  const { error, data, isError } = useQuery({
+  const { error, data, isError, refetch } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_ORDER,
       { selectedOrder, open },
@@ -74,7 +74,7 @@ function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
               <PaymentInformationSection selectedOrder={data} />
             </Grid>
           </Grid>
-          <OrderStages selectedOrder={data} />
+          <OrderStages selectedOrder={data} refetch={refetch} />
         </Box>
       </DialogContent>
     );

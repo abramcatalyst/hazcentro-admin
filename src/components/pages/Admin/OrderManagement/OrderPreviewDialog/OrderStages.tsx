@@ -24,7 +24,11 @@ import {
   setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -118,8 +122,11 @@ const steps = [
 
 type Props = {
   selectedOrder: OrderType;
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<OrderType, Error>>;
 };
-const OrderStages = ({ selectedOrder }: Props) => {
+const OrderStages = ({ selectedOrder, refetch }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const queryClient = useQueryClient();
@@ -139,8 +146,9 @@ const OrderStages = ({ selectedOrder }: Props) => {
     if (selectedOrder?.order_delivery?.status === "order-delivered") {
       setActiveStep(5);
     }
-  }, [selectedOrder, isSubmitting]);
+  }, [selectedOrder]);
 
+  console.log("ssssssssss");
   const renderStatus = (val: number) => {
     if (val === 1) {
       return "order-placed";
@@ -157,7 +165,6 @@ const OrderStages = ({ selectedOrder }: Props) => {
     return "order-delivered";
   };
   const handleSubmitUpdateStatus = async (index: number) => {
-    console.log("bbbbbbbbbb", index);
     try {
       setDefaultHeaders();
       isAuthTokenExpired();
@@ -173,13 +180,11 @@ const OrderStages = ({ selectedOrder }: Props) => {
       const successMsg = formatSuccessMessage(res?.data);
       toast.success(successMsg);
 
+      // setActiveStep(index + 1);
+      await refetch();
       await queryClient.invalidateQueries({
-        queryKey: [
-          TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_ORDER,
-          TANSTACK_REQUEST_CACHE_TAGS.FETCH_ORDERS,
-        ],
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ORDERS],
       });
-      setActiveStep(index + 1);
     } catch (error) {
       const errorMsg = formatErrorMessage(error);
       toast.error(errorMsg);

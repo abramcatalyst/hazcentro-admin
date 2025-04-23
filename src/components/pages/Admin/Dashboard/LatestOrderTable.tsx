@@ -7,15 +7,28 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
-import { currencyFormater } from "src/utils";
+import { currencyFormater, formatErrorMessage } from "src/utils";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchOrders } from "src/services/orders";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 
+dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat);
-
-const headCells = ["Order ID", "Item", "Amount", "Date", "Status"];
+const headCells = [
+  "Tracking ID",
+  "Buyer Name",
+  "Number of Items",
+  "Amount",
+  "Date Created",
+  "Status",
+];
 
 function EnhancedTableHead() {
   return (
@@ -30,6 +43,18 @@ function EnhancedTableHead() {
 }
 
 function LatestOrderTable() {
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_RECENT_ORDERS, {}],
+    queryFn: () => fetchOrders({ limit: 8, page: 1 }),
+  });
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  if (isPending) {
+    return <HalfScreenLoader />;
+  }
+
   return (
     <Box
       sx={{
@@ -47,23 +72,19 @@ function LatestOrderTable() {
         <Table sx={{ minWidth: 300 }} size={"small"}>
           <EnhancedTableHead />
           <TableBody>
-            {[1, 2, 3, 4, 5, 6].map((row) => {
+            {data?.data.map((row) => {
               return (
-                <TableRow key={row}>
-                  <StyledTableCell>#YW627J</StyledTableCell>
+                <TableRow key={row.id}>
+                  <StyledTableCell>{row?.tracking_id}</StyledTableCell>
+                  <StyledTableCell>{row?.buyer?.name || "N/A"}</StyledTableCell>
+                  <StyledTableCell>{row?.order_items?.length}</StyledTableCell>
                   <StyledTableCell>
-                    <Typography variant="body2" noWrap>
-                      {"iPhone 16 Pro | 256GB 6GB RAM"}
-                    </Typography>
+                    &#8358;{currencyFormater(row?.total_price, 2)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {" "}
-                    &#8358;{currencyFormater(780000)}
+                    {dayjs(row?.created_at).format("MMM Do `YY")}
                   </StyledTableCell>
-                  <StyledTableCell>
-                    {dayjs().format("MMM Do `YY")}
-                  </StyledTableCell>
-                  <StyledTableCell>{renderStatus("delivered")}</StyledTableCell>
+                  <StyledTableCell>{renderStatus(row?.status)}</StyledTableCell>
                 </TableRow>
               );
             })}

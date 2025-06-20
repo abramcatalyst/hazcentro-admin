@@ -1,0 +1,1369 @@
+{
+  "current_page": 1,
+  "data": [
+    {
+      "id": "110c75be-d4ef-4dc1-b1c9-b94662bcdff8",
+      "user_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+      "agent_id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+      "total_price": "852.65",
+      "payment_status": "success",
+      "payment_reference": "1746595728634",
+      "status": "completed",
+      "buyer_confirmed_at": null,
+      "tracking_id": "ORD-20250507-WQOW",
+      "created_at": "2025-05-07T10:37:47.000000Z",
+      "updated_at": "2025-05-30T14:39:35.000000Z",
+      "buyer": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "type": "user"
+      },
+      "user": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "role": "user",
+        "roles": [
+          {
+            "id": "16e67fd3-d7f4-46ba-bf94-9292e632c122",
+            "name": "user",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+              "role_id": "16e67fd3-d7f4-46ba-bf94-9292e632c122"
+            }
+          }
+        ]
+      },
+      "order_items": [
+        {
+          "id": "05f10064-69a9-4238-973e-db521b0b8b5e",
+          "order_id": "110c75be-d4ef-4dc1-b1c9-b94662bcdff8",
+          "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+          "quantity": 1,
+          "price_at_sale": "852.65",
+          "total_price": "852.65",
+          "created_at": "2025-05-07T10:37:47.000000Z",
+          "updated_at": "2025-05-07T10:37:47.000000Z",
+          "product": {
+            "id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+            "vendor_id": "a388a364-9d14-4321-ad04-e615cd81471f",
+            "name": "iste",
+            "sku": "PROD-8155",
+            "description": "Ab repudiandae tenetur cupiditate corrupti vitae voluptatem eveniet.",
+            "brand_id": "70175609-84fa-438d-b06a-72345d4439ba",
+            "price": "536.88",
+            "discounted_price": null,
+            "warranty": "2 years",
+            "overview": null,
+            "is_active": 1,
+            "is_featured": 0,
+            "other_category_id": null,
+            "created_at": "2025-04-06T16:28:01.000000Z",
+            "updated_at": "2025-04-06T16:28:01.000000Z",
+            "deleted_at": null,
+            "images": [
+              {
+                "id": 95,
+                "url": "https://haz.reevaluateme.online/storage/95/product6.png",
+                "name": "product6.png"
+              }
+            ],
+            "discount_percentage": null,
+            "total_likes": 0,
+            "media": [
+              {
+                "id": 95,
+                "model_type": "App\\Models\\Product",
+                "model_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                "uuid": "4f2728b0-e18c-4df5-ab6c-805d01efa6fd",
+                "collection_name": "product_images",
+                "name": "product6",
+                "file_name": "product6.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 527213,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 1,
+                "created_at": "2025-04-06T16:28:01.000000Z",
+                "updated_at": "2025-04-06T16:28:01.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/95/product6.png",
+                "preview_url": ""
+              }
+            ],
+            "vendor": {
+              "id": "a388a364-9d14-4321-ad04-e615cd81471f",
+              "business_name": "Franecki PLC"
+            },
+            "categories": [
+              {
+                "id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                "name": "Building Materials",
+                "total_products": 19,
+                "pivot": {
+                  "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                  "category_id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "7713a482-4414-4753-b4a5-c446509ecc6b",
+                "name": "Electrical Supplies",
+                "total_products": 14,
+                "pivot": {
+                  "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                  "category_id": "7713a482-4414-4753-b4a5-c446509ecc6b",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "9568ef05-a835-4dca-9ee2-f921de2e0f64",
+                "name": "Bricks & Blocks",
+                "total_products": 6,
+                "pivot": {
+                  "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                  "category_id": "9568ef05-a835-4dca-9ee2-f921de2e0f64",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "order_delivery": {
+        "id": "9eda884c-c0f0-4031-bdf8-4b0aa5684993",
+        "order_id": "110c75be-d4ef-4dc1-b1c9-b94662bcdff8",
+        "delivery_method_id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+        "address": "123 New Street",
+        "city": "Benin",
+        "state": "Edo",
+        "country": "Nigeria",
+        "zip_code": null,
+        "longitude": null,
+        "latitude": null,
+        "phone_number": "+2349012345678",
+        "drop_address": "Central Drop Hub \u2014 Benin",
+        "drop_city": "Benin",
+        "drop_state": "Edo",
+        "drop_country": "Nigeria",
+        "drop_zip_code": "12210",
+        "drop_phone_number": "+18629023602",
+        "drop_latitude": "6.3382000",
+        "drop_longitude": "5.6258000",
+        "status": "order-delivered",
+        "created_at": "2025-05-07T10:37:47.000000Z",
+        "updated_at": "2025-05-30T14:39:35.000000Z",
+        "delivery_method": {
+          "id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+          "name": "HazExpress"
+        }
+      },
+      "tracking": [
+        {
+          "id": "9f092368-d34e-4ef9-9522-83334503dc77",
+          "order_id": "110c75be-d4ef-4dc1-b1c9-b94662bcdff8",
+          "latitude": null,
+          "longitude": null,
+          "description": "Order confirmed",
+          "updated_by": null,
+          "is_automatic": 1,
+          "status": 1,
+          "created_at": "2025-05-30T14:39:35.000000Z",
+          "updated_at": "2025-05-30T14:39:35.000000Z"
+        },
+        {
+          "id": "9f083d82-0141-4c69-80f4-9164177b7a1f",
+          "order_id": "110c75be-d4ef-4dc1-b1c9-b94662bcdff8",
+          "latitude": null,
+          "longitude": null,
+          "description": "Order created",
+          "updated_by": null,
+          "is_automatic": 1,
+          "status": 0,
+          "created_at": "2025-05-30T03:56:44.000000Z",
+          "updated_at": "2025-05-30T03:56:44.000000Z"
+        }
+      ],
+      "agent": {
+        "id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+        "name": "Agent Account",
+        "role": "agent",
+        "roles": [
+          {
+            "id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6",
+            "name": "agent",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+              "role_id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "2547b723-ed5a-4c4a-8e7e-a1384f00f52a",
+      "user_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+      "agent_id": null,
+      "total_price": "1006.58",
+      "payment_status": "success",
+      "payment_reference": "1746790642450",
+      "status": "processing",
+      "buyer_confirmed_at": null,
+      "tracking_id": "ORD-20250509-FZJ8",
+      "created_at": "2025-05-09T11:37:35.000000Z",
+      "updated_at": "2025-05-09T11:37:35.000000Z",
+      "buyer": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "type": "user"
+      },
+      "user": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "role": "user",
+        "roles": [
+          {
+            "id": "16e67fd3-d7f4-46ba-bf94-9292e632c122",
+            "name": "user",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+              "role_id": "16e67fd3-d7f4-46ba-bf94-9292e632c122"
+            }
+          }
+        ]
+      },
+      "order_items": [
+        {
+          "id": "992618ff-b533-44e4-893a-eda45099a64b",
+          "order_id": "2547b723-ed5a-4c4a-8e7e-a1384f00f52a",
+          "product_id": "3250e0e7-ca32-4c67-a077-3215cbdcbc91",
+          "quantity": 2,
+          "price_at_sale": "503.29",
+          "total_price": "1006.58",
+          "created_at": "2025-05-09T11:37:35.000000Z",
+          "updated_at": "2025-05-09T11:37:35.000000Z",
+          "product": {
+            "id": "3250e0e7-ca32-4c67-a077-3215cbdcbc91",
+            "vendor_id": "e48b3b79-ae21-40fd-9c9e-c8ff04ca516f",
+            "name": "distinctio",
+            "sku": "PROD-3218",
+            "description": "Et et occaecati consequatur atque voluptas.",
+            "brand_id": "fa93e665-be6d-4b4b-afbf-0754bb631c68",
+            "price": "503.29",
+            "discounted_price": "341.94",
+            "warranty": null,
+            "overview": null,
+            "is_active": 1,
+            "is_featured": 0,
+            "other_category_id": null,
+            "created_at": "2025-04-06T16:28:01.000000Z",
+            "updated_at": "2025-04-06T16:28:01.000000Z",
+            "deleted_at": null,
+            "images": [
+              {
+                "id": 138,
+                "url": "https://haz.reevaluateme.online/storage/138/product2.png",
+                "name": "product2.png"
+              },
+              {
+                "id": 139,
+                "url": "https://haz.reevaluateme.online/storage/139/product6.png",
+                "name": "product6.png"
+              }
+            ],
+            "discount_percentage": 32.06000000000000227373675443232059478759765625,
+            "total_likes": 0,
+            "media": [
+              {
+                "id": 138,
+                "model_type": "App\\Models\\Product",
+                "model_id": "3250e0e7-ca32-4c67-a077-3215cbdcbc91",
+                "uuid": "d4a0cec4-c8ab-4b73-8045-0dfd88b16de6",
+                "collection_name": "product_images",
+                "name": "product2",
+                "file_name": "product2.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 35170,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 1,
+                "created_at": "2025-04-06T16:28:01.000000Z",
+                "updated_at": "2025-04-06T16:28:01.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/138/product2.png",
+                "preview_url": ""
+              },
+              {
+                "id": 139,
+                "model_type": "App\\Models\\Product",
+                "model_id": "3250e0e7-ca32-4c67-a077-3215cbdcbc91",
+                "uuid": "5ec80106-7b13-4256-95c4-806ab68f25da",
+                "collection_name": "product_images",
+                "name": "product6",
+                "file_name": "product6.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 527213,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 2,
+                "created_at": "2025-04-06T16:28:01.000000Z",
+                "updated_at": "2025-04-06T16:28:01.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/139/product6.png",
+                "preview_url": ""
+              }
+            ],
+            "vendor": {
+              "id": "e48b3b79-ae21-40fd-9c9e-c8ff04ca516f",
+              "business_name": "Mertz, Von and Gerlach"
+            },
+            "categories": [
+              {
+                "id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                "name": "Building Materials",
+                "total_products": 19,
+                "pivot": {
+                  "product_id": "3250e0e7-ca32-4c67-a077-3215cbdcbc91",
+                  "category_id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "d61bfc5f-c0f1-44c7-8036-bcf9249e0e30",
+                "name": "HVAC Supplies",
+                "total_products": 9,
+                "pivot": {
+                  "product_id": "3250e0e7-ca32-4c67-a077-3215cbdcbc91",
+                  "category_id": "d61bfc5f-c0f1-44c7-8036-bcf9249e0e30",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "e95e803a-3ada-4d63-9cb3-50d469916920",
+                "name": "Faucets & Sinks",
+                "total_products": 8,
+                "pivot": {
+                  "product_id": "3250e0e7-ca32-4c67-a077-3215cbdcbc91",
+                  "category_id": "e95e803a-3ada-4d63-9cb3-50d469916920",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "order_delivery": {
+        "id": "9edea3a6-2ac3-4999-8853-9cf259734cc5",
+        "order_id": "2547b723-ed5a-4c4a-8e7e-a1384f00f52a",
+        "delivery_method_id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+        "address": "3 loc",
+        "city": null,
+        "state": "Akwa Ibom",
+        "country": "Poland",
+        "zip_code": null,
+        "longitude": null,
+        "latitude": null,
+        "phone_number": "520.691.7934",
+        "drop_address": null,
+        "drop_city": null,
+        "drop_state": null,
+        "drop_country": null,
+        "drop_zip_code": null,
+        "drop_phone_number": null,
+        "drop_latitude": null,
+        "drop_longitude": null,
+        "status": "order-placed",
+        "created_at": "2025-05-09T11:37:35.000000Z",
+        "updated_at": "2025-05-09T11:37:35.000000Z",
+        "delivery_method": {
+          "id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+          "name": "HazExpress"
+        }
+      },
+      "tracking": [],
+      "agent": null
+    },
+    {
+      "id": "4246f2e3-13e2-421c-976d-8f3901e96b1f",
+      "user_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+      "agent_id": "2f9234c7-cddb-46a9-b53b-c436a9b71225",
+      "total_price": "6000.00",
+      "payment_status": "success",
+      "payment_reference": "1748577113635",
+      "status": "processing",
+      "buyer_confirmed_at": null,
+      "tracking_id": "ORD-20250530-YW1M",
+      "created_at": "2025-05-30T03:53:27.000000Z",
+      "updated_at": "2025-05-30T03:53:28.000000Z",
+      "buyer": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "type": "user"
+      },
+      "user": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "role": "user",
+        "roles": [
+          {
+            "id": "16e67fd3-d7f4-46ba-bf94-9292e632c122",
+            "name": "user",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+              "role_id": "16e67fd3-d7f4-46ba-bf94-9292e632c122"
+            }
+          }
+        ]
+      },
+      "order_items": [
+        {
+          "id": "b9122bb5-28f0-49b5-898d-48e24f2cf8b7",
+          "order_id": "4246f2e3-13e2-421c-976d-8f3901e96b1f",
+          "product_id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+          "quantity": 1,
+          "price_at_sale": "6000.00",
+          "total_price": "6000.00",
+          "created_at": "2025-05-30T03:53:27.000000Z",
+          "updated_at": "2025-05-30T03:53:27.000000Z",
+          "product": {
+            "id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+            "vendor_id": "a8183517-beb1-4043-b224-ea1717b1274c",
+            "name": "Storm Perfume",
+            "sku": "CEE-GEN-00001",
+            "description": "Very nice perfume",
+            "brand_id": null,
+            "price": "6000.00",
+            "discounted_price": "5500.00",
+            "warranty": null,
+            "overview": "Elegant perfume",
+            "is_active": 0,
+            "is_featured": 0,
+            "other_category_id": null,
+            "created_at": "2025-05-28T01:27:26.000000Z",
+            "updated_at": "2025-05-28T01:27:26.000000Z",
+            "deleted_at": null,
+            "images": [
+              {
+                "id": 202,
+                "url": "https://haz.reevaluateme.online/storage/202/20250527_200025.jpg",
+                "name": "20250527_200025.jpg"
+              }
+            ],
+            "discount_percentage": 8.3300000000000000710542735760100185871124267578125,
+            "total_likes": 0,
+            "media": [
+              {
+                "id": 202,
+                "model_type": "App\\Models\\Product",
+                "model_id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+                "uuid": "f5eac4b6-d853-4c17-b32c-9e3ebf9ecd55",
+                "collection_name": "product_images",
+                "name": "20250527_200025",
+                "file_name": "20250527_200025.jpg",
+                "mime_type": "image/jpeg",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 71560,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 1,
+                "created_at": "2025-05-28T01:27:28.000000Z",
+                "updated_at": "2025-05-28T01:27:28.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/202/20250527_200025.jpg",
+                "preview_url": ""
+              }
+            ],
+            "vendor": {
+              "id": "a8183517-beb1-4043-b224-ea1717b1274c",
+              "business_name": "Ceec Luxury Hairs"
+            },
+            "categories": [
+              {
+                "id": "d61bfc5f-c0f1-44c7-8036-bcf9249e0e30",
+                "name": "HVAC Supplies",
+                "total_products": 9,
+                "pivot": {
+                  "product_id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+                  "category_id": "d61bfc5f-c0f1-44c7-8036-bcf9249e0e30",
+                  "created_at": "2025-05-28T01:27:26.000000Z",
+                  "updated_at": "2025-05-28T01:27:26.000000Z"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "order_delivery": {
+        "id": "9f083c55-98db-47c9-8334-3fc43b57f36b",
+        "order_id": "4246f2e3-13e2-421c-976d-8f3901e96b1f",
+        "delivery_method_id": "7c5df18b-ee06-4e9f-bee8-d7fd82932e1e",
+        "address": "no 25",
+        "city": null,
+        "state": "Abia",
+        "country": "Poland",
+        "zip_code": null,
+        "longitude": null,
+        "latitude": null,
+        "phone_number": "520.691.7934",
+        "drop_address": "Regional Depot \u2014 Umuahia",
+        "drop_city": "Umuahia",
+        "drop_state": "Abia",
+        "drop_country": "Nigeria",
+        "drop_zip_code": "87744",
+        "drop_phone_number": "+19544134762",
+        "drop_latitude": "5.5320000",
+        "drop_longitude": "7.4860000",
+        "status": "order-placed",
+        "created_at": "2025-05-30T03:53:27.000000Z",
+        "updated_at": "2025-05-30T03:53:28.000000Z",
+        "delivery_method": {
+          "id": "7c5df18b-ee06-4e9f-bee8-d7fd82932e1e",
+          "name": "DHL"
+        }
+      },
+      "tracking": [
+        {
+          "id": "9f083c55-b551-45b4-8781-d328e926266b",
+          "order_id": "4246f2e3-13e2-421c-976d-8f3901e96b1f",
+          "latitude": null,
+          "longitude": null,
+          "description": "Order confirmed",
+          "updated_by": null,
+          "is_automatic": 1,
+          "status": 1,
+          "created_at": "2025-05-30T03:53:29.000000Z",
+          "updated_at": "2025-05-30T03:53:29.000000Z"
+        },
+        {
+          "id": "9f083c55-ae80-4884-bd4e-eef4020722da",
+          "order_id": "4246f2e3-13e2-421c-976d-8f3901e96b1f",
+          "latitude": null,
+          "longitude": null,
+          "description": "Order created",
+          "updated_by": null,
+          "is_automatic": 1,
+          "status": 0,
+          "created_at": "2025-05-30T03:53:28.000000Z",
+          "updated_at": "2025-05-30T03:53:28.000000Z"
+        }
+      ],
+      "agent": {
+        "id": "2f9234c7-cddb-46a9-b53b-c436a9b71225",
+        "name": "Carol Sanders",
+        "role": "agent",
+        "roles": [
+          {
+            "id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6",
+            "name": "agent",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "2f9234c7-cddb-46a9-b53b-c436a9b71225",
+              "role_id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "4dad0957-4060-47df-86f2-c0a7638995fa",
+      "user_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+      "agent_id": null,
+      "total_price": "82.64",
+      "payment_status": "success",
+      "payment_reference": "1746790566197",
+      "status": "processing",
+      "buyer_confirmed_at": null,
+      "tracking_id": "ORD-20250509-ODW7",
+      "created_at": "2025-05-09T11:36:21.000000Z",
+      "updated_at": "2025-05-09T11:36:21.000000Z",
+      "buyer": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "type": "user"
+      },
+      "user": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "role": "user",
+        "roles": [
+          {
+            "id": "16e67fd3-d7f4-46ba-bf94-9292e632c122",
+            "name": "user",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+              "role_id": "16e67fd3-d7f4-46ba-bf94-9292e632c122"
+            }
+          }
+        ]
+      },
+      "order_items": [
+        {
+          "id": "a5e34a22-1fb4-44f9-981b-9b4bf3e214cc",
+          "order_id": "4dad0957-4060-47df-86f2-c0a7638995fa",
+          "product_id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+          "quantity": 2,
+          "price_at_sale": "41.32",
+          "total_price": "82.64",
+          "created_at": "2025-05-09T11:36:21.000000Z",
+          "updated_at": "2025-05-09T11:36:21.000000Z",
+          "product": {
+            "id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+            "vendor_id": "e48b3b79-ae21-40fd-9c9e-c8ff04ca516f",
+            "name": "cupiditate",
+            "sku": "PROD-1163",
+            "description": "Nemo neque aut tempore quaerat.",
+            "brand_id": "fa93e665-be6d-4b4b-afbf-0754bb631c68",
+            "price": "41.32",
+            "discounted_price": "38.18",
+            "warranty": "1 year",
+            "overview": "Iusto quod sint eaque aut mollitia sunt cupiditate. Et enim voluptatem id enim natus explicabo qui aut. Ducimus sit vel error impedit. Exercitationem consequatur autem officia alias delectus.",
+            "is_active": 1,
+            "is_featured": 0,
+            "other_category_id": null,
+            "created_at": "2025-04-06T16:28:01.000000Z",
+            "updated_at": "2025-04-06T16:28:01.000000Z",
+            "deleted_at": null,
+            "images": [
+              {
+                "id": 142,
+                "url": "https://haz.reevaluateme.online/storage/142/product3.png",
+                "name": "product3.png"
+              },
+              {
+                "id": 143,
+                "url": "https://haz.reevaluateme.online/storage/143/product4.png",
+                "name": "product4.png"
+              },
+              {
+                "id": 144,
+                "url": "https://haz.reevaluateme.online/storage/144/product5.png",
+                "name": "product5.png"
+              }
+            ],
+            "discount_percentage": 7.5999999999999996447286321199499070644378662109375,
+            "total_likes": 0,
+            "media": [
+              {
+                "id": 142,
+                "model_type": "App\\Models\\Product",
+                "model_id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+                "uuid": "358c9d4b-0c1f-4516-a3ab-157793ae47ec",
+                "collection_name": "product_images",
+                "name": "product3",
+                "file_name": "product3.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 113129,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 1,
+                "created_at": "2025-04-06T16:28:01.000000Z",
+                "updated_at": "2025-04-06T16:28:01.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/142/product3.png",
+                "preview_url": ""
+              },
+              {
+                "id": 143,
+                "model_type": "App\\Models\\Product",
+                "model_id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+                "uuid": "653840e8-62fd-4ca8-957f-a3e6b6cd515b",
+                "collection_name": "product_images",
+                "name": "product4",
+                "file_name": "product4.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 452018,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 2,
+                "created_at": "2025-04-06T16:28:01.000000Z",
+                "updated_at": "2025-04-06T16:28:01.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/143/product4.png",
+                "preview_url": ""
+              },
+              {
+                "id": 144,
+                "model_type": "App\\Models\\Product",
+                "model_id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+                "uuid": "0193a4b6-315e-435f-9d55-c28bb4988e2a",
+                "collection_name": "product_images",
+                "name": "product5",
+                "file_name": "product5.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 722660,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 3,
+                "created_at": "2025-04-06T16:28:02.000000Z",
+                "updated_at": "2025-04-06T16:28:02.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/144/product5.png",
+                "preview_url": ""
+              }
+            ],
+            "vendor": {
+              "id": "e48b3b79-ae21-40fd-9c9e-c8ff04ca516f",
+              "business_name": "Mertz, Von and Gerlach"
+            },
+            "categories": [
+              {
+                "id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                "name": "Building Materials",
+                "total_products": 19,
+                "pivot": {
+                  "product_id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+                  "category_id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "1bff4a2f-965d-4af3-94d4-a772c218d1bb",
+                "name": "Kitchen & Bath Fixtures",
+                "total_products": 10,
+                "pivot": {
+                  "product_id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+                  "category_id": "1bff4a2f-965d-4af3-94d4-a772c218d1bb",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "43d4c6f4-026d-45df-a7ef-9af9bc2b24f7",
+                "name": "Cement",
+                "total_products": 12,
+                "pivot": {
+                  "product_id": "175d279e-6d87-4d3d-a441-c4c6440cee35",
+                  "category_id": "43d4c6f4-026d-45df-a7ef-9af9bc2b24f7",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "order_delivery": {
+        "id": "9edea335-e067-4375-9ae4-63bc122d6833",
+        "order_id": "4dad0957-4060-47df-86f2-c0a7638995fa",
+        "delivery_method_id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+        "address": "2 close",
+        "city": null,
+        "state": "Anambra",
+        "country": "Poland",
+        "zip_code": null,
+        "longitude": null,
+        "latitude": null,
+        "phone_number": "520.691.7934",
+        "drop_address": null,
+        "drop_city": null,
+        "drop_state": null,
+        "drop_country": null,
+        "drop_zip_code": null,
+        "drop_phone_number": null,
+        "drop_latitude": null,
+        "drop_longitude": null,
+        "status": "order-placed",
+        "created_at": "2025-05-09T11:36:21.000000Z",
+        "updated_at": "2025-05-09T11:36:21.000000Z",
+        "delivery_method": {
+          "id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+          "name": "HazExpress"
+        }
+      },
+      "tracking": [],
+      "agent": null
+    },
+    {
+      "id": "76eed38c-973d-46fc-9554-535914288e7c",
+      "user_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+      "agent_id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+      "total_price": "1926.41",
+      "payment_status": "success",
+      "payment_reference": "ORD_76eed38c-973d-46fc-9554-535914288e7c_67f631d32f435",
+      "status": "processing",
+      "buyer_confirmed_at": null,
+      "tracking_id": "GUEST-HDW0-VOIQ",
+      "created_at": "2025-04-09T01:03:36.000000Z",
+      "updated_at": "2025-04-09T08:38:48.000000Z",
+      "buyer": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "type": "user"
+      },
+      "user": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "role": "user",
+        "roles": [
+          {
+            "id": "16e67fd3-d7f4-46ba-bf94-9292e632c122",
+            "name": "user",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+              "role_id": "16e67fd3-d7f4-46ba-bf94-9292e632c122"
+            }
+          }
+        ]
+      },
+      "order_items": [
+        {
+          "id": "862775c7-c48c-43f0-ab26-b6d625b8cd1c",
+          "order_id": "76eed38c-973d-46fc-9554-535914288e7c",
+          "product_id": "0f40d762-c40e-4887-a611-0c9a7e602aef",
+          "quantity": 1,
+          "price_at_sale": "852.65",
+          "total_price": "852.65",
+          "created_at": "2025-04-09T01:03:36.000000Z",
+          "updated_at": "2025-04-09T01:03:36.000000Z",
+          "product": {
+            "id": "0f40d762-c40e-4887-a611-0c9a7e602aef",
+            "vendor_id": "e48b3b79-ae21-40fd-9c9e-c8ff04ca516f",
+            "name": "veniam",
+            "sku": "PROD-9450",
+            "description": "Et quis sequi qui fugit.",
+            "brand_id": "fa93e665-be6d-4b4b-afbf-0754bb631c68",
+            "price": "852.65",
+            "discounted_price": "530.09",
+            "warranty": null,
+            "overview": "Ut voluptas reprehenderit fugit illo voluptates omnis. Consequatur consequatur consequuntur provident ut ut corrupti. Placeat est velit officia aut ducimus. Est itaque incidunt ducimus quasi.",
+            "is_active": 1,
+            "is_featured": 0,
+            "other_category_id": null,
+            "created_at": "2025-04-06T16:28:01.000000Z",
+            "updated_at": "2025-04-06T16:28:01.000000Z",
+            "deleted_at": null,
+            "images": [
+              {
+                "id": 145,
+                "url": "https://haz.reevaluateme.online/storage/145/product4.png",
+                "name": "product4.png"
+              },
+              {
+                "id": 146,
+                "url": "https://haz.reevaluateme.online/storage/146/product5.png",
+                "name": "product5.png"
+              }
+            ],
+            "discount_percentage": 37.8299999999999982946974341757595539093017578125,
+            "total_likes": 0,
+            "media": [
+              {
+                "id": 145,
+                "model_type": "App\\Models\\Product",
+                "model_id": "0f40d762-c40e-4887-a611-0c9a7e602aef",
+                "uuid": "9fe6d99e-0a17-445b-98fa-65d93bb666e1",
+                "collection_name": "product_images",
+                "name": "product4",
+                "file_name": "product4.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 452018,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 1,
+                "created_at": "2025-04-06T16:28:02.000000Z",
+                "updated_at": "2025-04-06T16:28:02.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/145/product4.png",
+                "preview_url": ""
+              },
+              {
+                "id": 146,
+                "model_type": "App\\Models\\Product",
+                "model_id": "0f40d762-c40e-4887-a611-0c9a7e602aef",
+                "uuid": "0ed04ffd-6898-42aa-a959-327fa8c839a6",
+                "collection_name": "product_images",
+                "name": "product5",
+                "file_name": "product5.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 722660,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 2,
+                "created_at": "2025-04-06T16:28:02.000000Z",
+                "updated_at": "2025-04-06T16:28:02.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/146/product5.png",
+                "preview_url": ""
+              }
+            ],
+            "vendor": {
+              "id": "e48b3b79-ae21-40fd-9c9e-c8ff04ca516f",
+              "business_name": "Mertz, Von and Gerlach"
+            },
+            "categories": [
+              {
+                "id": "1bff4a2f-965d-4af3-94d4-a772c218d1bb",
+                "name": "Kitchen & Bath Fixtures",
+                "total_products": 10,
+                "pivot": {
+                  "product_id": "0f40d762-c40e-4887-a611-0c9a7e602aef",
+                  "category_id": "1bff4a2f-965d-4af3-94d4-a772c218d1bb",
+                  "created_at": "2025-04-06T16:28:02.000000Z",
+                  "updated_at": "2025-04-06T16:28:02.000000Z"
+                }
+              },
+              {
+                "id": "3f388892-1d71-4389-af94-99a82f999d08",
+                "name": "Outdoor Living",
+                "total_products": 18,
+                "pivot": {
+                  "product_id": "0f40d762-c40e-4887-a611-0c9a7e602aef",
+                  "category_id": "3f388892-1d71-4389-af94-99a82f999d08",
+                  "created_at": "2025-04-06T16:28:02.000000Z",
+                  "updated_at": "2025-04-06T16:28:02.000000Z"
+                }
+              },
+              {
+                "id": "77b29b65-09f4-4f6e-9b4c-1753ae644d65",
+                "name": "Tools & Equipment",
+                "total_products": 10,
+                "pivot": {
+                  "product_id": "0f40d762-c40e-4887-a611-0c9a7e602aef",
+                  "category_id": "77b29b65-09f4-4f6e-9b4c-1753ae644d65",
+                  "created_at": "2025-04-06T16:28:02.000000Z",
+                  "updated_at": "2025-04-06T16:28:02.000000Z"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "a8c5d6da-20ee-4ad5-ad54-dd8415ebb72c",
+          "order_id": "76eed38c-973d-46fc-9554-535914288e7c",
+          "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+          "quantity": 2,
+          "price_at_sale": "536.88",
+          "total_price": "1073.76",
+          "created_at": "2025-04-09T01:03:36.000000Z",
+          "updated_at": "2025-04-09T01:03:36.000000Z",
+          "product": {
+            "id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+            "vendor_id": "a388a364-9d14-4321-ad04-e615cd81471f",
+            "name": "iste",
+            "sku": "PROD-8155",
+            "description": "Ab repudiandae tenetur cupiditate corrupti vitae voluptatem eveniet.",
+            "brand_id": "70175609-84fa-438d-b06a-72345d4439ba",
+            "price": "536.88",
+            "discounted_price": null,
+            "warranty": "2 years",
+            "overview": null,
+            "is_active": 1,
+            "is_featured": 0,
+            "other_category_id": null,
+            "created_at": "2025-04-06T16:28:01.000000Z",
+            "updated_at": "2025-04-06T16:28:01.000000Z",
+            "deleted_at": null,
+            "images": [
+              {
+                "id": 95,
+                "url": "https://haz.reevaluateme.online/storage/95/product6.png",
+                "name": "product6.png"
+              }
+            ],
+            "discount_percentage": null,
+            "total_likes": 0,
+            "media": [
+              {
+                "id": 95,
+                "model_type": "App\\Models\\Product",
+                "model_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                "uuid": "4f2728b0-e18c-4df5-ab6c-805d01efa6fd",
+                "collection_name": "product_images",
+                "name": "product6",
+                "file_name": "product6.png",
+                "mime_type": "image/png",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 527213,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 1,
+                "created_at": "2025-04-06T16:28:01.000000Z",
+                "updated_at": "2025-04-06T16:28:01.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/95/product6.png",
+                "preview_url": ""
+              }
+            ],
+            "vendor": {
+              "id": "a388a364-9d14-4321-ad04-e615cd81471f",
+              "business_name": "Franecki PLC"
+            },
+            "categories": [
+              {
+                "id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                "name": "Building Materials",
+                "total_products": 19,
+                "pivot": {
+                  "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                  "category_id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "7713a482-4414-4753-b4a5-c446509ecc6b",
+                "name": "Electrical Supplies",
+                "total_products": 14,
+                "pivot": {
+                  "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                  "category_id": "7713a482-4414-4753-b4a5-c446509ecc6b",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              },
+              {
+                "id": "9568ef05-a835-4dca-9ee2-f921de2e0f64",
+                "name": "Bricks & Blocks",
+                "total_products": 6,
+                "pivot": {
+                  "product_id": "0b71d891-b4bb-4a54-a1f6-55f309f39c61",
+                  "category_id": "9568ef05-a835-4dca-9ee2-f921de2e0f64",
+                  "created_at": "2025-04-06T16:28:01.000000Z",
+                  "updated_at": "2025-04-06T16:28:01.000000Z"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "order_delivery": {
+        "id": "9ea16765-4d2d-4511-9063-e614abecb733",
+        "order_id": "76eed38c-973d-46fc-9554-535914288e7c",
+        "delivery_method_id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+        "address": "123 New Street",
+        "city": "Benin",
+        "state": "Edo",
+        "country": "Nigeria",
+        "zip_code": "100001",
+        "longitude": "3.3792000",
+        "latitude": "6.5244000",
+        "phone_number": "+2349012345678",
+        "drop_address": null,
+        "drop_city": null,
+        "drop_state": null,
+        "drop_country": null,
+        "drop_zip_code": null,
+        "drop_phone_number": null,
+        "drop_latitude": null,
+        "drop_longitude": null,
+        "status": "order-confirmed",
+        "created_at": "2025-04-09T01:03:36.000000Z",
+        "updated_at": "2025-04-21T11:05:14.000000Z",
+        "delivery_method": {
+          "id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+          "name": "HazExpress"
+        }
+      },
+      "tracking": [],
+      "agent": {
+        "id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+        "name": "Agent Account",
+        "role": "agent",
+        "roles": [
+          {
+            "id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6",
+            "name": "agent",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+              "role_id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "e57b8607-209c-483b-a50b-b6ca0a9809b8",
+      "user_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+      "agent_id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+      "total_price": "6000.00",
+      "payment_status": "success",
+      "payment_reference": "1748395844806",
+      "status": "processing",
+      "buyer_confirmed_at": null,
+      "tracking_id": "ORD-20250528-GY2R",
+      "created_at": "2025-05-28T01:31:04.000000Z",
+      "updated_at": "2025-05-28T01:31:05.000000Z",
+      "buyer": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "type": "user"
+      },
+      "user": {
+        "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+        "name": "Test User",
+        "email": "test.customer@example.com",
+        "role": "user",
+        "roles": [
+          {
+            "id": "16e67fd3-d7f4-46ba-bf94-9292e632c122",
+            "name": "user",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
+              "role_id": "16e67fd3-d7f4-46ba-bf94-9292e632c122"
+            }
+          }
+        ]
+      },
+      "order_items": [
+        {
+          "id": "822860b7-a78f-4d8c-a452-1ade5e69944e",
+          "order_id": "e57b8607-209c-483b-a50b-b6ca0a9809b8",
+          "product_id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+          "quantity": 1,
+          "price_at_sale": "6000.00",
+          "total_price": "6000.00",
+          "created_at": "2025-05-28T01:31:04.000000Z",
+          "updated_at": "2025-05-28T01:31:04.000000Z",
+          "product": {
+            "id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+            "vendor_id": "a8183517-beb1-4043-b224-ea1717b1274c",
+            "name": "Storm Perfume",
+            "sku": "CEE-GEN-00001",
+            "description": "Very nice perfume",
+            "brand_id": null,
+            "price": "6000.00",
+            "discounted_price": "5500.00",
+            "warranty": null,
+            "overview": "Elegant perfume",
+            "is_active": 0,
+            "is_featured": 0,
+            "other_category_id": null,
+            "created_at": "2025-05-28T01:27:26.000000Z",
+            "updated_at": "2025-05-28T01:27:26.000000Z",
+            "deleted_at": null,
+            "images": [
+              {
+                "id": 202,
+                "url": "https://haz.reevaluateme.online/storage/202/20250527_200025.jpg",
+                "name": "20250527_200025.jpg"
+              }
+            ],
+            "discount_percentage": 8.3300000000000000710542735760100185871124267578125,
+            "total_likes": 0,
+            "media": [
+              {
+                "id": 202,
+                "model_type": "App\\Models\\Product",
+                "model_id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+                "uuid": "f5eac4b6-d853-4c17-b32c-9e3ebf9ecd55",
+                "collection_name": "product_images",
+                "name": "20250527_200025",
+                "file_name": "20250527_200025.jpg",
+                "mime_type": "image/jpeg",
+                "disk": "public",
+                "conversions_disk": "public",
+                "size": 71560,
+                "manipulations": [],
+                "custom_properties": [],
+                "generated_conversions": [],
+                "responsive_images": [],
+                "order_column": 1,
+                "created_at": "2025-05-28T01:27:28.000000Z",
+                "updated_at": "2025-05-28T01:27:28.000000Z",
+                "original_url": "https://haz.reevaluateme.online/storage/202/20250527_200025.jpg",
+                "preview_url": ""
+              }
+            ],
+            "vendor": {
+              "id": "a8183517-beb1-4043-b224-ea1717b1274c",
+              "business_name": "Ceec Luxury Hairs"
+            },
+            "categories": [
+              {
+                "id": "d61bfc5f-c0f1-44c7-8036-bcf9249e0e30",
+                "name": "HVAC Supplies",
+                "total_products": 9,
+                "pivot": {
+                  "product_id": "9f040224-5ca5-47bb-a131-2bd5d6b438c3",
+                  "category_id": "d61bfc5f-c0f1-44c7-8036-bcf9249e0e30",
+                  "created_at": "2025-05-28T01:27:26.000000Z",
+                  "updated_at": "2025-05-28T01:27:26.000000Z"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "order_delivery": {
+        "id": "9f040372-14d3-4cd3-b5d9-d808b58e42e5",
+        "order_id": "e57b8607-209c-483b-a50b-b6ca0a9809b8",
+        "delivery_method_id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+        "address": "Nobdhsd d",
+        "city": null,
+        "state": "Edo",
+        "country": "Poland",
+        "zip_code": null,
+        "longitude": null,
+        "latitude": null,
+        "phone_number": "520.691.7934",
+        "drop_address": "Central Drop Hub \u2014 Benin",
+        "drop_city": "Benin",
+        "drop_state": "Edo",
+        "drop_country": "Nigeria",
+        "drop_zip_code": "12210",
+        "drop_phone_number": "+18629023602",
+        "drop_latitude": "6.3382000",
+        "drop_longitude": "5.6258000",
+        "status": "order-confirmed",
+        "created_at": "2025-05-28T01:31:04.000000Z",
+        "updated_at": "2025-05-30T04:10:25.000000Z",
+        "delivery_method": {
+          "id": "b292e545-5b75-4d20-b307-5837a6f2ec14",
+          "name": "HazExpress"
+        }
+      },
+      "tracking": [
+        {
+          "id": "9f040372-2505-4d6b-be44-2d7d6282343c",
+          "order_id": "e57b8607-209c-483b-a50b-b6ca0a9809b8",
+          "latitude": null,
+          "longitude": null,
+          "description": "Order created",
+          "updated_by": null,
+          "is_automatic": 1,
+          "status": 0,
+          "created_at": "2025-05-28T01:31:04.000000Z",
+          "updated_at": "2025-05-28T01:31:04.000000Z"
+        },
+        {
+          "id": "9f040372-2cbc-4ea8-b8cd-e43a92fa4119",
+          "order_id": "e57b8607-209c-483b-a50b-b6ca0a9809b8",
+          "latitude": null,
+          "longitude": null,
+          "description": "Order confirmed",
+          "updated_by": null,
+          "is_automatic": 1,
+          "status": 1,
+          "created_at": "2025-05-28T01:31:04.000000Z",
+          "updated_at": "2025-05-28T01:31:04.000000Z"
+        }
+      ],
+      "agent": {
+        "id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+        "name": "Agent Account",
+        "role": "agent",
+        "roles": [
+          {
+            "id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6",
+            "name": "agent",
+            "guard_name": "api",
+            "created_at": "2025-04-06T16:27:54.000000Z",
+            "updated_at": "2025-04-06T16:27:54.000000Z",
+            "pivot": {
+              "model_type": "App\\Models\\User",
+              "model_id": "02a4762a-6105-4d0a-8dfd-8e31047a1bb9",
+              "role_id": "0596b5ef-ae3c-472b-8c7a-aeb0ffcbf2c6"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "first_page_url": "https://haz.reevaluateme.online/api/v1/admin/users/4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75/orders?page=1",
+  "from": 1,
+  "last_page": 1,
+  "last_page_url": "https://haz.reevaluateme.online/api/v1/admin/users/4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75/orders?page=1",
+  "links": [
+    {
+      "url": null,
+      "label": "&laquo; Previous",
+      "active": false
+    },
+    {
+      "url": "https://haz.reevaluateme.online/api/v1/admin/users/4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75/orders?page=1",
+      "label": "1",
+      "active": true
+    },
+    {
+      "url": null,
+      "label": "Next &raquo;",
+      "active": false
+    }
+  ],
+  "next_page_url": null,
+  "path": "https://haz.reevaluateme.online/api/v1/admin/users/4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75/orders",
+  "per_page": 50,
+  "prev_page_url": null,
+  "to": 6,
+  "total": 6
+}

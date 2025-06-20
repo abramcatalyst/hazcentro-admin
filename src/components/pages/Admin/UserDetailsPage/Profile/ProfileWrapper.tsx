@@ -15,7 +15,7 @@ const ProfileWrapper = ({ data }: Props) => {
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
           <UserHeader data={data} />
-          <ProfileDetailsSection />
+          <ProfileDetailsSection data={data} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <ActiveOrders />

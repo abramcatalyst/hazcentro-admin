@@ -12,12 +12,14 @@ type ProfileInfoBoxProps = {
   title: string;
   enablePreview?: boolean;
   enableDownload?: boolean;
+  fullValueLength?: boolean;
 };
 const ProfileInfoBox = ({
   value,
   title,
   enableDownload,
   enablePreview,
+  fullValueLength,
 }: ProfileInfoBoxProps) => {
   const [openPreview, setOpenPreview] = useState(false);
 
@@ -28,6 +30,9 @@ const ProfileInfoBox = ({
     setOpenPreview(false);
   };
   let splitValue = 16;
+  if (fullValueLength) {
+    splitValue = value?.length;
+  }
   if (enableDownload && enablePreview) {
     splitValue = 11;
   }

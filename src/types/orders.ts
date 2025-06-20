@@ -53,7 +53,18 @@ export type OrderItemType = {
     categories: OrderItemCategoryType[];
   };
 };
-
+export type TrackingType = {
+  id: string;
+  order_id: string;
+  latitude: string | null;
+  longitude: string | null;
+  description: string;
+  updated_by: string | null;
+  is_automatic: number;
+  status: number;
+  created_at: string;
+  updated_at: string;
+};
 export type OrderType = {
   id: string;
   user_id: string;
@@ -63,6 +74,7 @@ export type OrderType = {
   payment_reference: string;
   status: string;
   tracking_id: string;
+  tracking: TrackingType[];
   created_at: string;
   updated_at: string;
   buyer: {

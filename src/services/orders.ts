@@ -72,3 +72,34 @@ export const fetchAgentAssignedOrders = async ({
 
   return data;
 };
+
+export const fetchSingleUsersOrders = async ({
+  id,
+  page,
+  limit = 50,
+  search,
+  status,
+  startDate,
+  endDate,
+}: QueryFilterType): Promise<{
+  data: OrderType[];
+  pagination: {
+    current_page: number;
+    last_page: number;
+    next_page: number;
+    per_page: number;
+    total: number;
+  };
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/users/${id}/orders?limit=${limit}${
+      page ? `&page=${page}` : ""
+    }${startDate ? `&minCreateDate=${startDate}` : ""}${
+      endDate ? `&maxCreateDate=${endDate}` : ""
+    }${status ? `&status=${status}` : ""}${search ? `&search=${search}` : ""}`
+  );
+
+  return data?.orders;
+};

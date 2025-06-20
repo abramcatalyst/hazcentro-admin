@@ -6,12 +6,14 @@ import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import { useTheme } from "@mui/material/styles";
 import MaleAvatar from "src/assets/images/avatar-male.png";
 import { UserType } from "src/types/users";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   data: UserType;
 };
 const UserHeader = ({ data }: Props) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   return (
     <Box
       component={Paper}
@@ -35,7 +37,11 @@ const UserHeader = ({ data }: Props) => {
           mb: 1,
         }}
       >
-        <IconButton>
+        <IconButton
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           <ChevronLeftRoundedIcon />
         </IconButton>
       </Box>

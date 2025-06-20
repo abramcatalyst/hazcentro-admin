@@ -16,7 +16,12 @@ import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
-import { currencyFormater, GLOBAL_COLORS, tableMenuStyles } from "src/utils";
+import {
+  currencyFormater,
+  FULL_DATE_FORMAT,
+  GLOBAL_COLORS,
+  tableMenuStyles,
+} from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
@@ -114,7 +119,7 @@ function OrdersTable({ selectedUsers, data }: Props) {
                     &#8358;{currencyFormater(row?.total_price, 2)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {dayjs(row?.created_at).format("MMM do YYYY")}
+                    {dayjs(row?.created_at).format(FULL_DATE_FORMAT)}
                   </StyledTableCell>
                   <StyledTableCell>{row?.buyer?.name}</StyledTableCell>
 

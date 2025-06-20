@@ -4,11 +4,11 @@ import { tabOptions } from "src/components/pages/Admin/OrderManagement/OrderMana
 
 type Props = {
   selectedTab: string;
-  setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
+  handleChangeTab: (val: string) => void;
 };
-const OrdersTab = ({ selectedTab, setSelectedTab }: Props) => {
+const OrdersTab = ({ selectedTab, handleChangeTab }: Props) => {
   const handleClick = (value: string) => {
-    setSelectedTab(value);
+    handleChangeTab(value);
   };
   return (
     <Box

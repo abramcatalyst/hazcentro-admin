@@ -167,12 +167,17 @@ function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
                 <InfoBox title="Balance" value={currencyFormater(453256)} />
               </Grid>
               <Grid size={sizing}>
-                <InfoBox title="Following" value={"100"} />
+                <InfoBox
+                  title={
+                    selectedUser?.role === "user" ? "Following" : "Followers"
+                  }
+                  value={"100"}
+                />
               </Grid>
             </Grid>
           </Box>
         </Box>
-        {data?.role === "user" ? <ActiveOrders /> : null}
+        {data?.role === "user" ? <ActiveOrders selectedUser={data} /> : null}
         <QuickActions />
         <Divider />
         <Box sx={{ my: 1, display: "flex", gap: 1 }}>

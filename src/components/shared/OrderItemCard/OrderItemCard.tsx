@@ -1,10 +1,14 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Machine1 from "src/assets/tempimages/machine1.jpg";
+import PlaceholderImage from "src/assets/images/placeholder.png";
 import { alpha, useTheme } from "@mui/material/styles";
+import { OrderType } from "src/types/orders";
 
-function OrderItemCard() {
+type Props = {
+  data: OrderType;
+};
+function OrderItemCard({ data }: Props) {
   const theme = useTheme();
   return (
     <Box
@@ -36,8 +40,11 @@ function OrderItemCard() {
           }}
         >
           <img
-            src={Machine1}
-            alt={"Delete Account"}
+            src={
+              data?.order_items[0]?.product?.media[0]?.original_url ||
+              PlaceholderImage
+            }
+            alt={"Item"}
             style={{
               width: "100%",
               height: "100%",
@@ -47,9 +54,11 @@ function OrderItemCard() {
           />
         </Box>
         <Box>
-          <Typography sx={{ fontSize: "15px" }}>{"Oriano Box"}</Typography>
+          <Typography sx={{ fontSize: "15px" }}>
+            {data?.order_items[0]?.product?.name}
+          </Typography>
           <Typography sx={{ fontSize: "13px", color: "GrayText" }}>
-            SKU:{"NB69823x"}
+            SKU:{data?.tracking_id}
           </Typography>
         </Box>
       </Box>

@@ -18,7 +18,7 @@ import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import dayjs from "dayjs";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
-import OrderItemCard from "src/components/shared/OrderItemCard/OrderItemCard";
+// import OrderItemCard from "src/components/shared/OrderItemCard/OrderItemCard";
 
 dayjs.extend(advancedFormat);
 
@@ -220,7 +220,7 @@ function PreviewPayoutDialog({ open, data, handleClose }: Props) {
           <Typography variant="subtitle2" gutterBottom>
             Order details
           </Typography>
-          <OrderItemCard />
+          {/* <OrderItemCard /> */}
         </Box>
         <Box sx={{ mt: 2 }}>
           <Typography variant="subtitle2" gutterBottom>

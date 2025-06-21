@@ -1,11 +1,44 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { GLOBAL_COLORS } from "src/utils";
+import { formatErrorMessage, GLOBAL_COLORS } from "src/utils";
 import { Link } from "react-router-dom";
 import OrderItemCard from "src/components/shared/OrderItemCard/OrderItemCard";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchSingleUsersOrders } from "src/services/orders";
+import OrderSkeletonLoader from "src/components/shared/OrderSkeletonLoader/OrderSkeletonLoader";
+import { UserType } from "src/types/users";
 
-function ActiveOrders() {
-  let testOrders = ["2"];
+type Props = {
+  selectedUser: UserType;
+};
+function ActiveOrders({ selectedUser }: Props) {
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER_ACTIVE_ORDERS,
+      { selectedUser },
+    ],
+    queryFn: () =>
+      fetchSingleUsersOrders({ id: selectedUser?.id || "", limit: 2 }),
+  });
+
+  if (isPending) {
+    return (
+      <Box>
+        <OrderSkeletonLoader />
+        <OrderSkeletonLoader />
+      </Box>
+    );
+  }
+  if (isError) {
+    return (
+      <Box sx={{ p: 2 }}>
+        <Typography sx={{ textAlign: "center", color: "burlywood" }}>
+          {formatErrorMessage(error)}
+        </Typography>
+      </Box>
+    );
+  }
   return (
     <Box
       sx={{
@@ -35,8 +68,8 @@ function ActiveOrders() {
           my: 1,
         }}
       >
-        {testOrders.length > 0 ? (
-          testOrders.map((order) => <OrderItemCard key={order} />)
+        {data && data?.data?.length > 0 ? (
+          data?.data?.map((row) => <OrderItemCard key={row?.id} data={row} />)
         ) : (
           <Box
             sx={{

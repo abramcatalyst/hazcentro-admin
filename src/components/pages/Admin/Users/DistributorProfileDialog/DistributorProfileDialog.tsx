@@ -11,7 +11,8 @@ import DialogContent from "@mui/material/DialogContent";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import UserImg from "src/assets/tempimages/user1.png";
+import AvatarFemaleImg from "src/assets/images/avatar-female.png";
+import AvatarMaleImg from "src/assets/images/avatar-male.png";
 import { formatErrorMessage, GLOBAL_COLORS } from "src/utils";
 import QuickActions from "./QuickActions";
 import ActiveOrders from "./ActiveOrders";
@@ -25,6 +26,10 @@ import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenL
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime"; // ES 2015
+
+dayjs.extend(relativeTime);
 
 type Props = {
   open: boolean;
@@ -96,7 +101,11 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
               }}
             >
               <img
-                src={UserImg}
+                src={
+                  selectedUser?.gender?.toLowerCase()?.includes("female")
+                    ? AvatarFemaleImg
+                    : AvatarMaleImg
+                }
                 alt="user"
                 style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
@@ -140,9 +149,11 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
             </Box>
           </Box>
           <Box>
-            <Typography sx={{ color: "GrayText" }} variant="body2">
-              Last Seen: 2 Min, ago
-            </Typography>
+            {selectedUser?.last_seen_at ? (
+              <Typography sx={{ color: "GrayText" }} variant="body2">
+                Last Seen: {dayjs(selectedUser?.last_seen_at).toNow()}
+              </Typography>
+            ) : null}
           </Box>
         </Box>
 

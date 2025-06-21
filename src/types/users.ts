@@ -8,6 +8,7 @@ export type UserType = {
   gender: string;
   state: string;
   country: string;
+  last_seen_at: string;
   country_code: string;
   phone_number: string;
   status: string;

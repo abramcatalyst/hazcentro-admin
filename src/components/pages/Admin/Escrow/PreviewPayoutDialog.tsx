@@ -13,7 +13,7 @@ import { alpha, useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
 
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
-import { PayoutType } from "src/types/payout";
+import { PayoutType } from "src/types/followers";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import dayjs from "dayjs";
 

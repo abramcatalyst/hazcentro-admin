@@ -11,7 +11,7 @@ import { UserType } from "src/types/users";
 type Props = {
   data: UserType;
 };
-const sizing = { xs: 12, sm: 6, md: 4 };
+const sizing = { xs: 12, sm: 6, md: 6, lg: 4 };
 const ProfileDetailsSection = ({ data }: Props) => {
   const theme = useTheme();
   return (

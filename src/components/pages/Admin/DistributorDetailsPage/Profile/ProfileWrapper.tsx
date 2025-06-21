@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
-import UserHeader from "../UserHeader";
+import UserHeader from "src/components/pages/Admin/UserDetailsPage/UserHeader";
 import ActiveOrders from "../ActiveOrders";
 import ProfileDetailsSection from "./ProfileDetailsSection";
 import PerformanceStats from "../PerformanceStats";

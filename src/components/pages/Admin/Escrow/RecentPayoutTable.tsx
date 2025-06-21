@@ -15,7 +15,7 @@ import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 import PreviewPayoutDialog from "./PreviewPayoutDialog";
-import { PayoutType } from "src/types/payout";
+import { PayoutType } from "src/types/followers";
 
 type PayoutCardProps = {
   data: PayoutType;

@@ -9,7 +9,7 @@ type Props = {
   isSmall?: boolean;
 };
 const EmptyTable = ({
-  subText = "Start creating practice and quiz  to see your progress here.",
+  subText = "Sorry, no records match your search",
   mainText = "No Records to Show Yet",
   isSmall,
 }: Props) => {

@@ -1,11 +1,11 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
-import UserHeader from "../UserHeader";
 import UserStats from "../UserStats";
 import LatestOrderTable from "../LatestOrderTable";
 import ActiveOrders from "../ActiveOrders";
 import Followers from "../Followers";
 import { UserType } from "src/types/users";
+import UserHeader from "src/components/pages/Admin/UserDetailsPage/UserHeader";
 
 type Props = {
   data: UserType;

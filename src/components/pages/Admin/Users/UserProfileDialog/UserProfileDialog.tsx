@@ -10,7 +10,8 @@ import DialogContent from "@mui/material/DialogContent";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import UserImg from "src/assets/tempimages/user1.png";
+import AvatarFemale from "src/assets/images/avatar-female.png";
+import AvatarMale from "src/assets/images/avatar-male.png";
 import { currencyFormater, formatErrorMessage } from "src/utils";
 import QuickActions from "./QuickActions";
 import ActiveOrders from "./ActiveOrders";
@@ -109,7 +110,11 @@ function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
               }}
             >
               <img
-                src={UserImg}
+                src={
+                  selectedUser?.gender?.toLowerCase()?.includes("female")
+                    ? AvatarFemale
+                    : AvatarMale
+                }
                 alt="user"
                 style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />

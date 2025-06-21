@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OrdersTab from "./OrdersTab";
 import OrdersTable from "./OrdersTable";
 import { tabOptions } from "../../OrderManagement/OrderManagementWrapper";
@@ -47,6 +47,18 @@ const OrdersWrapper = () => {
       { replace: true }
     );
   };
+
+  useEffect(() => {
+    return () => {
+      setSearchParams(
+        (params) => {
+          params.set(sStatus, "");
+          return params;
+        },
+        { replace: true }
+      );
+    };
+  }, []);
 
   return (
     <Box sx={{ width: "100%" }}>

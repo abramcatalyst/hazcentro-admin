@@ -2,8 +2,15 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import MachineImg from "src/assets/tempimages/machine1.jpg";
-import { currencyFormater } from "src/utils";
+import MachineImg from "src/assets/images/placeholder.png";
+import { currencyFormater, formatErrorMessage } from "src/utils";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchSingleUsersOrders } from "src/services/orders";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import OrderSkeletonLoader from "src/components/shared/OrderSkeletonLoader/OrderSkeletonLoader";
 
 type ProductInfoBoxProps = {
   image: string;
@@ -70,7 +77,29 @@ const ProductInfoBox = ({
     </Box>
   );
 };
+
 const ActiveOrders = () => {
+  const { id } = useParams();
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER_ACTIVE_ORDERS,
+      { id },
+    ],
+    queryFn: () => fetchSingleUsersOrders({ id: id || "", limit: 3 }),
+  });
+
+  if (isPending) {
+    return (
+      <Box>
+        <OrderSkeletonLoader />
+        <OrderSkeletonLoader />
+        <OrderSkeletonLoader />
+      </Box>
+    );
+  }
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
   return (
     <Box
       component={Paper}
@@ -90,57 +119,33 @@ const ActiveOrders = () => {
           Active Orders
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 1,
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <ProductInfoBox
-          image={MachineImg}
-          title="Oriano Ket"
-          caption1={`20000`}
-        />
-        <Button size="small" color="success" sx={{ color: "#47B48E" }}>
-          View details
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 1,
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <ProductInfoBox
-          image={MachineImg}
-          title="Oriano Ket"
-          caption1={`20000`}
-        />
-        <Button size="small" color="success" sx={{ color: "#47B48E" }}>
-          View details
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 1,
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <ProductInfoBox
-          image={MachineImg}
-          title="Oriano Ket"
-          caption1={`260000`}
-        />
-        <Button size="small" color="success" sx={{ color: "#47B48E" }}>
-          View details
-        </Button>
-      </Box>
+      {data?.data && data?.data?.length > 0 ? (
+        data?.data?.map((row) => (
+          <Box
+            key={`${row?.id}aa`}
+            sx={{
+              display: "flex",
+              gap: 1,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <ProductInfoBox
+              image={
+                row?.order_items[0]?.product?.media[0]?.original_url ||
+                MachineImg
+              }
+              title={row?.order_items[0]?.product?.name}
+              caption1={row?.total_price}
+            />
+            <Button size="small" color="success" sx={{ color: "#47B48E" }}>
+              View details
+            </Button>
+          </Box>
+        ))
+      ) : (
+        <EmptyTable isSmall subText="Sorry, no record match your search" />
+      )}
     </Box>
   );
 };

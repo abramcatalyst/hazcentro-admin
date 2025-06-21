@@ -1,5 +1,6 @@
 import axios from "axios";
 import { QueryFilterType } from "src/types/filters";
+import { FollowerType } from "src/types/followers";
 import { UserType } from "src/types/users";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
@@ -55,15 +56,12 @@ export const fetchSingleUser = async (id: string): Promise<UserType> => {
 };
 
 export const fetchUserFollowers = async ({
+  id,
   page,
   limit,
   search,
-  status,
-  role,
-  endDate,
-  lastLoginDate,
 }: QueryFilterType): Promise<{
-  data: UserType[];
+  data: FollowerType[];
   current_page: number;
   first_page_url: string;
   from: number;
@@ -85,14 +83,10 @@ export const fetchUserFollowers = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/admin/users?limit=${limit}${page ? `&page=${page}` : ""}${
-      role ? `&role=${role}` : ""
-    }${endDate ? `&maxCreateDate=${endDate}` : ""}${
-      lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
-    }${status ? `&status=${status === "true" ? true : false}` : ""}${
-      search ? `&search=${search}` : ""
-    }`
+    `${baseUrl}/admin/users/${id}/vendors-following?limit=${limit}${
+      page ? `&page=${page}` : ""
+    }${search ? `&search=${search}` : ""}`
   );
-
-  return data?.users;
+  return data?.data?.following;
 };
+// admin/users/638dc2ce-f780-4673-b10a-2222ef4b62f1/vendors-following

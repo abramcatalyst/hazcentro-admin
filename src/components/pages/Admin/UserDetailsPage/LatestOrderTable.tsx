@@ -22,6 +22,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
 const headCells = [
   "Order ID",
@@ -71,48 +72,52 @@ const LatestOrderTable = () => {
         <Typography sx={{ my: 1.4, fontWeight: 600 }}>Latest Order</Typography>
       </Box>
       <TableContainer>
-        <Table
-          sx={{ minWidth: 300 }}
-          aria-labelledby="tableTitle"
-          size={"small"}
-        >
-          <EnhancedTableHead />
-          <TableBody>
-            {data?.data?.map((row, index) => {
-              return (
-                <TableRow key={`${row?.id}${index}`} hover>
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    {row?.tracking_id}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Typography
-                      noWrap
-                      variant="subtitle2"
-                      // sx={{ fontSize: "11px" }}
-                    >
-                      {row?.agent?.name}
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    &#8358;{currencyFormater(row?.total_price, 2)}
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    {dayjs().format(FULL_DATE_FORMAT)}
-                  </StyledTableCell>
+        {data?.data && data?.data?.length > 0 ? (
+          <Table
+            sx={{ minWidth: 300 }}
+            aria-labelledby="tableTitle"
+            size={"small"}
+          >
+            <EnhancedTableHead />
+            <TableBody>
+              {data?.data?.map((row, index) => {
+                return (
+                  <TableRow key={`${row?.id}${index}`} hover>
+                    <StyledTableCell sx={{ fontSize: "11px" }}>
+                      {row?.tracking_id}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <Typography
+                        noWrap
+                        variant="subtitle2"
+                        // sx={{ fontSize: "11px" }}
+                      >
+                        {row?.agent?.name}
+                      </Typography>
+                    </StyledTableCell>
+                    <StyledTableCell sx={{ fontSize: "11px" }}>
+                      &#8358;{currencyFormater(row?.total_price, 2)}
+                    </StyledTableCell>
+                    <StyledTableCell sx={{ fontSize: "11px" }}>
+                      {dayjs().format(FULL_DATE_FORMAT)}
+                    </StyledTableCell>
 
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    {renderStatus(row?.status)}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <IconButton size="small" sx={{ fontSize: "11px" }}>
-                      <KeyboardArrowRightRoundedIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                    <StyledTableCell sx={{ fontSize: "11px" }}>
+                      {renderStatus(row?.status)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <IconButton size="small" sx={{ fontSize: "11px" }}>
+                        <KeyboardArrowRightRoundedIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        ) : (
+          <EmptyTable subText="No order found" />
+        )}
       </TableContainer>
     </Box>
   );

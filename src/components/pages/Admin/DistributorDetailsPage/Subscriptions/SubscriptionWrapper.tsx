@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import SubscriptionTable from "./SubscriptionTable";
 import SubscriptionInfo from "./SubscriptionInfo";
-import ActiveOrders from "../ActiveOrders";
+// import ActiveOrders from "../ActiveOrders";
 import PerformanceStats from "../PerformanceStats";
 
 const SubscriptionWrapper = () => {
@@ -15,7 +15,7 @@ const SubscriptionWrapper = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <PerformanceStats />
-          <ActiveOrders />
+          {/* <ActiveOrders /> */}
         </Grid>
       </Grid>
     </Box>

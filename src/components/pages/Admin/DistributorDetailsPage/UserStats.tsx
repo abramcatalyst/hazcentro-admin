@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
 import { currencyFormater } from "src/utils";
+import { VendorOverviewType } from "src/types/vendor";
 
 const sizing = { xs: 5, md: 2 };
 type StatsBoxProps = {
@@ -12,7 +13,11 @@ type StatsBoxProps = {
   addNairaSign?: boolean;
   borderStyleColor: "GREEN" | "YELLOW" | "BLUE";
 };
-const UserStats = () => {
+
+type Props = {
+  data: VendorOverviewType;
+};
+const UserStats = ({ data }: Props) => {
   const theme = useTheme();
   const StatsBox = ({
     title,
@@ -64,26 +69,39 @@ const UserStats = () => {
         <Grid size={sizing}>
           <StatsBox
             addNairaSign
-            value={240360}
+            value={data?.summary?.sales_today}
             title="Sales Today"
             borderStyleColor="GREEN"
           />
         </Grid>
         <Grid size={sizing}>
           <StatsBox
-            value={2460}
+            value={data?.summary?.units_today}
             title="Units Today"
             borderStyleColor="YELLOW"
           />
         </Grid>
         <Grid size={sizing}>
-          <StatsBox value={30} title="Total Category" borderStyleColor="BLUE" />
+          <StatsBox
+            value={data?.summary?.category_count}
+            title="Total Category"
+            borderStyleColor="BLUE"
+          />
         </Grid>
         <Grid size={sizing}>
-          <StatsBox value={3} title="Balance-on-hold" borderStyleColor="BLUE" />
+          <StatsBox
+            value={data?.summary?.balance_on_hold}
+            title="Balance-on-hold"
+            borderStyleColor="BLUE"
+            addNairaSign
+          />
         </Grid>
         <Grid size={sizing}>
-          <StatsBox value={3} title="Active Order" borderStyleColor="BLUE" />
+          <StatsBox
+            value={data?.summary?.active_order_count}
+            title="Active Order"
+            borderStyleColor="BLUE"
+          />
         </Grid>
       </Grid>
     </Box>

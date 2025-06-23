@@ -1,12 +1,14 @@
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Machine1 from "src/assets/tempimages/machine1.jpg";
 import { GLOBAL_COLORS } from "src/utils";
 import { Link } from "react-router-dom";
+import VendorOrderItemCard from "src/components/shared/OrderItemCard/VendorOrderItemCard";
+import { VendorOverviewType } from "src/types/vendor";
 
-function ActiveOrders() {
-  let testOrders = ["2"];
+type Props = {
+  data: VendorOverviewType;
+};
+function ActiveOrders({ data }: Props) {
   return (
     <Box
       sx={{
@@ -36,86 +38,10 @@ function ActiveOrders() {
           my: 1,
         }}
       >
-        {testOrders.length > 0 ? (
-          testOrders.map((order) => (
-            <Box
-              key={order}
-              sx={{
-                display: "flex",
-                gap: 1,
-                alignItems: "center",
-                justifyContent: "space-between",
-
-                background: "#ffffff",
-                p: { xs: 1 },
-                borderRadius: "12px",
-                my: 0.6,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-              >
-                <Box
-                  sx={{
-                    borderRadius: "6px",
-                    height: "72px",
-                    width: "72px",
-                  }}
-                >
-                  <img
-                    src={Machine1}
-                    alt={"Delete Account"}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "6px",
-                    }}
-                  />
-                </Box>
-                <Box>
-                  <Typography sx={{ fontSize: "15px" }}>
-                    {"Oriano Box"}
-                  </Typography>
-                  <Typography sx={{ fontSize: "13px", color: "GrayText" }}>
-                    SKU:{"NB69823x"}
-                  </Typography>
-                </Box>
-              </Box>
-              <Button size="large" color="error">
-                View details
-              </Button>
-              {/* <Box
-              role="button"
-              sx={{
-                borderRadius: "6px",
-                my: 0.6,
-                height: "42px",
-                display: "flex",
-                gap: 0.9,
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                background: "#EE4F160D",
-                "&:hover": {
-                  background: theme.palette.common.white,
-                },
-              }}
-            >
-            
-              <Typography
-                sx={{ fontSize: "14px", color: theme.palette.error.main }}
-              >
-                {"Delete Account"}
-              </Typography>
-            </Box> */}
-            </Box>
-          ))
+        {data && data?.active_orders?.length > 0 ? (
+          data?.active_orders
+            ?.slice(0, 3)
+            ?.map((row) => <VendorOrderItemCard key={row?.id} data={row} />)
         ) : (
           <Box
             sx={{

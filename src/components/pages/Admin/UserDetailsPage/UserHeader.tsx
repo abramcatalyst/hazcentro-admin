@@ -4,16 +4,22 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import { useTheme } from "@mui/material/styles";
-import MaleAvatar from "src/assets/images/avatar-male.png";
 import { UserType } from "src/types/users";
 import { useNavigate } from "react-router-dom";
+import { VendorOverviewType } from "src/types/vendor";
+import renderUserProfileImage from "src/utils/renderUserProfileImage";
 
 type Props = {
   data: UserType;
+  vendorOverviewData?: VendorOverviewType;
 };
-const UserHeader = ({ data }: Props) => {
+const UserHeader = ({ data, vendorOverviewData }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const userImage = renderUserProfileImage({
+    remoteImageUrl: vendorOverviewData?.profile?.profile_picture_url || "",
+    gender: data?.gender,
+  });
   return (
     <Box
       component={Paper}
@@ -34,7 +40,6 @@ const UserHeader = ({ data }: Props) => {
           gap: 1,
           alignItems: "center",
           justifyContent: "space-between",
-          mb: 1,
         }}
       >
         <IconButton
@@ -52,10 +57,19 @@ const UserHeader = ({ data }: Props) => {
           alignItems: "center",
         }}
       >
-        <Box sx={{ borderRadius: "50%", width: "45px", height: "45px" }}>
-          <img alt="user" src={MaleAvatar} style={{ objectFit: "cover" }} />
+        <Box sx={{ borderRadius: "50%" }}>
+          <img
+            alt="user"
+            src={userImage}
+            style={{
+              objectFit: "cover",
+              borderRadius: "50%",
+              width: "49px",
+              height: "49px",
+            }}
+          />
         </Box>
-        <Box sx={{ my: 2 }}>
+        <Box>
           <Typography
             sx={{
               fontSize: "15px",

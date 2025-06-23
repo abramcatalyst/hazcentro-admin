@@ -7,6 +7,8 @@ import ProfileWrapper from "./Profile/ProfileWrapper";
 import FollowingsWrapper from "./Followings/FollowingsWrapper";
 import OrdersWrapper from "./Orders/OrdersWrapper";
 import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
@@ -56,18 +58,26 @@ const UserDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 10 }} container spacing={1}>
-            {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
-              <OverviewWrapper data={data} />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.PROFILE ? (
-              <ProfileWrapper data={data} />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.FOLLOWINGS ? (
-              <FollowingsWrapper data={data} />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.ORDERS ? (
-              <OrdersWrapper />
-            ) : null}
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
+                <OverviewWrapper data={data} />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.PROFILE ? (
+                <ProfileWrapper data={data} />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.FOLLOWINGS ? (
+                <FollowingsWrapper data={data} />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.ORDERS ? (
+                <OrdersWrapper />
+              ) : null}
+            </ErrorBoundary>
           </Grid>
         </Grid>
       </Box>

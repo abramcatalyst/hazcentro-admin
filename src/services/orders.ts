@@ -103,3 +103,32 @@ export const fetchSingleUsersOrders = async ({
 
   return data?.orders;
 };
+export const fetchSingleDistributorOrders = async ({
+  id,
+  page,
+  limit = 50,
+  search,
+  status,
+  startDate,
+}: QueryFilterType): Promise<{
+  data: OrderType[];
+  
+    current_page: number;
+    last_page: number;
+    next_page: number;
+    per_page: number;
+    total: number;
+  
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/vendors/${id}/orders?limit=${limit}${
+      page ? `&page=${page}` : ""
+    }${startDate ? `&minCreateDate=${startDate}` : ""}${
+      status ? `&status=${status}` : ""
+    }${search ? `&search=${search}` : ""}`
+  );
+  console.log("dddddddddddddd", data?.data);
+  return data?.data;
+};

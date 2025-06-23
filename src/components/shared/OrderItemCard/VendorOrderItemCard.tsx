@@ -3,12 +3,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PlaceholderImage from "src/assets/images/placeholder.png";
 import { alpha, useTheme } from "@mui/material/styles";
-import { OrderType } from "src/types/orders";
+import { PartOrderType } from "src/types/vendor";
 
 type Props = {
-  data: OrderType;
+  data: PartOrderType;
 };
-function OrderItemCard({ data }: Props) {
+function VendorOrderItemCard({ data }: Props) {
   const theme = useTheme();
   return (
     <Box
@@ -40,10 +40,7 @@ function OrderItemCard({ data }: Props) {
           }}
         >
           <img
-            src={
-              data?.order_items[0]?.product?.media[0]?.original_url ??
-              PlaceholderImage
-            }
+            src={data?.items[0]?.image ?? PlaceholderImage}
             alt={"Item"}
             style={{
               width: "100%",
@@ -55,7 +52,7 @@ function OrderItemCard({ data }: Props) {
         </Box>
         <Box>
           <Typography sx={{ fontSize: "15px" }}>
-            {data?.order_items[0]?.product?.name}
+            {data?.items[0]?.product_name}
           </Typography>
           <Typography sx={{ fontSize: "13px", color: "GrayText" }}>
             SKU:{data?.tracking_id}
@@ -78,4 +75,4 @@ function OrderItemCard({ data }: Props) {
     </Box>
   );
 }
-export default OrderItemCard;
+export default VendorOrderItemCard;

@@ -12,6 +12,8 @@ import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRigh
 import { currencyFormater, FULL_DATE_FORMAT } from "src/utils";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import dayjs from "dayjs";
+import { VendorOverviewType } from "src/types/vendor";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
 const headCells = ["Order ID", "Item", "Amount", "Date", "Status", ""];
 
@@ -27,55 +29,60 @@ function EnhancedTableHead() {
   );
 }
 
-const LatestOrderTable = () => {
+type Props = {
+  vendorOverviewData: VendorOverviewType;
+};
+const LatestOrderTable = ({ vendorOverviewData }: Props) => {
   return (
     <Box sx={{ background: "#ffffff", borderRadius: "20px", mb: 1 }}>
       <Box sx={{ p: 1, pl: 2 }}>
         <Typography sx={{ my: 1.4, fontWeight: 600 }}>Latest Order</Typography>
       </Box>
       <TableContainer>
-        <Table
-          sx={{ minWidth: 300 }}
-          aria-labelledby="tableTitle"
-          size={"small"}
-        >
-          <EnhancedTableHead />
-          <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
-              return (
-                <TableRow key={`${row}${index}`} hover>
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    #YTVFR
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Typography
-                      noWrap
-                      variant="subtitle2"
-                      sx={{ fontSize: "11px" }}
-                    >
-                      {"iPhone 16 Pro | 256GB 6GB RAM"}
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    &#8358;{currencyFormater(40000, 2)}
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    {dayjs().format(FULL_DATE_FORMAT)}
-                  </StyledTableCell>
+        {vendorOverviewData && vendorOverviewData?.latest_orders?.length > 0 ? (
+          <Table sx={{ minWidth: 300 }} size={"small"}>
+            <EnhancedTableHead />
+            <TableBody>
+              {vendorOverviewData?.latest_orders
+                ?.slice(0, 10)
+                ?.map((row, index) => {
+                  return (
+                    <TableRow key={`${row?.id}${index}`} hover>
+                      <StyledTableCell sx={{ fontSize: "11px" }}>
+                        {row?.tracking_id}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Typography
+                          noWrap
+                          variant="subtitle2"
+                          sx={{ fontSize: "11px" }}
+                        >
+                          {row?.items[0]?.product_name}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ fontSize: "11px" }}>
+                        &#8358;{currencyFormater(row?.total_price, 2)}
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ fontSize: "11px" }}>
+                        {dayjs(row?.created_at).format(FULL_DATE_FORMAT)}
+                      </StyledTableCell>
 
-                  <StyledTableCell sx={{ fontSize: "11px" }}>
-                    {renderStatus("completed")}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <IconButton size="small" sx={{ fontSize: "11px" }}>
-                      <KeyboardArrowRightRoundedIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                      <StyledTableCell sx={{ fontSize: "11px" }}>
+                        {renderStatus(row?.status)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <IconButton size="small" sx={{ fontSize: "11px" }}>
+                          <KeyboardArrowRightRoundedIcon />
+                        </IconButton>
+                      </StyledTableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        ) : (
+          <EmptyTable subText="No Recent Orders" />
+        )}
       </TableContainer>
     </Box>
   );

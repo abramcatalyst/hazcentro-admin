@@ -21,13 +21,15 @@ import DistributorStats from "./DistributorStats";
 import { UserType } from "src/types/users";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
-import { fetchSingleUser } from "src/services/users";
+import { fetchVendorOverviewData } from "src/services/users";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"; // ES 2015
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 dayjs.extend(relativeTime);
 
@@ -44,16 +46,16 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
   const navigate = useNavigate();
   const { error, data, isError } = useQuery({
     queryKey: [
-      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER,
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_VENDOR_OVERVIEW,
       { selectedUser, open },
     ],
-    queryFn: () => fetchSingleUser(selectedUser?.id),
+    queryFn: () => fetchVendorOverviewData({ id: selectedUser?.id }),
   });
 
   useEffect(() => {
     return () => {
       queryClient.removeQueries({
-        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER],
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_VENDOR_OVERVIEW],
       });
     };
   }, []);
@@ -71,7 +73,15 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
       </DialogContent>
     );
   }
+  let userImage = AvatarMaleImg;
+  if (selectedUser?.gender?.toLowerCase()?.includes("female")) {
+    userImage = AvatarFemaleImg;
+  }
+
   if (data) {
+    if (data?.profile?.profile_picture_url) {
+      userImage = data?.profile?.profile_picture_url;
+    }
     content = (
       <DialogContent>
         <Box
@@ -101,11 +111,7 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
               }}
             >
               <img
-                src={
-                  selectedUser?.gender?.toLowerCase()?.includes("female")
-                    ? AvatarFemaleImg
-                    : AvatarMaleImg
-                }
+                src={userImage}
                 alt="user"
                 style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
@@ -115,7 +121,7 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
                 noWrap
                 sx={{ fontWeigh: 600, fontSize: { xs: "17px", sm: "20px" } }}
               >
-                {data?.name}
+                {data?.profile?.name}
               </Typography>
 
               <Box
@@ -144,21 +150,23 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
                 </Box>
               </Box>
               <Typography sx={{ color: "GrayText" }} variant="body2">
-                ID:{data?.unique_user_id}
+                ID:{data?.profile?.unique_user_id}
               </Typography>
             </Box>
           </Box>
           <Box>
             {selectedUser?.last_seen_at ? (
               <Typography sx={{ color: "GrayText" }} variant="body2">
-                Last Seen: {dayjs(selectedUser?.last_seen_at).toNow()}
+                Last Seen: {dayjs(selectedUser?.last_seen_at).fromNow()}
               </Typography>
             ) : null}
           </Box>
         </Box>
 
-        <DistributorStats selectedUser={data} />
-        <ActiveOrders />
+        <DistributorStats data={data} />
+        <ErrorBoundary FallbackComponent={ErrorFallBack}>
+          {data && <ActiveOrders data={data} />}
+        </ErrorBoundary>
         <QuickActions />
         <Divider />
         <Box sx={{ my: 1, display: "flex", gap: 1 }}>

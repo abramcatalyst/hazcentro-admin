@@ -1,7 +1,10 @@
 import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
 
-const OrderSkeletonLoader = () => {
+type Props = {
+  mainSkelentonType?: "circular" | "square";
+};
+const OrderSkeletonLoader = ({ mainSkelentonType }: Props) => {
   return (
     <Box>
       <Box
@@ -14,7 +17,11 @@ const OrderSkeletonLoader = () => {
         }}
       >
         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <Skeleton sx={{ width: 75, height: 72 }} />
+          {mainSkelentonType === "circular" ? (
+            <Skeleton variant="circular" sx={{ width: 72, height: 72 }} />
+          ) : (
+            <Skeleton sx={{ width: 75, height: 72 }} />
+          )}
           <Box>
             <Skeleton sx={{ width: 75, height: 20, marginBottom: 0.05 }} />
             <Skeleton sx={{ width: 55, height: 20 }} />

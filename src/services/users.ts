@@ -2,6 +2,7 @@ import axios from "axios";
 import { QueryFilterType } from "src/types/filters";
 import { FollowerType } from "src/types/followers";
 import { UserType } from "src/types/users";
+import { VendorOverviewType } from "src/types/vendor";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
 export const fetchUsers = async ({
@@ -89,4 +90,15 @@ export const fetchUserFollowers = async ({
   );
   return data?.data?.following;
 };
-// admin/users/638dc2ce-f780-4673-b10a-2222ef4b62f1/vendors-following
+
+export const fetchVendorOverviewData = async ({
+  id,
+}: QueryFilterType): Promise<VendorOverviewType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/vendors/${id}/dashboard-overview`
+  );
+  console.log("bbbbbbbbbbbbb", data?.data);
+  return data?.data;
+};

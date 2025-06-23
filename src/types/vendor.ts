@@ -52,3 +52,66 @@ export type VendorType = {
     }[];
   };
 };
+
+export type PartOrderType = {
+  id: string;
+  tracking_id: string;
+  status: string;
+  total_price: string;
+  items: {
+    product_id: string;
+    product_name: string;
+    price: string;
+    image: string;
+  }[];
+  created_at: string;
+};
+export type VendorFollowerType = {
+  user_id: string;
+  unique_user_id: string;
+  name: string;
+  email: string;
+  gender: string;
+  profile_picture: string | null;
+  followed_at: string;
+};
+export type VendorOverviewType = {
+  profile: {
+    user_id: string;
+    unique_user_id: string;
+    name: string;
+    business_name: string;
+    business_reg_no: string;
+    nature_of_business: string;
+    sector_industry: string;
+    biz_phone_number: string | null;
+    website: string | null;
+    location: string | null;
+    region: string | null;
+    product_type: string | null;
+    role_position: string | null;
+    means_of_id: string | null;
+    verified_badge: string | null;
+    profile_picture_url: string | null;
+    last_seen_at: string | null;
+  };
+  summary: {
+    total_products: number;
+    successful_sales: number;
+    years_selling: number;
+    sales_today: number;
+    units_today: number;
+    category_count: number;
+    balance_on_hold: number;
+    active_order_count: number;
+    follower_count: number;
+    review_stats: {
+      average_rating: number;
+      total_reviews: number;
+    };
+  };
+  active_orders: PartOrderType[];
+  latest_orders: PartOrderType[];
+  recent_followers: VendorFollowerType[];
+  documents: [];
+};

@@ -5,7 +5,7 @@ import MedalImg from "src/assets/images/star-medal.png";
 import Star1Img from "src/assets/images/star-ticket.png";
 import Star2Img from "src/assets/images/star-ticket-2.png";
 import { currencyFormater } from "src/utils";
-import { UserType } from "src/types/users";
+import { VendorOverviewType } from "src/types/vendor";
 
 type StatsBoxProps = {
   title: string;
@@ -36,12 +36,10 @@ export const StatsBox = ({ title, image, value }: StatsBoxProps) => {
   );
 };
 type Props = {
-  selectedUser: UserType;
+  data: VendorOverviewType;
 };
-function DistributorStats({ selectedUser }: Props) {
+function DistributorStats({ data }: Props) {
   const theme = useTheme();
-  const thisYear = new Date().getFullYear();
-  const createdYear = new Date(selectedUser?.created_at).getFullYear();
 
   return (
     <Box
@@ -58,13 +56,21 @@ function DistributorStats({ selectedUser }: Props) {
         flexWrap: "wrap",
       }}
     >
-      <StatsBox title="Total Products" value={2300} image={Star1Img} />
+      <StatsBox
+        title="Total Products"
+        value={data?.summary?.total_products}
+        image={Star1Img}
+      />
 
-      <StatsBox title="Successful Sales" value={456} image={Star2Img} />
+      <StatsBox
+        title="Successful Sales"
+        value={data?.summary?.successful_sales}
+        image={Star2Img}
+      />
 
       <StatsBox
         title="Years Selling"
-        value={thisYear - createdYear}
+        value={Math.abs(data?.summary?.years_selling)}
         image={MedalImg}
       />
     </Box>

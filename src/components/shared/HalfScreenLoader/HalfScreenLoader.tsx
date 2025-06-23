@@ -9,7 +9,8 @@ const HalfScreenLoader = ({ text = "Loading..." }: Props) => {
   return (
     <Box
       sx={{
-        minHeight: "40vh",
+        width: "100%",
+        minHeight: "33vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

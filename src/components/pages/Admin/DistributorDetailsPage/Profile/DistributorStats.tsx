@@ -4,8 +4,12 @@ import MedalImg from "src/assets/images/star-medal.png";
 import Star1Img from "src/assets/images/star-ticket.png";
 import Star2Img from "src/assets/images/star-ticket-2.png";
 import { StatsBox } from "../../Users/DistributorProfileDialog/DistributorStats";
+import { VendorOverviewType } from "src/types/vendor";
 
-function DistributorStats() {
+type Props = {
+  vendorOverviewData: VendorOverviewType;
+};
+function DistributorStats({ vendorOverviewData }: Props) {
   const theme = useTheme();
 
   return (
@@ -25,11 +29,23 @@ function DistributorStats() {
         flexWrap: "wrap",
       }}
     >
-      <StatsBox title="Total Products" value={2300} image={Star1Img} />
+      <StatsBox
+        title="Total Products"
+        value={vendorOverviewData?.summary?.total_products}
+        image={Star1Img}
+      />
 
-      <StatsBox title="Successful Sales" value={456} image={Star2Img} />
+      <StatsBox
+        title="Successful Sales"
+        value={vendorOverviewData?.summary?.successful_sales}
+        image={Star2Img}
+      />
 
-      <StatsBox title="Years Selling" value={4} image={MedalImg} />
+      <StatsBox
+        title="Years Selling"
+        value={Math.abs(vendorOverviewData?.summary?.years_selling || 0)}
+        image={MedalImg}
+      />
     </Box>
   );
 }

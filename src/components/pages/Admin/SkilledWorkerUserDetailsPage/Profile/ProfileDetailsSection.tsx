@@ -15,6 +15,7 @@ type Props = {
 const sizing = { xs: 12, sm: 6, md: 4 };
 const ProfileDetailsSection = ({ data }: Props) => {
   const theme = useTheme();
+
   return (
     <Box
       component={Paper}

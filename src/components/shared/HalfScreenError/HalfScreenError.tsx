@@ -13,7 +13,8 @@ const HalfScreenError = ({
   return (
     <Box
       sx={{
-        minHeight: "40vh",
+        width: "100%",
+        minHeight: "35vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

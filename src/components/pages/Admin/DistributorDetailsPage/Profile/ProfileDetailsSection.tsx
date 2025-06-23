@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
-import MaleAvatar from "src/assets/tempimages/user1.png";
 import QuickActions from "./QuickActions";
 import { MdOutlineStar } from "react-icons/md";
 import DistributorStats from "./DistributorStats";
@@ -15,11 +14,25 @@ import DocumentInfo from "./DocumentInfo";
 import VerifiedIcon from "src/assets/icons/verified_icon_green_1.svg";
 import { GLOBAL_COLORS } from "src/utils";
 import PaymentInfo from "./PaymentInfo";
+import { UserType } from "src/types/users";
+import { VendorOverviewType } from "src/types/vendor";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime"; // ES 2015
+import renderUserProfileImage from "src/utils/renderUserProfileImage";
 
-const ProfileDetailsSection = () => {
+dayjs.extend(relativeTime);
+type Props = {
+  userData: UserType;
+  vendorOverviewData: VendorOverviewType;
+};
+const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
   const [selectedTab, setSelectedTab] = useState(profileTabOptions[0].value);
 
   const theme = useTheme();
+  const userImage = renderUserProfileImage({
+    remoteImageUrl: vendorOverviewData?.profile?.profile_picture_url,
+    gender: userData?.gender,
+  });
   return (
     <Box
       component={Paper}
@@ -43,6 +56,7 @@ const ProfileDetailsSection = () => {
 
       <Box
         sx={{
+          width: "100%",
           display: "flex",
           gap: 1,
           alignItems: "center",
@@ -60,13 +74,20 @@ const ProfileDetailsSection = () => {
             gap: 1,
             alignItems: "center",
             flexWrap: "wrap",
+            width: { xs: "100%", md: "70%" },
+            minHeight: "100px",
           }}
         >
-          <Box sx={{ borderRadius: "50%", width: "104px", height: "104px" }}>
+          <Box sx={{ borderRadius: "50%" }}>
             <img
               alt="user"
-              src={MaleAvatar}
-              style={{ objectFit: "cover", borderRadius: "50%" }}
+              src={userImage}
+              style={{
+                objectFit: "cover",
+                borderRadius: "50%",
+                width: "105px",
+                height: "105px",
+              }}
             />
           </Box>
           <Box sx={{}}>
@@ -76,7 +97,7 @@ const ProfileDetailsSection = () => {
                 fontWeight: 500,
               }}
             >
-              Jason Suter
+              {userData?.name}
             </Typography>{" "}
             <Box
               sx={{
@@ -88,7 +109,9 @@ const ProfileDetailsSection = () => {
                 gap: 0.4,
               }}
             >
-              <Typography variant="body2">Followers: 120 </Typography>
+              <Typography variant="body2">
+                Followers: {vendorOverviewData?.summary?.follower_count}{" "}
+              </Typography>
               <MdOutlineStar
                 style={{
                   fontSize: "12px",
@@ -127,10 +150,11 @@ const ProfileDetailsSection = () => {
                 color: theme.palette.grey[800],
               }}
             >
-              User ID: 123457865
+              User ID: {userData?.unique_user_id}
             </Typography>{" "}
           </Box>
         </Box>
+
         <Box
           sx={{
             display: "flex",
@@ -140,15 +164,17 @@ const ProfileDetailsSection = () => {
             flexWrap: "wrap",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "12px",
-              lineHeight: "80%",
-              color: theme.palette.grey[800],
-            }}
-          >
-            Last Seen: 2 Min ago
-          </Typography>{" "}
+          {userData?.last_seen_at ? (
+            <Typography
+              sx={{
+                fontSize: "12px",
+                lineHeight: "80%",
+                color: theme.palette.grey[800],
+              }}
+            >
+              Last Seen: {dayjs(userData?.last_seen_at).fromNow()}
+            </Typography>
+          ) : null}{" "}
           <Typography
             sx={{
               fontSize: "12px",
@@ -162,7 +188,7 @@ const ProfileDetailsSection = () => {
         </Box>
       </Box>
       <Box sx={{}}>
-        <DistributorStats />
+        <DistributorStats vendorOverviewData={vendorOverviewData} />
       </Box>
       <Box
         sx={{
@@ -202,7 +228,12 @@ const ProfileDetailsSection = () => {
         </Box>
       </Box>
       <Box my={2}>
-        {selectedTab === tabOptionsObj.PROFILE ? <ProfileInfo /> : null}
+        {selectedTab === tabOptionsObj.PROFILE ? (
+          <ProfileInfo
+            userData={userData}
+            vendorOverviewData={vendorOverviewData}
+          />
+        ) : null}
         {selectedTab === tabOptionsObj.PRODUCTS ? <ProductInfo /> : null}
         {selectedTab === tabOptionsObj.DOCUMENTS ? <DocumentInfo /> : null}
         {selectedTab === tabOptionsObj.PAYMENT ? <PaymentInfo /> : null}

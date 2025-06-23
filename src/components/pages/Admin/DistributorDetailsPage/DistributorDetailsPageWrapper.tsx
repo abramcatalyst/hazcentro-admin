@@ -76,10 +76,10 @@ const DistributorDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {
           </Grid>
           <Grid size={{ xs: 15, sm: 13 }} container spacing={1}>
             {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
-              <OverviewWrapper data={data} />
+              <OverviewWrapper userData={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.PROFILE ? (
-              <ProfileWrapper data={data} />
+              <ProfileWrapper userData={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.FOLLOWINGS ? (
               <FollowingsWrapper data={data} />

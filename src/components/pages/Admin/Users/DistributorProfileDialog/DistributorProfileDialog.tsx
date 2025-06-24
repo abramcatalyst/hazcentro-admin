@@ -113,7 +113,12 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
               <img
                 src={userImage}
                 alt="user"
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                style={{
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                  width: "100%",
+                  height: "100%",
+                }}
               />
             </Box>
             <Box>

@@ -8,6 +8,7 @@ import FollowingsWrapper from "./Followings/FollowingsWrapper";
 import OrdersWrapper from "./Orders/OrdersWrapper";
 import SubscriptionWrapper from "./Subscriptions/SubscriptionWrapper";
 import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
+import ProductCategoriesWrapper from "./ProductCategories/ProductCategoriesWrapper";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
@@ -80,6 +81,9 @@ const DistributorDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {
             ) : null}
             {selectedTab === usersPageTabOptionsObj.PROFILE ? (
               <ProfileWrapper userData={data} />
+            ) : null}
+            {selectedTab === usersPageTabOptionsObj.PRODUCT_CATEGORY ? (
+              <ProductCategoriesWrapper userData={data} />
             ) : null}
             {selectedTab === usersPageTabOptionsObj.FOLLOWINGS ? (
               <FollowingsWrapper data={data} />

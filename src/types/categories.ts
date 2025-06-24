@@ -71,3 +71,11 @@ export type SingleCategoryType = {
     total: number;
   };
 };
+
+export type VendorProductCategoryType = {
+  id: string;
+  name: string;
+  total_products: number;
+  change_percent: string;
+  category_icon: string;
+};

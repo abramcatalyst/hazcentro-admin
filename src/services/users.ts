@@ -1,4 +1,6 @@
 import axios from "axios";
+import { VendorActivityType } from "src/types/activities";
+import { VendorProductCategoryType } from "src/types/categories";
 import { QueryFilterType } from "src/types/filters";
 import { FollowerType } from "src/types/followers";
 import { UserType } from "src/types/users";
@@ -99,6 +101,18 @@ export const fetchVendorOverviewData = async ({
   const { data } = await axios.get(
     `${baseUrl}/admin/vendors/${id}/dashboard-overview`
   );
-  console.log("bbbbbbbbbbbbb", data?.data);
   return data?.data;
+};
+
+export const fetchVendorCategoriesAndActivityData = async ({
+  id,
+}: QueryFilterType): Promise<{
+  categories: VendorProductCategoryType[];
+  recent_activities: VendorActivityType[];
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/admin/vendors/${id}/category`);
+  console.log("bbbbbbbbbbbbb", data);
+  return data;
 };

@@ -9,6 +9,7 @@ import OrdersWrapper from "./Orders/OrdersWrapper";
 import SubscriptionWrapper from "./Subscriptions/SubscriptionWrapper";
 import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
 import ProductCategoriesWrapper from "./ProductCategories/ProductCategoriesWrapper";
+import RateAndReviewsWrapper from "./RateAndReviews/RateAndReviewsWrapper";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
@@ -93,6 +94,9 @@ const DistributorDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {
             ) : null}
             {selectedTab === usersPageTabOptionsObj.SUBSCRIPTION ? (
               <SubscriptionWrapper />
+            ) : null}
+            {selectedTab === usersPageTabOptionsObj.RATE_AND_REVIEWS ? (
+              <RateAndReviewsWrapper />
             ) : null}
           </Grid>
         </Grid>

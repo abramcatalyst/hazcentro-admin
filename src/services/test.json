@@ -1,205 +1,35 @@
 {
-  "categories": [
-    {
-      "id": "0b467b07-cbed-45ad-a2f7-5954d54b26c6",
-      "name": "Building Materials",
-      "total_products": 8,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/1/building.jpg"
-    },
-    {
-      "id": "1bff4a2f-965d-4af3-94d4-a772c218d1bb",
-      "name": "Kitchen & Bath Fixtures",
-      "total_products": 7,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/8/electrical.png"
-    },
-    {
-      "id": "1e305e00-b07e-4391-ab7e-b7f7886e8c6c",
-      "name": "Air Conditioners",
-      "total_products": 1,
-      "change_percent": "+0%",
-      "category_icon": null
-    },
-    {
-      "id": "238a72f4-4cad-4ea8-a70b-7179b3586d62",
-      "name": "Interior Finishes",
-      "total_products": 9,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/4/tools.png"
-    },
-    {
-      "id": "3c8027a7-1b18-4863-b410-fba32b0e2a77",
-      "name": "Wiring & Cables",
-      "total_products": 1,
-      "change_percent": "+0%",
-      "category_icon": null
-    },
-    {
-      "id": "3f388892-1d71-4389-af94-99a82f999d08",
-      "name": "Outdoor Living",
-      "total_products": 9,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/9/hvac.png"
-    },
-    {
-      "id": "43d4c6f4-026d-45df-a7ef-9af9bc2b24f7",
-      "name": "Cement",
-      "total_products": 2,
-      "change_percent": "+0%",
-      "category_icon": null
-    },
-    {
-      "id": "7713a482-4414-4753-b4a5-c446509ecc6b",
-      "name": "Electrical Supplies",
-      "total_products": 2,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/2/automation.png"
-    },
-    {
-      "id": "77b29b65-09f4-4f6e-9b4c-1753ae644d65",
-      "name": "Tools & Equipment",
-      "total_products": 2,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/7/tools.png"
-    },
-    {
-      "id": "8a76093d-9c22-42cd-b4fa-b4b7c3d10535",
-      "name": "Thermostats",
-      "total_products": 1,
-      "change_percent": "+0%",
-      "category_icon": null
-    },
-    {
-      "id": "a05301d2-131b-4502-9117-802f8ebbb0d1",
-      "name": "Plumbing Supplies",
-      "total_products": 1,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/3/electrical.png"
-    },
-    {
-      "id": "a1a1b9e9-3448-4853-899b-3ca675622bc7",
-      "name": "Paint & Primer",
-      "total_products": 4,
-      "change_percent": "+0%",
-      "category_icon": null
-    },
-    {
-      "id": "b6aa3f31-2554-4a18-bfad-2b7715e35209",
-      "name": "Pipes & Fittings",
-      "total_products": 1,
-      "change_percent": "+0%",
-      "category_icon": null
-    },
-    {
-      "id": "cfc5d494-125a-4623-834c-43a8adcd9ebd",
-      "name": "Switches & Outlets",
-      "total_products": 1,
-      "change_percent": "+0%",
-      "category_icon": null
-    },
-    {
-      "id": "d61bfc5f-c0f1-44c7-8036-bcf9249e0e30",
-      "name": "HVAC Supplies",
-      "total_products": 2,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/5/plumbing.png"
-    },
-    {
-      "id": "e4aa9628-7e50-4522-8736-fb654fe0d1ae",
-      "name": "Landscaping Materials",
-      "total_products": 2,
-      "change_percent": "+0%",
-      "category_icon": "https://haz.reevaluateme.online/storage/6/electrical.png"
-    },
-    {
-      "id": "e95e803a-3ada-4d63-9cb3-50d469916920",
-      "name": "Faucets & Sinks",
-      "total_products": 1,
-      "change_percent": "+0%",
-      "category_icon": null
-    }
-  ],
-  "recent_activities": [
-    {
-      "product_id": "9f03c426-3ab5-470e-a3c1-8524dbc78357",
-      "product_name": "Hisense",
-      "image": "https://haz.reevaluateme.online/storage/200/IMG-20250527-WA0007.jpg",
-      "reason": "Initial stock",
-      "category": "Outdoor Living",
-      "timestamp": "3 weeks ago"
-    },
-    {
-      "product_id": "9f03c2d2-2596-481d-8178-1f93fb38316a",
-      "product_name": "ac",
-      "image": "https://haz.reevaluateme.online/storage/198/IMG-20250527-WA0011.jpg",
-      "reason": "Initial stock",
-      "category": "Interior Finishes",
-      "timestamp": "3 weeks ago"
-    },
-    {
-      "product_id": "9eff40d4-824d-4c37-a7dd-676702a8fb44",
-      "product_name": "Gas",
-      "image": "https://haz.reevaluateme.online/storage/192/IMG-20250524-WA0019.jpg",
-      "reason": "Initial stock",
-      "category": "Kitchen & Bath Fixtures",
-      "timestamp": "4 weeks ago"
-    },
-    {
-      "product_id": "9eff3ffa-65e8-4b09-8766-ccdd8b3aeec5",
-      "product_name": "clothing",
-      "image": "https://haz.reevaluateme.online/storage/188/IMG-20250524-WA0019.jpg",
-      "reason": "Initial stock",
-      "category": "Building Materials",
-      "timestamp": "4 weeks ago"
-    },
-    {
-      "product_id": "9eff3f05-0597-4b63-9750-42989cf2af03",
-      "product_name": "goes",
-      "image": null,
-      "reason": "Initial stock",
-      "category": "Outdoor Living",
-      "timestamp": "4 weeks ago"
-    },
-    {
-      "product_id": "9eff3cab-2994-46af-8450-dd11ae9e650a",
-      "product_name": "house",
-      "image": null,
-      "reason": "Initial stock",
-      "category": "Outdoor Living",
-      "timestamp": "4 weeks ago"
-    },
-    {
-      "product_id": "9eff3a5a-ff37-4093-bf04-ce0af1519067",
-      "product_name": "goat",
-      "image": null,
-      "reason": "Initial stock",
-      "category": "Interior Finishes",
-      "timestamp": "4 weeks ago"
-    },
-    {
-      "product_id": "9efd57bf-a2ea-41ee-a072-a24741d3ddc1",
-      "product_name": "fan 14",
-      "image": null,
-      "reason": "Initial stock",
-      "category": "Kitchen & Bath Fixtures",
-      "timestamp": "4 weeks ago"
-    },
-    {
-      "product_id": "9efd237d-da9e-4016-bd1d-554962c42eda",
-      "product_name": "laptop 02",
-      "image": null,
-      "reason": "Initial stock",
-      "category": "Interior Finishes",
-      "timestamp": "4 weeks ago"
-    },
-    {
-      "product_id": "9efd2245-f1ea-4cc4-a330-7f3398caf759",
-      "product_name": "laptop 01",
-      "image": null,
-      "reason": "Initial stock",
-      "category": "Building Materials",
-      "timestamp": "4 weeks ago"
-    }
-  ]
+  "data": [],
+  "links": {
+    "first": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/reviews?page=1",
+    "last": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/reviews?page=1",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 1,
+    "links": [
+      {
+        "url": null,
+        "label": "&laquo; Previous",
+        "active": false
+      },
+      {
+        "url": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/reviews?page=1",
+        "label": "1",
+        "active": true
+      },
+      {
+        "url": null,
+        "label": "Next &raquo;",
+        "active": false
+      }
+    ],
+    "path": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/reviews",
+    "per_page": 15,
+    "to": 12,
+    "total": 12
+  }
 }

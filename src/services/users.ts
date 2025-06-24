@@ -3,6 +3,7 @@ import { VendorActivityType } from "src/types/activities";
 import { VendorProductCategoryType } from "src/types/categories";
 import { QueryFilterType } from "src/types/filters";
 import { FollowerType } from "src/types/followers";
+import { RateType } from "src/types/rates";
 import { UserType } from "src/types/users";
 import { VendorOverviewType } from "src/types/vendor";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
@@ -113,6 +114,84 @@ export const fetchVendorCategoriesAndActivityData = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(`${baseUrl}/admin/vendors/${id}/category`);
+  return data;
+};
+
+export const fetchVendorSubscriptionsData = async ({
+  id,
+}: QueryFilterType): Promise<{
+  categories: VendorProductCategoryType[];
+  recent_activities: VendorActivityType[];
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/vendors/${id}/subscriptions`
+  );
+  return data;
+};
+
+export const fetchVendorRatesAndReviewsData = async ({
+  id,
+  limit = 20,
+  page,
+}: QueryFilterType): Promise<{
+  data: RateType[];
+  links: {
+    first: string;
+    last: string;
+    prev: string | null;
+    next: string | null;
+  };
+  meta: {
+    current_page: number;
+    from: number;
+    last_page: number;
+    links: [
+      {
+        url: string | null;
+        label: string;
+        active: boolean;
+      },
+      {
+        url: string;
+        label: string;
+        active: boolean;
+      },
+      {
+        url: string | null;
+        label: "Next &raquo;";
+        active: boolean;
+      }
+    ];
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+  };
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/vendors/${id}/reviews?limit=${limit}${
+      page ? `&page=${page}` : ""
+    }`
+  );
+  console.log("111111111111111111111", data);
+  return data;
+};
+
+export const fetchVendorFeedsAndFollowersData = async ({
+  id,
+}: QueryFilterType): Promise<{
+  categories: VendorProductCategoryType[];
+  recent_activities: VendorActivityType[];
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/vendors/${id}/feeds-followers`
+  );
   console.log("bbbbbbbbbbbbb", data);
   return data;
 };

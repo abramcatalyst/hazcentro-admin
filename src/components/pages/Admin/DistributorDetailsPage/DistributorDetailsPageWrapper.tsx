@@ -4,12 +4,14 @@ import Grid from "@mui/material/Grid2";
 import SideNav from "./SideNav";
 import OverviewWrapper from "./Overview/OverviewWrapper";
 import ProfileWrapper from "./Profile/ProfileWrapper";
-import FollowingsWrapper from "./Followings/FollowingsWrapper";
 import OrdersWrapper from "./Orders/OrdersWrapper";
 import SubscriptionWrapper from "./Subscriptions/SubscriptionWrapper";
 import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
 import ProductCategoriesWrapper from "./ProductCategories/ProductCategoriesWrapper";
 import RateAndReviewsWrapper from "./RateAndReviews/RateAndReviewsWrapper";
+import FeedAndFollowersWrapper from "./FeedsAndFollowers/FeedAndFollowersWrapper";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
@@ -77,27 +79,41 @@ const DistributorDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {
             />
           </Grid>
           <Grid size={{ xs: 15, sm: 13 }} container spacing={1}>
-            {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
-              <OverviewWrapper userData={data} />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.PROFILE ? (
-              <ProfileWrapper userData={data} />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.PRODUCT_CATEGORY ? (
-              <ProductCategoriesWrapper userData={data} />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.FOLLOWINGS ? (
-              <FollowingsWrapper data={data} />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.ORDERS ? (
-              <OrdersWrapper />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.SUBSCRIPTION ? (
-              <SubscriptionWrapper />
-            ) : null}
-            {selectedTab === usersPageTabOptionsObj.RATE_AND_REVIEWS ? (
-              <RateAndReviewsWrapper />
-            ) : null}
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.OVERVIEW ? (
+                <OverviewWrapper userData={data} />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.PROFILE ? (
+                <ProfileWrapper userData={data} />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.PRODUCT_CATEGORY ? (
+                <ProductCategoriesWrapper userData={data} />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.FEEDS_AND_FOLLOWERS ? (
+                <FeedAndFollowersWrapper />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.ORDERS ? (
+                <OrdersWrapper />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.SUBSCRIPTION ? (
+                <SubscriptionWrapper />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.RATE_AND_REVIEWS ? (
+                <RateAndReviewsWrapper />
+              ) : null}
+            </ErrorBoundary>
           </Grid>
         </Grid>
       </Box>

@@ -2,22 +2,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import Logo from "src/assets/images/logo2.png";
-import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
-import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
-import { currencyFormater, formatErrorMessage } from "src/utils";
-import { useParams } from "react-router-dom";
-import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
-import { useQuery } from "@tanstack/react-query";
-import { fetchVendorRatesAndReviewsData } from "src/services/users";
+import { currencyFormater } from "src/utils";
 import { RateType } from "src/types/rates";
 import { useTheme } from "@mui/material/styles";
 import { MdOutlineStar } from "react-icons/md";
-import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import { FeedType } from "src/types/feeds";
 
 const starsRating = [...Array(5).keys()].map(() =>
   Math.floor(Math.random() * 100)
 );
-const RateItem = ({ data }: { data: RateType }) => {
+const FeedItem = ({ data }: { data: RateType }) => {
   const theme = useTheme();
   return (
     <Box
@@ -87,7 +81,7 @@ const RateItem = ({ data }: { data: RateType }) => {
                 ))}
               </Box>
               <Typography sx={{ color: "GrayText", fontSize: "12px" }}>
-                {dayjs(data?.created_at).format("MMM Do, YYYY")}
+                {dayjs().format("MMM Do, YYYY")}
               </Typography>{" "}
             </Box>
           </Box>
@@ -130,25 +124,25 @@ const RateItem = ({ data }: { data: RateType }) => {
     </Box>
   );
 };
+console.log(FeedItem);
 
-function RateAndReviewsTable() {
-  const { id } = useParams();
+type Props = {
+  data: {
+    data: FeedType[];
 
-  const { error, data, isError, isPending } = useQuery({
-    queryKey: [
-      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_VENDOR_RATE_AND_REVIEWS,
-      { id },
-    ],
-    queryFn: () => fetchVendorRatesAndReviewsData({ id: id }),
-  });
+    meta: {
+      current_page: number;
+      from: null;
+      last_page: number;
 
-  if (isPending) {
-    return <HalfScreenLoader />;
-  }
-
-  if (isError) {
-    return <HalfScreenError text={formatErrorMessage(error)} />;
-  }
+      per_page: number;
+      to: null;
+      total: number;
+    };
+  };
+};
+function FeedsTable({ data }: Props) {
+  console.log("dddddddddddd", data);
   return (
     <Box
       sx={{
@@ -161,16 +155,10 @@ function RateAndReviewsTable() {
       }}
     >
       <Box>
-        {data?.data?.length > 0 ? (
-          data?.data.map((row) => {
-            return <RateItem key={row?.id} data={row} />;
-          })
-        ) : (
-          <EmptyTable subText="No content available" />
-        )}
+        <Typography sx={{ textAlign: "center" }}>Upcomming</Typography>
       </Box>
     </Box>
   );
 }
 
-export default RateAndReviewsTable;
+export default FeedsTable;

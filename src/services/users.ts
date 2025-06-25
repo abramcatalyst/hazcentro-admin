@@ -1,8 +1,9 @@
 import axios from "axios";
 import { VendorActivityType } from "src/types/activities";
 import { VendorProductCategoryType } from "src/types/categories";
+import { FeedType } from "src/types/feeds";
 import { QueryFilterType } from "src/types/filters";
-import { FollowerType } from "src/types/followers";
+import { FollowerType, VendorFullFollowerType } from "src/types/followers";
 import { RateType } from "src/types/rates";
 import { UserType } from "src/types/users";
 import { VendorOverviewType } from "src/types/vendor";
@@ -183,14 +184,38 @@ export const fetchVendorRatesAndReviewsData = async ({
 
 export const fetchVendorFeedsAndFollowersData = async ({
   id,
+  limit,
 }: QueryFilterType): Promise<{
-  categories: VendorProductCategoryType[];
-  recent_activities: VendorActivityType[];
+  feeds: {
+    data: FeedType[];
+
+    meta: {
+      current_page: number;
+      from: null;
+      last_page: number;
+      per_page: number;
+      to: null;
+      total: number;
+    };
+  };
+  followers: {
+    data: VendorFullFollowerType[];
+
+    meta: {
+      current_page: number;
+      from: number;
+      last_page: number;
+      per_page: number;
+      to: number;
+      total: number;
+      total_followers: number;
+    };
+  };
 }> => {
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/admin/vendors/${id}/feeds-followers`
+    `${baseUrl}/admin/vendors/${id}/feeds-followers?limit=${limit}`
   );
   console.log("bbbbbbbbbbbbb", data);
   return data;

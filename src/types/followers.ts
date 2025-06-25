@@ -17,3 +17,16 @@ export type FollowerType = {
     name: string;
   };
 };
+
+export type VendorFullFollowerType = {
+  id: string;
+  user_id: string;
+  followable_id: string;
+  followed_at: string;
+  follower_details: {
+    id: string;
+    email: string;
+    profile_picture: string | null;
+    name: string;
+  };
+};

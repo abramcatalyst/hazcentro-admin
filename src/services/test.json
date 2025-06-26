@@ -1,85 +1,22 @@
 {
-  "feeds": {
-    "data": [],
-    "links": {
-      "first": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers?page=1",
-      "last": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers?page=1",
-      "prev": null,
-      "next": null
+  "status": "success",
+  "data": {
+    "total_sales": {
+      "amount": 2557.9499999999998181010596454143524169921875,
+      "change_pct": 100
     },
-    "meta": {
-      "current_page": 1,
-      "from": null,
-      "last_page": 1,
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "path": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers",
-      "per_page": 10,
-      "to": null,
-      "total": 0
-    }
-  },
-  "followers": {
-    "data": [
-      {
-        "id": "bac3caef-0e98-4a4c-a3a1-9069792ba674",
-        "user_id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
-        "followed_at": "2025-06-23 13:24:37",
-        "follower_details": {
-          "id": "4cc3f4f6-b4f5-4020-a6e1-f1c9d395eb75",
-          "name": "Test User",
-          "email": "test.customer@example.com",
-          "profile_picture": null
-        }
-      }
-    ],
-    "links": {
-      "first": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers?page=1",
-      "last": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers?page=1",
-      "prev": null,
-      "next": null
+    "total_orders": {
+      "count": 3,
+      "change_pct": 100
     },
-    "meta": {
-      "current_page": 1,
-      "from": 1,
-      "last_page": 1,
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "path": "https://haz.reevaluateme.online/api/v1/admin/vendors/ef6a9df4-4c7e-44c3-b511-b173ce4de679/feeds-followers",
-      "per_page": 10,
-      "to": 1,
-      "total": 1,
-      "total_followers": 1
-    }
+    "total_users": {
+      "count": 0,
+      "change_pct": 0
+    },
+    "total_distributors": {
+      "count": 0,
+      "change_pct": 0
+    },
+    "active_escrow_balance": 14752.90999999999985448084771633148193359375
   }
 }

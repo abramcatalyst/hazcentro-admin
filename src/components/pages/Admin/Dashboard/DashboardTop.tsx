@@ -10,16 +10,24 @@ import DollarImg from "src/assets/icons/dollar_finance_financial_investment_icon
 import PeopleImg from "src/assets/icons/people_fill_icon.svg";
 
 import { BiSolidRightTopArrowCircle } from "react-icons/bi";
+import { AdminDashboardStatsType } from "src/types/admin";
 
-const itemSizing = { xs: 5, sm: 2, md: 1 };
+const itemSizing = { xs: 4, sm: 2, md: 1 };
 
 type StatsCardProps = {
   kind: "sale" | "order" | "user" | "distributor" | "visitor";
   title: string;
   value: string | number;
   trend?: string | number;
+  decimalPoint?: number;
 };
-const StatsCard = ({ kind, title, value, trend }: StatsCardProps) => {
+const StatsCard = ({
+  kind,
+  title,
+  value,
+  trend,
+  decimalPoint = 0,
+}: StatsCardProps) => {
   const renderImage = () => {
     if (kind === "visitor") {
       return CubeImg;
@@ -77,6 +85,7 @@ const StatsCard = ({ kind, title, value, trend }: StatsCardProps) => {
       sx={{
         borderRadius: "12px",
         background: renderBackground(),
+        minHeight: "110px",
       }}
     >
       <CardContent>
@@ -102,7 +111,7 @@ const StatsCard = ({ kind, title, value, trend }: StatsCardProps) => {
             <Typography
               sx={{ fontWeight: 600, fontSize: { xs: "14px", sm: "22px" } }}
             >
-              {currencyFormater(value)}
+              {currencyFormater(value, decimalPoint)}
             </Typography>
             <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
               <Typography sx={{ fontSize: "11.7px" }}>{title}</Typography>
@@ -124,48 +133,46 @@ const StatsCard = ({ kind, title, value, trend }: StatsCardProps) => {
     </Card>
   );
 };
-const DashboardTop = () => {
+
+type Props = {
+  data: AdminDashboardStatsType;
+};
+const DashboardTop = ({ data }: Props) => {
   return (
     <Box sx={{ my: 1, background: "#ffffff", p: { xs: 0.5, sm: 1 } }}>
-      <Grid container spacing={1} columns={5}>
+      <Grid container spacing={1} columns={4}>
         <Grid size={itemSizing}>
           <StatsCard
             kind="sale"
             title="Total Sales"
-            value={12456320}
-            trend={"+2.5%"}
+            value={data?.total_sales?.amount}
+            trend={`${data?.total_sales?.change_pct}%`}
+            decimalPoint={2}
           />
         </Grid>
         <Grid size={itemSizing}>
           <StatsCard
             kind="order"
             title="Total Orders"
-            value={12456320}
-            trend={"+2.5%"}
+            value={data?.total_orders?.count}
+            trend={`${data?.total_orders?.change_pct}%`}
           />
         </Grid>
         <Grid size={itemSizing}>
           <StatsCard
             kind="user"
             title="Total Users"
-            value={10320}
-            trend={"+2.5%"}
+            value={data?.total_users?.count}
+            trend={`${data?.total_users?.change_pct}%`}
           />
         </Grid>
         <Grid size={itemSizing}>
           <StatsCard
             kind="distributor"
             title="Total Sales"
-            value={120}
-            trend={"+2.5%"}
-          />
-        </Grid>
-        <Grid size={itemSizing}>
-          <StatsCard
-            kind="visitor"
-            title="Total Sales"
-            value={1230}
-            trend={"+2.5%"}
+            value={data?.total_distributors?.count}
+            trend={`${data?.total_distributors?.change_pct}%`}
+            decimalPoint={2}
           />
         </Grid>
       </Grid>

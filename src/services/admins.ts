@@ -1,6 +1,7 @@
 import axios from "axios";
+import { AdminDashboardStatsType } from "src/types/admin";
 import { QueryFilterType } from "src/types/filters";
-import { isAuthTokenExpired, setDefaultHeaders } from "src/utils";
+import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 import { AdminType } from "src/utils/types";
 
 export const fetchAdmins = async ({
@@ -19,7 +20,7 @@ export const fetchAdmins = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${import.meta.env.VITE_BASE_URL}/admin/fetch-admins?limit=${limit}${
+    `${baseUrl}/admin/fetch-admins?limit=${limit}${
       page ? `&page=${page}` : ""
     }${startDate ? `&minCreateDate=${startDate}` : ""}${
       endDate ? `&maxCreateDate=${endDate}` : ""
@@ -30,3 +31,12 @@ export const fetchAdmins = async ({
 
   return data?.data;
 };
+
+export const fetchAdminDashboardOverviewData =
+  async (): Promise<AdminDashboardStatsType> => {
+    setDefaultHeaders();
+    isAuthTokenExpired();
+    const { data } = await axios.get(`${baseUrl}/admin/dashboard/overview`);
+
+    return data?.data;
+  };

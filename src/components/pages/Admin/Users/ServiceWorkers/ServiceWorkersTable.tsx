@@ -124,12 +124,6 @@ function ServiceWorkersTable({ selectedUsers }: Props) {
           handleClose={handleClosePreviewProfile}
         />
       )}
-      {/* {openPreviewProfile && (
-        <DistributorProfileDialog
-          open={openPreviewProfile}
-          handleClose={handleClosePreviewProfile}
-        />
-      )} */}
 
       <TableContainer>
         {data?.total > 0 ? (

@@ -123,3 +123,11 @@ export type OrderType = {
     roles: RoleType[];
   };
 };
+
+export type VendorEscrowOrderType = {
+  order_id: string;
+  item: string;
+  amount: string;
+  status: string;
+  date: string;
+};

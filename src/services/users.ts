@@ -1,6 +1,7 @@
 import axios from "axios";
 import { VendorActivityType } from "src/types/activities";
 import { VendorProductCategoryType } from "src/types/categories";
+import { EscrowResType } from "src/types/escrow";
 import { FeedType } from "src/types/feeds";
 import { QueryFilterType } from "src/types/filters";
 import { FollowerType, VendorFullFollowerType } from "src/types/followers";
@@ -178,7 +179,6 @@ export const fetchVendorRatesAndReviewsData = async ({
       page ? `&page=${page}` : ""
     }`
   );
-  console.log("111111111111111111111", data);
   return data;
 };
 
@@ -217,6 +217,34 @@ export const fetchVendorFeedsAndFollowersData = async ({
   const { data } = await axios.get(
     `${baseUrl}/admin/vendors/${id}/feeds-followers?limit=${limit}`
   );
-  console.log("bbbbbbbbbbbbb", data);
+  return data;
+};
+
+export const fetchVendorEscrowData = async ({
+  id,
+}: QueryFilterType): Promise<EscrowResType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/admin/vendors/${id}/escrow`);
+  return data;
+};
+
+export const fetchWorkerOverviewData = async ({
+  id,
+}: QueryFilterType): Promise<EscrowResType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/admin/workers/${id}/overview`);
+  return data;
+};
+
+export const fetchWorkerJobRequestData = async ({
+  id,
+}: QueryFilterType): Promise<EscrowResType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/workers/${id}/job-requests`
+  );
   return data;
 };

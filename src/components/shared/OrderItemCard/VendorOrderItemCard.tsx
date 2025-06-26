@@ -60,8 +60,11 @@ function VendorOrderItemCard({ data }: Props) {
         </Box>
       </Box>
       <Button
+        size="small"
         color="error"
         sx={{
+          minWidth: "93px",
+          fontSize: "12.4px",
           background: alpha(theme.palette.error.light, 0.05),
           color: "#000000",
           "&:hover": {

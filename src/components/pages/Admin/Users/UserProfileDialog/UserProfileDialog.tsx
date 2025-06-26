@@ -12,7 +12,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import AvatarFemale from "src/assets/images/avatar-female.png";
 import AvatarMale from "src/assets/images/avatar-male.png";
-import { currencyFormater, formatErrorMessage } from "src/utils";
+import { currencyFormater, formatErrorMessage, userRoles } from "src/utils";
 import QuickActions from "./QuickActions";
 import ActiveOrders from "./ActiveOrders";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
@@ -163,21 +163,29 @@ function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
                   value={selectedUser?.phone_number}
                 />
               </Grid>
-              <Grid size={sizing}>
-                <InfoBox title="Balance" value={currencyFormater(453256)} />
-              </Grid>
-              <Grid size={sizing}>
-                <InfoBox
-                  title={
-                    selectedUser?.role === "user" ? "Following" : "Followers"
-                  }
-                  value={"100"}
-                />
-              </Grid>
+              {data?.role !== userRoles.WORKER && (
+                <Grid size={sizing}>
+                  <InfoBox title="Balance" value={currencyFormater(453256)} />
+                </Grid>
+              )}
+              {data?.role !== userRoles.WORKER && (
+                <Grid size={sizing}>
+                  <InfoBox
+                    title={
+                      selectedUser?.role === userRoles.USER
+                        ? "Following"
+                        : "Followers"
+                    }
+                    value={"100"}
+                  />
+                </Grid>
+              )}
             </Grid>
           </Box>
         </Box>
-        {data?.role === "user" ? <ActiveOrders selectedUser={data} /> : null}
+        {data?.role === userRoles.USER ? (
+          <ActiveOrders selectedUser={data} />
+        ) : null}
         <QuickActions />
         <Divider />
         <Box sx={{ my: 1, display: "flex", gap: 1 }}>

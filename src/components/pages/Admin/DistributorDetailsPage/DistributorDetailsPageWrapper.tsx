@@ -12,6 +12,7 @@ import RateAndReviewsWrapper from "./RateAndReviews/RateAndReviewsWrapper";
 import FeedAndFollowersWrapper from "./FeedsAndFollowers/FeedAndFollowersWrapper";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
+import EscrowWrapper from "./Escrow/EscrowWrapper";
 
 export const usersPageTabOptionsObj = {
   OVERVIEW: "OVERVIEW",
@@ -112,6 +113,11 @@ const DistributorDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {
             <ErrorBoundary FallbackComponent={ErrorFallBack}>
               {selectedTab === usersPageTabOptionsObj.RATE_AND_REVIEWS ? (
                 <RateAndReviewsWrapper />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.ESCROW ? (
+                <EscrowWrapper />
               ) : null}
             </ErrorBoundary>
           </Grid>

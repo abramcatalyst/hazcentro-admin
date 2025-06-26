@@ -34,7 +34,7 @@ const blueStates = ["processing"];
 const renderStatus = (stat: string | boolean | number | null | undefined) => {
   const theme = useTheme();
 
-  if (typeof stat === "string" && redStates.includes(stat)) {
+  if (typeof stat === "string" && redStates.includes(stat?.toLowerCase())) {
     return (
       <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
         <Box
@@ -52,7 +52,7 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
     );
   }
 
-  if (typeof stat === "string" && yellowStates?.includes(stat)) {
+  if (typeof stat === "string" && yellowStates?.includes(stat?.toLowerCase())) {
     return (
       <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
         <Box
@@ -75,7 +75,7 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
       </Box>
     );
   }
-  if (typeof stat === "string" && blueStates?.includes(stat)) {
+  if (typeof stat === "string" && blueStates?.includes(stat?.toLowerCase())) {
     return (
       <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
         <Box
@@ -104,7 +104,7 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
   if (typeof stat === "boolean" && stat === false) {
     return <Chip color="error" label={"Not active"} size="small" />;
   }
-  if (typeof stat === "string" && greenStates?.includes(stat)) {
+  if (typeof stat === "string" && greenStates?.includes(stat?.toLowerCase())) {
     return (
       <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
         <Box

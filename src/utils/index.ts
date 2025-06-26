@@ -107,9 +107,9 @@ export const listItemSelectStyles = {
 };
 
 export const userRoles = {
-  PLAYER: "player",
-  INFLUENCER: "influencer",
-  VIRTUAL_AGENT: "virtualagent",
+  USER: "user",
+  WORKER: "worker",
+  VENDOR: "vendor",
   AGENT: "agent",
 };
 

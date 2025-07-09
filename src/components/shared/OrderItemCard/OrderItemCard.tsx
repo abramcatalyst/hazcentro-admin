@@ -58,7 +58,7 @@ function OrderItemCard({ data }: Props) {
             {data?.order_items[0]?.product?.name}
           </Typography>
           <Typography sx={{ fontSize: "13px", color: "GrayText" }}>
-            SKU:{data?.tracking_id}
+            SKU:{data?.order_items[0]?.product?.sku || ""}
           </Typography>
         </Box>
       </Box>

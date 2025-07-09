@@ -7,6 +7,12 @@ import { MdMoreVert } from "react-icons/md";
 import UserImage from "src/assets/tempimages/machine1.jpg";
 import FilterByBrandsSection from "./FilterByBrandsSection";
 import FilterByDistributorsSection from "./FilterByDistributorsSection";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchAdminDashboardSalesInsights } from "src/services/admins";
+import { formatErrorMessage } from "src/utils";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 type SalesByCardProps = {
   title: string;
   subTitle: string;
@@ -109,19 +115,42 @@ const optionsList = [
   {
     title: "Product Cat.",
     value: optionsObject.PRODUCT_CAT,
+    type: "product",
   },
   {
     title: "Brands",
     value: optionsObject.BRANDS,
+    type: "brand",
   },
   {
     title: "Distributors",
     value: optionsObject.DISTRIBUTORS,
+    type: "vendor",
   },
 ];
 const SalesBySectionWrapper = () => {
   const [selectedView, setSelectedView] = useState(optionsList[0].value);
+  const [queryFilter, setQueryFilter] = useState(optionsList[0].type);
   const theme = useTheme();
+
+  const { error, data, isError, isPending } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_DASHBOARD_SALES_INSIGHTS,
+      { queryFilter },
+    ],
+    queryFn: () => fetchAdminDashboardSalesInsights({ type: queryFilter }),
+  });
+
+  if (isPending) {
+    return <HalfScreenLoader />;
+  }
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+
+  console.log("ddddddddddddddd", data);
+
   return (
     <Box
       sx={{
@@ -169,6 +198,7 @@ const SalesBySectionWrapper = () => {
               }}
               onClick={() => {
                 setSelectedView(item.value);
+                setQueryFilter(item?.type);
               }}
             >
               {item?.title}{" "}

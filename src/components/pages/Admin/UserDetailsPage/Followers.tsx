@@ -13,7 +13,10 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import OrderSkeletonLoader from "src/components/shared/OrderSkeletonLoader/OrderSkeletonLoader";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
-const Followers = () => {
+type Props = {
+  title?: string;
+};
+const Followers = ({ title = "Followers" }: Props) => {
   const { id } = useParams();
 
   const { isPending, error, data, isError } = useQuery({
@@ -50,7 +53,7 @@ const Followers = () => {
         }}
       >
         <Typography sx={{ fontWeight: 500, fontSize: "16px" }}>
-          Followers ({currencyFormater(data?.total)})
+          {title} ({currencyFormater(data?.total)})
         </Typography>
       </Box>
       {data?.data && data?.data?.length > 0 ? (

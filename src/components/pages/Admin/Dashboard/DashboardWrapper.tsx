@@ -32,20 +32,20 @@ const DashboardWrapper = () => {
       <DashboardTop data={data} />
       <Box>
         <Grid container spacing={1}>
-          <Grid size={{ xs: 12, sm: 7, md: 8 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <BalanceSection />
           </Grid>
-          <Grid size={{ xs: 12, sm: 5, md: 4 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <SalesBySectionWrapper />
           </Grid>
         </Grid>
       </Box>
       <Box>
         <Grid container spacing={1}>
-          <Grid size={{ xs: 12, sm: 7, md: 8 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <LatestOrderTable />
           </Grid>
-          <Grid size={{ xs: 12, sm: 5, md: 4 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <TrendingProducts />
           </Grid>
         </Grid>

@@ -1,9 +1,19 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { currencyFormater } from "src/utils";
-import Machine from "src/assets/tempimages/machine1.jpg";
+import { currencyFormater, formatErrorMessage } from "src/utils";
+import DefaultImage from "src/assets/images/placeholder.png";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchAdminDashboardTrendingProducts } from "src/services/admins";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import OrderSkeletonLoader from "src/components/shared/OrderSkeletonLoader/OrderSkeletonLoader";
+import { TrendingProductType } from "src/types/products";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
-const TrendingProductCard = () => {
+type TrendingProductCardProps = {
+  data: TrendingProductType;
+};
+const TrendingProductCard = ({ data }: TrendingProductCardProps) => {
   return (
     <Box
       sx={{
@@ -29,7 +39,7 @@ const TrendingProductCard = () => {
           }}
         >
           <img
-            src={Machine}
+            src={data?.image_url || DefaultImage}
             alt="total sales"
             style={{
               width: "100%",
@@ -48,10 +58,10 @@ const TrendingProductCard = () => {
               fontSize: { xs: "14px", sm: "17px" },
             }}
           >
-            Ex Escavator
+            {data?.name}
           </Typography>
           <Typography fontSize="14px" color="#312F27B2">
-            SKU:6123HJD
+            SKU:{data?.sku}
           </Typography>
         </Box>
       </Box>
@@ -63,13 +73,33 @@ const TrendingProductCard = () => {
             color: "#312F27B2",
           }}
         >
-          &#8358;{currencyFormater(4320090)}
+          &#8358;{currencyFormater(data?.total_revenue_generated, 2)}
         </Typography>
       </Box>
     </Box>
   );
 };
 const TrendingProducts = () => {
+  const { error, data, isError, isPending } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_DASHBOARD_TRENDING_PRODUCTS,
+    ],
+    queryFn: () => fetchAdminDashboardTrendingProducts(),
+  });
+
+  if (isPending) {
+    return (
+      <Box>
+        <OrderSkeletonLoader />
+        <OrderSkeletonLoader />
+        <OrderSkeletonLoader />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
   return (
     <Box
       sx={{
@@ -82,10 +112,13 @@ const TrendingProducts = () => {
       <Typography variant="h6" gutterBottom sx={{ mt: 2, mb: 1 }}>
         Trending Products
       </Typography>
-      <TrendingProductCard />
-      <TrendingProductCard />
-      <TrendingProductCard />
-      <TrendingProductCard />
+      {data && data?.length > 0 ? (
+        data
+          ?.slice(0, 12)
+          ?.map((row) => <TrendingProductCard data={row} key={row?.id} />)
+      ) : (
+        <EmptyTable isSmall subText="No trending products" />
+      )}
     </Box>
   );
 };

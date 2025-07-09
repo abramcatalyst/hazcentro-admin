@@ -10,6 +10,7 @@ type Props = {
 };
 function VendorOrderItemCard({ data }: Props) {
   const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -55,7 +56,7 @@ function VendorOrderItemCard({ data }: Props) {
             {data?.items[0]?.product_name}
           </Typography>
           <Typography sx={{ fontSize: "13px", color: "GrayText" }}>
-            SKU:{data?.tracking_id}
+            SKU:{data?.items[0]?.sku}
           </Typography>
         </Box>
       </Box>

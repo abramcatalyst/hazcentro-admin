@@ -112,36 +112,23 @@ const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
               <Typography variant="body2">
                 Followers: {vendorOverviewData?.summary?.follower_count}{" "}
               </Typography>
-              <MdOutlineStar
-                style={{
-                  fontSize: "12px",
-                  color: `gold`,
-                }}
-              />
-              <MdOutlineStar
-                style={{
-                  fontSize: "12px",
-                  color: `gold`,
-                }}
-              />
-              <MdOutlineStar
-                style={{
-                  fontSize: "12px",
-                  color: `gold`,
-                }}
-              />
-              <MdOutlineStar
-                style={{
-                  fontSize: "12px",
-                  color: `gold`,
-                }}
-              />
-              <MdOutlineStar
-                style={{
-                  fontSize: "12px",
-                  color: `grey`,
-                }}
-              />
+
+              <Box sx={{ display: "flex", gap: 0.1, alignItems: "center" }}>
+                {[...Array(5).keys()].map((x, idx) => (
+                  <MdOutlineStar
+                    key={x}
+                    style={{
+                      fontSize: "12px",
+                      color:
+                        idx <
+                        vendorOverviewData?.summary?.review_stats
+                          ?.average_rating
+                          ? `gold`
+                          : `grey`,
+                    }}
+                  />
+                ))}
+              </Box>
             </Box>{" "}
             <Typography
               sx={{

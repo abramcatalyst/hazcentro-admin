@@ -54,3 +54,14 @@ export type ProductFromCategoryType = {
   vendor: VendorType;
   media: MediaType[];
 };
+
+export type TrendingProductType = {
+  id: string;
+  name: string;
+  category: string;
+  sku: string;
+  price: number;
+  total_units_sold: number;
+  total_revenue_generated: string;
+  image_url: string;
+};

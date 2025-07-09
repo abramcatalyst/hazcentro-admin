@@ -13,7 +13,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import AvatarFemaleImg from "src/assets/images/avatar-female.png";
 import AvatarMaleImg from "src/assets/images/avatar-male.png";
-import { formatErrorMessage, GLOBAL_COLORS } from "src/utils";
+import { formatErrorMessage } from "src/utils";
 import QuickActions from "./QuickActions";
 import ActiveOrders from "./ActiveOrders";
 import { MdOutlineStar } from "react-icons/md";
@@ -138,17 +138,18 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
                 }}
               >
                 <Typography sx={{ color: "GrayText" }} variant="body2">
-                  Followers:100.
+                  Followers:{data?.summary?.follower_count}.
                 </Typography>
                 <Box sx={{ display: "flex", gap: 0.1, alignItems: "center" }}>
-                  {[...Array(5).keys()].map((x) => (
+                  {[...Array(5).keys()].map((x, idx) => (
                     <MdOutlineStar
                       key={x}
                       style={{
+                        fontSize: "12px",
                         color:
-                          x < 3
-                            ? GLOBAL_COLORS.YELLOW_500
-                            : theme.palette.grey[500],
+                          idx < data?.summary?.review_stats?.average_rating
+                            ? `gold`
+                            : `grey`,
                       }}
                     />
                   ))}

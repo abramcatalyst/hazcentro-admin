@@ -169,10 +169,10 @@ const DashboardTop = ({ data }: Props) => {
         <Grid size={itemSizing}>
           <StatsCard
             kind="distributor"
-            title="Total Sales"
+            title="Total Distributor"
             value={data?.total_distributors?.count}
             trend={`${data?.total_distributors?.change_pct}%`}
-            decimalPoint={2}
+            decimalPoint={0}
           />
         </Grid>
       </Grid>

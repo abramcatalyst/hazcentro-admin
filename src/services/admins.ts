@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AdminDashboardStatsType } from "src/types/admin";
 import { QueryFilterType } from "src/types/filters";
+import { TrendingProductType } from "src/types/products";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 import { AdminType } from "src/utils/types";
 
@@ -40,3 +41,26 @@ export const fetchAdminDashboardOverviewData =
 
     return data?.data;
   };
+
+export const fetchAdminDashboardSalesInsights = async ({
+  type,
+}: QueryFilterType): Promise<AdminDashboardStatsType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/dashboard/sales-insights?type=${type}`
+  );
+
+  return data?.data;
+};
+export const fetchAdminDashboardTrendingProducts = async (): Promise<
+  TrendingProductType[]
+> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/dashboard/trending-products`
+  );
+
+  return data?.data;
+};

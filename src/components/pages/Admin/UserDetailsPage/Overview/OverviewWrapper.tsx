@@ -21,7 +21,7 @@ const OverviewWrapper = ({ data }: Props) => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <ActiveOrders />
-          <Followers />
+          <Followers title={"Following"} />
         </Grid>
       </Grid>
     </Box>

@@ -18,47 +18,21 @@ import { useQuery } from "@tanstack/react-query";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { fetchFAQs } from "src/services/faqs";
 import { FAQType } from "src/types/faqs";
-import { tableMenuStyles } from "src/utils";
+import { formatErrorMessage, tableMenuStyles } from "src/utils";
 import EditFAQDialog from "./EditFAQDialog";
 import AddFAQsDialog from "./AddFAQsDialog";
-
-const faqs = [
-  {
-    id: 1,
-    title: "What payment methods do you accept?",
-    content:
-      "We accept Visa, MasterCard, American Express, PayPal, Apple Pay, and Google Pay. All transactions are secured with SSL encryption.",
-  },
-  {
-    id: 2,
-    title: "How long does shipping take?",
-    content:
-      "Standard shipping typically takes 5–7 business days. Expedited options (2–3 business days) and overnight shipping are also available at checkout.",
-  },
-  {
-    id: 3,
-    title: "What is your return policy?",
-    content:
-      "You can return most items within 30 days of delivery for a full refund. Items must be in original condition and packaging. See our Returns page for full details.",
-  },
-  {
-    id: 4,
-    title: "How can I track my order?",
-    content:
-      "Once your order ships, you’ll receive an email with a tracking number and link. You can also log in to your account and view ‘Order History’ to see real-time updates.",
-  },
-  {
-    id: 5,
-    title: "Do you ship internationally?",
-    content:
-      "Yes, we ship to select countries worldwide. International shipping rates and delivery times vary by destination—please check our Shipping Info page for details.",
-  },
-];
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 
 const FAQsTable = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openAddFAQs, setOpenAddFAQs] = useState(false);
   const [selected, setSelected] = useState<FAQType | null>(null);
+  const { isError, error, isLoading, data } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FAQS, {}],
+    queryFn: () => fetchFAQs({}),
+  });
+
   const handleOpenEdit = (item: FAQType) => {
     setSelected(item);
     setOpenEdit(true);
@@ -73,12 +47,13 @@ const FAQsTable = () => {
   const handleCloseAddFAQ = () => {
     setOpenAddFAQs(false);
   };
-  const { data } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FAQS, {}],
-    queryFn: () => fetchFAQs({}),
-  });
 
-  console.log("bbbbbbbbbbbbbbb", data);
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  if (isLoading) {
+    return <HalfScreenLoader />;
+  }
   return (
     <Box sx={{ background: "#ffffff", p: 1, borderRadius: "20px", mb: 1 }}>
       <Box
@@ -114,11 +89,11 @@ const FAQsTable = () => {
         <AddFAQsDialog open={openAddFAQs} handleClose={handleCloseAddFAQ} />
       )}
       <Box>
-        {data?.data?.length === 0 ? (
+        {data?.length === 0 ? (
           <EmptyTable subText="No FAQs found" />
         ) : (
           <Box>
-            {faqs?.map((row) => {
+            {data?.map((row) => {
               return (
                 <Accordion key={row?.id}>
                   <AccordionSummary>
@@ -130,7 +105,7 @@ const FAQsTable = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography component="span">{row?.title}</Typography>
+                      <Typography component="span">{row?.question}</Typography>
                       <Box>
                         <IconButton>
                           <ExpandMoreIcon />
@@ -167,7 +142,7 @@ const FAQsTable = () => {
                       </Box>
                     </Box>
                   </AccordionSummary>
-                  <AccordionDetails>{row?.content}</AccordionDetails>
+                  <AccordionDetails>{row?.answer}</AccordionDetails>
                 </Accordion>
               );
             })}

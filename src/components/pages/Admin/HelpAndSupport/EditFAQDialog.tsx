@@ -41,8 +41,8 @@ function EditFAQDialog({ open, selected, handleClose }: Props) {
 
   const queryClient = useQueryClient();
   let initialValues = {
-    question: selected?.title || "",
-    answer: selected?.content || "",
+    question: selected?.question || "",
+    answer: selected?.answer || "",
   };
   const formik = useFormik({
     initialValues,
@@ -52,7 +52,10 @@ function EditFAQDialog({ open, selected, handleClose }: Props) {
 
       try {
         helpers.setSubmitting(true);
-        const res = await axios.post(`${baseUrl}/admin/faqs`, values);
+        const res = await axios.put(
+          `${baseUrl}/admin/faqs/${selected?.id}`,
+          values
+        );
 
         await queryClient.invalidateQueries({
           queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FAQS],

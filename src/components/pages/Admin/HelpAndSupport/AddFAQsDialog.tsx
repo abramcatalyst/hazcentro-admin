@@ -34,7 +34,12 @@ type Props = {
   open: boolean;
   handleClose: () => void;
 };
-
+// {
+//     "question": "What is your shipping policy?",
+//     "answer": "We offer standard and express shipping options...",
+//     "order": 1,
+//     "is_active": true
+// }
 function AddFAQsDialog({ open, handleClose }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -43,6 +48,8 @@ function AddFAQsDialog({ open, handleClose }: Props) {
   let initialValues = {
     question: "",
     answer: "",
+    order: 1,
+    is_active: true,
   };
   const formik = useFormik({
     initialValues,
@@ -52,8 +59,7 @@ function AddFAQsDialog({ open, handleClose }: Props) {
       try {
         helpers.setSubmitting(true);
         const res = await axios.post(`${baseUrl}/admin/faqs`, values);
-        // const res = await axios.post(`${baseUrl}/auth/login`, values);
-        // console.log("xxxxxxxxxxxxxxxxxxxxxxx", res?.data?.access_token);
+        console.log("xxxxxxxxxxxxxxxxxxxxxxx", res?.data);
         await queryClient.invalidateQueries({
           queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FAQS],
         });
@@ -116,11 +122,11 @@ function AddFAQsDialog({ open, handleClose }: Props) {
             <FormControl fullWidth sx={{ my: 1 }}>
               <InputLabel>Enter Question</InputLabel>
               <OutlinedInput
-                name="name"
+                label="Enter Question"
+                name="question"
                 value={values.question}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                label="Enter Question"
               />
               {touched.question && errors.question && (
                 <FormHelperText error>{errors.question}</FormHelperText>
@@ -129,13 +135,13 @@ function AddFAQsDialog({ open, handleClose }: Props) {
             <FormControl fullWidth sx={{ my: 1 }}>
               <InputLabel>Enter the Answer</InputLabel>
               <OutlinedInput
+                label="Enter the Answer"
                 multiline
                 rows={6}
                 name="answer"
                 value={values.answer}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                label="Enter the Answer"
               />
               {touched.answer && errors.answer && (
                 <FormHelperText error>{errors.answer}</FormHelperText>

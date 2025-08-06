@@ -3,6 +3,9 @@ import Box from "@mui/material/Box";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import HelpAndSupportTabs from "./HelpAndSupportTabs";
 import FAQsTable from "./FAQsTable";
+import ReturnPolicyWrapper from "./ReturnPolicyWrapper";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 export const tabOptionsObj = {
   FAQS: "FAQS",
@@ -47,9 +50,14 @@ const HelpAndSupportWrapper = () => {
           setSelectedTab={setSelectedTab}
         />
       </Box>
-      <Box>
-        <FAQsTable />
-      </Box>
+      <Box>{selectedTab === tabOptionsObj.FAQS && <FAQsTable />}</Box>
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <Box>
+          {selectedTab === tabOptionsObj.RETURN_POLICY && (
+            <ReturnPolicyWrapper />
+          )}
+        </Box>
+      </ErrorBoundary>
     </Box>
   );
 };

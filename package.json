@@ -21,6 +21,7 @@
     "d3-scale": "^4.0.2",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
+    "jodit-react": "^5.2.19",
     "jwt-decode": "^4.0.0",
     "mapbox-gl": "^3.10.0",
     "material-ui-popup-state": "^5.3.3",

@@ -7,4 +7,12 @@ export type SettingsType = {
     created_at: string;
     updated_at: string;
   };
+  payout_preference: {
+    id: 1;
+    key: "payout_preference";
+    value: string;
+    type: "string";
+    created_at: string;
+    updated_at: string;
+  };
 };

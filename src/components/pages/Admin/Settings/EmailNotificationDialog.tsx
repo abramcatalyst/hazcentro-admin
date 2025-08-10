@@ -47,13 +47,13 @@ function EmailNotificationDialog({ open, data, handleClose }: Props) {
   let initialValues = {
     email: "",
   };
-  const emailList = useMemo(() => {
+  let emailList: string[] = useMemo(() => {
     let items: string[] = [];
     if (data && data?.admin_email_for_alerts) {
       items = safeJSONParse(data?.admin_email_for_alerts?.value) || [];
     }
     return items;
-  }, [data]);
+  }, [data, open]);
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,

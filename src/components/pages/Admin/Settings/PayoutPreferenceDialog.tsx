@@ -1,4 +1,3 @@
-import { useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -9,9 +8,9 @@ import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import FormLabel from "@mui/material/FormLabel";
-import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
 import { useTheme } from "@mui/material/styles";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
@@ -22,7 +21,6 @@ import {
   baseUrl,
   formatErrorMessage,
   formatSuccessMessage,
-  safeJSONParse,
   setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
@@ -37,31 +35,28 @@ type Props = {
   data: SettingsType | null;
   handleClose: () => void;
 };
-
+const options = [
+  { title: "Weekly (saturdays)", value: "weekly (saturdays)" },
+  { title: "Daily (After 24 hrs)", value: "daily (after 24 hrs)" },
+  { title: "Monthly", value: "monthly" },
+];
 function PayoutPreferenceDialog({ open, data, handleClose }: Props) {
-  const [submitting, setIsSubmitting] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const queryClient = useQueryClient();
   let initialValues = {
-    email: "",
+    schedule: data?.payout_preference?.value || "",
   };
-  const emailList = useMemo(() => {
-    let items: string[] = [];
-    if (data && data?.admin_email_for_alerts) {
-      items = safeJSONParse(data?.admin_email_for_alerts?.value) || [];
-    }
-    return items;
-  }, [data]);
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       setDefaultHeaders();
       let payload = {
-        key: "admin_email_for_alerts",
-        value: [...emailList, values.email],
+        key: "payout_preference",
+        value: values.schedule,
       };
       try {
         helpers.setSubmitting(true);
@@ -81,7 +76,7 @@ function PayoutPreferenceDialog({ open, data, handleClose }: Props) {
       }
     },
     validationSchema: yup.object().shape({
-      email: yup.string().required().label("Email"),
+      schedule: yup.string().required().label("Schedule"),
     }),
   });
 
@@ -95,31 +90,6 @@ function PayoutPreferenceDialog({ open, data, handleClose }: Props) {
     isSubmitting,
   } = formik;
 
-  const handleRemoveEmail = async (val: string) => {
-    setDefaultHeaders();
-    const emailValues = emailList?.filter((item) => item !== val) || [];
-    let payload = {
-      key: "admin_email_for_alerts",
-      value: emailValues,
-    };
-    try {
-      setIsSubmitting(true);
-      const res = await axios.put(`${baseUrl}/admin/setting`, payload);
-
-      await queryClient.invalidateQueries({
-        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SETTINGS],
-      });
-      toast.success(formatSuccessMessage(res?.data));
-      // handleClose();
-    } catch (error) {
-      setIsSubmitting(false);
-      let errMsg = formatErrorMessage(error);
-
-      return toast.error(errMsg);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
   return (
     <StyledDialog
       fullWidth
@@ -156,71 +126,25 @@ function PayoutPreferenceDialog({ open, data, handleClose }: Props) {
         <Box component={"form"} onSubmit={handleSubmit}>
           <Box>
             <FormControl size="small" fullWidth sx={{ my: 1 }}>
-              <FormLabel>Add Email</FormLabel>
-              <OutlinedInput
-                placeholder="Enter the email address here"
-                name="email"
-                type="email"
-                value={values.email}
+              <FormLabel>Choose payout schedule</FormLabel>
+              <Select
+                name="schedule"
+                value={values.schedule}
                 onChange={handleChange}
                 onBlur={handleBlur}
-              />
-              {touched.email && errors.email && (
-                <FormHelperText error>{errors.email}</FormHelperText>
+              >
+                {options.map((item) => (
+                  <MenuItem key={item?.value} value={item?.value}>
+                    {item?.title}
+                  </MenuItem>
+                ))}
+              </Select>
+              {touched.schedule && errors.schedule && (
+                <FormHelperText error>{errors.schedule}</FormHelperText>
               )}
             </FormControl>
           </Box>
-          {emailList && emailList?.length > 0 ? (
-            <Box>
-              <Typography sx={{ fontSize: "14px", fontWeight: 500, my: 1 }}>
-                Added Emails
-              </Typography>
-              <Box
-                sx={{
-                  my: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: 1,
-                }}
-              >
-                {emailList?.map((item) => (
-                  <Box
-                    key={item}
-                    sx={{
-                      border: `1px solid #eeeeee`,
-                      px: 1,
-                      py: 0.3,
-                      display: "flex",
-                      gap: 0.7,
-                      alignItems: "center",
-                      borderRadius: "6px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "14px" }}>{item}</Typography>
-                    <IconButton
-                      disabled={submitting}
-                      size="small"
-                      color="error"
-                      onClick={() => {
-                        handleRemoveEmail(item);
-                      }}
-                    >
-                      <RemoveCircleOutlineRoundedIcon
-                        style={{ fontSize: "17px" }}
-                      />
-                    </IconButton>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          ) : (
-            <Box>
-              <Typography sx={{ textAlign: "center", my: 2 }}>
-                No emails added yet
-              </Typography>
-            </Box>
-          )}
+
           <Box
             sx={{ my: 3, display: "flex", gap: 1, justifyContent: "flex-end" }}
           >
@@ -231,7 +155,7 @@ function PayoutPreferenceDialog({ open, data, handleClose }: Props) {
               sx={{
                 minWidth: { xs: "150px", sm: "184px" },
               }}
-              disabled={isSubmitting || submitting}
+              disabled={isSubmitting}
             >
               {isSubmitting ? "Processing" : "Submit"}
             </Button>

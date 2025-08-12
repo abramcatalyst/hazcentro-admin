@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Grid from "@mui/material/Grid2";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -14,11 +14,14 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
+import FormLabel from "@mui/material/FormLabel";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
 import { useTheme } from "@mui/material/styles";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
@@ -27,25 +30,26 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import {
   baseUrl,
+  convertStringToBoolean,
   formatErrorMessage,
   formatSuccessMessage,
-  safeJSONParse,
   setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import CreateItemNotification from "src/components/shared/CreateItemNotification/CreateItemNotification";
-import { SettingsType } from "src/types/settings";
 import dayjs, { Dayjs } from "dayjs";
 import { fetchCategories } from "src/services/categories";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import CustomTab from "src/components/shared/CustomTab/CustomTab";
+import ManageDiscounts from "./ManageDiscounts";
+import { SettingsDiscountType } from "src/types/settings";
+import EditDiscountSetting from "./EditDiscountSetting";
 
 type Props = {
   open: boolean;
-  data: SettingsType | null;
   handleClose: () => void;
 };
 const sizing = { xs: 12, sm: 6 };
@@ -61,11 +65,32 @@ const MenuProps = {
   },
 };
 
-function DiscountSettingDialog({ open, data, handleClose }: Props) {
-  const [submitting, setIsSubmitting] = useState(false);
+const tabOptions = [
+  { title: "Add Discount", value: "ADD" },
+  { title: "Manage Discount", value: "MANAGE" },
+];
+function DiscountSettingDialog({ open, handleClose }: Props) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState(tabOptions[0].value);
+  const [showEditDiscount, setShowEditDiscount] = useState(false);
+  const [selectedDiscount, setSelectedDiscount] =
+    useState<SettingsDiscountType | null>(null);
+
+  const handleClick = (value: string) => {
+    setSelectedTab(value);
+  };
+
+  const handleOpenEditDiscount = (value: SettingsDiscountType) => {
+    setSelectedDiscount(value);
+    setShowEditDiscount(true);
+  };
+
+  const handleCloseEditDiscount = () => {
+    setSelectedDiscount(null);
+    setShowEditDiscount(false);
+  };
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -78,7 +103,7 @@ function DiscountSettingDialog({ open, data, handleClose }: Props) {
     isLoading,
     data: categoryData,
   } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SETTINGS, {}],
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CATEGORIES, {}],
     queryFn: () => fetchCategories({ limit: 1000, page: 1 }),
   });
 
@@ -98,38 +123,52 @@ function DiscountSettingDialog({ open, data, handleClose }: Props) {
     name: "",
     rate: 1,
     start_date: "",
-    end_date: "2025-08-31",
+    end_date: "",
     applicable_categories: [],
-    is_active: true,
-    override_vendor_discount: false,
+    is_active: "true",
+    override_vendor_discount: "false",
     description: "",
   };
-  const emailList = useMemo(() => {
-    let items: string[] = [];
-    if (data && data?.admin_email_for_alerts) {
-      items = safeJSONParse(data?.admin_email_for_alerts?.value) || [];
-    }
-    return items;
-  }, [data]);
+
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
       setDefaultHeaders();
+      let categories = [];
 
+      // categoryData?.data.map((item) => {
+      //   if(item?.name === )
+      // })
+      if (categoryData) {
+        for (let index = 0; index < categoryData?.data?.length; index++) {
+          const element = categoryData?.data[index];
+          if (element.name === selectedCategories[index]) {
+            categories.push(element?.id);
+          }
+        }
+      }
+      const payload = {
+        ...values,
+        is_active: convertStringToBoolean(values.is_active),
+        override_vendor_discount: convertStringToBoolean(
+          values.override_vendor_discount
+        ),
+        applicable_categories: categories,
+      };
       try {
         helpers.setSubmitting(true);
-        const res = await axios.put(
+        const res = await axios.post(
           `${baseUrl}/admin/category-discounts`,
-          values
+          payload
         );
 
         await queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SETTINGS],
+          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SETTINGS_DISCOUNTS],
         });
         toast.success(formatSuccessMessage(res?.data));
         helpers.resetForm();
-        // handleClose();
+        handleClose();
       } catch (error) {
         helpers.setSubmitting(false);
         let errMsg = formatErrorMessage(error);
@@ -138,7 +177,11 @@ function DiscountSettingDialog({ open, data, handleClose }: Props) {
       }
     },
     validationSchema: yup.object().shape({
-      email: yup.string().required().label("Email"),
+      name: yup.string().required().label("Name"),
+      rate: yup.number().positive().required().label("Rate"),
+      start_date: yup.string().required().label("Start date"),
+      end_date: yup.string().required().label("End date"),
+      description: yup.string().required().label("Description"),
     }),
   });
 
@@ -153,35 +196,8 @@ function DiscountSettingDialog({ open, data, handleClose }: Props) {
     setFieldValue,
   } = formik;
 
-  const handleRemoveEmail = async (val: string) => {
-    setDefaultHeaders();
-    const emailValues = emailList?.filter((item) => item !== val) || [];
-    let payload = {
-      key: "admin_email_for_alerts",
-      value: emailValues,
-    };
-    try {
-      setIsSubmitting(true);
-      const res = await axios.put(
-        `${baseUrl}/admin/category-discounts/9f8bcc21-d21d-479d-9b2d-49158f17ee85`,
-        payload
-      );
-
-      await queryClient.invalidateQueries({
-        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SETTINGS],
-      });
-      toast.success(formatSuccessMessage(res?.data));
-      // handleClose();
-    } catch (error) {
-      setIsSubmitting(false);
-      let errMsg = formatErrorMessage(error);
-
-      return toast.error(errMsg);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
   const DATE_FORMAT = "YYYY-MM-DD";
+  console.log("selectedCategories", selectedCategories);
   return (
     <StyledDialog
       fullWidth
@@ -212,193 +228,254 @@ function DiscountSettingDialog({ open, data, handleClose }: Props) {
         </Box>
       </DialogActions>
       <DialogContent>
-        {isError ? (
-          <HalfScreenError text={formatErrorMessage(error)} />
-        ) : isLoading ? (
-          <HalfScreenLoader />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box sx={{ pl: 2, display: "flex", gap: 1, mb: 2 }}>
+            {tabOptions.map((item) => {
+              return (
+                <CustomTab
+                  size="small"
+                  key={item.value}
+                  handleClick={handleClick}
+                  value={item.value}
+                  title={item.title}
+                  active={item.value === selectedTab}
+                />
+              );
+            })}
+          </Box>
+        </Box>
+        {showEditDiscount && selectedDiscount ? (
+          <EditDiscountSetting
+            selectedDiscount={selectedDiscount}
+            handleClose={handleCloseEditDiscount}
+          />
         ) : (
           <Box>
-            <Box>
-              <CreateItemNotification text="Note: All mail message will be sent to the official Hazcentro email “hazcetro@mail.com. You can change this setting below" />
-            </Box>
-            <Box component={"form"} onSubmit={handleSubmit}>
+            {selectedTab === "ADD" && (
               <Box>
-                <Grid container spacing={1}>
-                  <Grid size={{ xs: 12 }}>
-                    <FormControl size="small" fullWidth sx={{ my: 1 }}>
-                      <InputLabel>Name</InputLabel>
-                      <OutlinedInput
-                        label="Name"
-                        name="name"
-                        value={values.name}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {touched.name && errors.name && (
-                        <FormHelperText error>{errors.name}</FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                  <Grid size={{ xs: 12 }}>
-                    <FormControl size="small" fullWidth>
-                      <InputLabel>Categories</InputLabel>
-                      <Select
-                        multiple
-                        value={selectedCategories}
-                        onChange={handleChangeCategory}
-                        input={
-                          <OutlinedInput label="Categories" size="small" />
-                        }
-                        renderValue={(selected) => selected.join(", ")}
-                        MenuProps={MenuProps}
-                      >
-                        {categoryData?.data.map((item) => (
-                          <MenuItem key={item?.name} value={item?.name}>
-                            <Checkbox
-                              size="small"
-                              checked={selectedCategories.includes(item?.name)}
-                            />
-                            <ListItemText primary={item?.name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid size={sizing}>
-                    <FormControl fullWidth>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="Start date"
-                          value={startDate}
-                          slotProps={{ textField: { size: "small" } }}
-                          onChange={(value) => {
-                            setStartDate(value);
-                            if (value) {
-                              setFieldValue(
-                                "start_date",
-                                dayjs(value).format(DATE_FORMAT)
-                              );
-                            }
-                          }}
-                        />
-                      </LocalizationProvider>
-                    </FormControl>
-                  </Grid>
-                  <Grid size={sizing}>
-                    <FormControl fullWidth>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="End date"
-                          value={endDate}
-                          slotProps={{ textField: { size: "small" } }}
-                          onChange={(value) => {
-                            setEndDate(value);
-                            if (value) {
-                              setFieldValue(
-                                "end_date",
-                                dayjs(value).format(DATE_FORMAT)
-                              );
-                            }
-                          }}
-                        />
-                      </LocalizationProvider>
-                    </FormControl>
-                  </Grid>
-                  <Grid size={{ xs: 12 }}>
-                    <FormControl size="small" fullWidth sx={{ my: 1 }}>
-                      <InputLabel>Description</InputLabel>
-                      <OutlinedInput
-                        label="Description"
-                        name="description"
-                        multiline
-                        rows={3}
-                        value={values.description}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {touched.description && errors.description && (
-                        <FormHelperText error>
-                          {errors.description}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Box>
-              {emailList && emailList?.length > 0 ? (
-                <Box>
-                  <Typography sx={{ fontSize: "14px", fontWeight: 500, my: 1 }}>
-                    Added Emails
-                  </Typography>
-                  <Box
-                    sx={{
-                      my: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                      gap: 1,
-                    }}
-                  >
-                    {emailList?.map((item) => (
+                {isError ? (
+                  <HalfScreenError text={formatErrorMessage(error)} />
+                ) : isLoading ? (
+                  <HalfScreenLoader />
+                ) : (
+                  <Box>
+                    <Box component={"form"} onSubmit={handleSubmit}>
+                      <Box>
+                        <Grid container spacing={1}>
+                          <Grid size={{ xs: 12 }}>
+                            <FormControl size="small" fullWidth sx={{ my: 1 }}>
+                              <InputLabel>Name</InputLabel>
+                              <OutlinedInput
+                                label="Name"
+                                name="name"
+                                value={values.name}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                              {touched.name && errors.name && (
+                                <FormHelperText error>
+                                  {errors.name}
+                                </FormHelperText>
+                              )}
+                            </FormControl>
+                          </Grid>
+                          <Grid size={{ xs: 12 }}>
+                            <FormControl size="small" fullWidth sx={{ my: 1 }}>
+                              <InputLabel>Discount Rate(%)</InputLabel>
+                              <OutlinedInput
+                                label="Discount Rate(%)"
+                                name="rate"
+                                value={values.rate}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                              {touched.rate && errors.rate && (
+                                <FormHelperText error>
+                                  {errors.rate}
+                                </FormHelperText>
+                              )}
+                            </FormControl>
+                          </Grid>
+                          <Grid size={{ xs: 12 }}>
+                            <FormControl size="small" fullWidth>
+                              <InputLabel>Categories</InputLabel>
+                              <Select
+                                multiple
+                                value={selectedCategories}
+                                onChange={handleChangeCategory}
+                                input={
+                                  <OutlinedInput
+                                    label="Categories"
+                                    size="small"
+                                  />
+                                }
+                                renderValue={(selected) => selected.join(", ")}
+                                MenuProps={MenuProps}
+                              >
+                                {categoryData &&
+                                  categoryData?.data.map((item) => (
+                                    <MenuItem
+                                      key={item?.name}
+                                      value={item?.name}
+                                    >
+                                      <Checkbox
+                                        size="small"
+                                        checked={selectedCategories.includes(
+                                          item?.name
+                                        )}
+                                      />
+                                      <ListItemText primary={item?.name} />
+                                    </MenuItem>
+                                  ))}
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                          <Grid size={sizing}>
+                            <FormControl fullWidth>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                  label="Start date"
+                                  value={startDate}
+                                  slotProps={{ textField: { size: "small" } }}
+                                  onChange={(value) => {
+                                    setStartDate(value);
+                                    if (value) {
+                                      setFieldValue(
+                                        "start_date",
+                                        dayjs(value).format(DATE_FORMAT)
+                                      );
+                                    }
+                                  }}
+                                />
+                              </LocalizationProvider>
+                            </FormControl>
+                          </Grid>
+                          <Grid size={sizing}>
+                            <FormControl fullWidth>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                  label="End date"
+                                  value={endDate}
+                                  slotProps={{ textField: { size: "small" } }}
+                                  onChange={(value) => {
+                                    setEndDate(value);
+                                    if (value) {
+                                      setFieldValue(
+                                        "end_date",
+                                        dayjs(value).format(DATE_FORMAT)
+                                      );
+                                    }
+                                  }}
+                                />
+                              </LocalizationProvider>
+                            </FormControl>
+                          </Grid>
+                          <Grid size={sizing}>
+                            <FormControl size="small" fullWidth>
+                              <FormLabel>Status</FormLabel>
+                              <RadioGroup
+                                row
+                                name="is_active"
+                                value={values.is_active}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              >
+                                <FormControlLabel
+                                  value="true"
+                                  control={<Radio size="small" />}
+                                  label="Active"
+                                />
+                                <FormControlLabel
+                                  value="false"
+                                  control={<Radio size="small" />}
+                                  label="Not Active"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                          </Grid>
+                          <Grid size={sizing}>
+                            <FormControl size="small" fullWidth>
+                              <FormLabel>Overide vendor discount</FormLabel>
+                              <RadioGroup
+                                row
+                                name="override_vendor_discount"
+                                value={values.override_vendor_discount}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              >
+                                <FormControlLabel
+                                  value="true"
+                                  control={<Radio size="small" />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="false"
+                                  control={<Radio size="small" />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                          </Grid>
+                          <Grid size={{ xs: 12 }}>
+                            <FormControl size="small" fullWidth sx={{ my: 1 }}>
+                              <InputLabel>Description</InputLabel>
+                              <OutlinedInput
+                                label="Description"
+                                name="description"
+                                multiline
+                                rows={3}
+                                value={values.description}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                              {touched.description && errors.description && (
+                                <FormHelperText error>
+                                  {errors.description}
+                                </FormHelperText>
+                              )}
+                            </FormControl>
+                          </Grid>
+                        </Grid>
+                      </Box>
+
                       <Box
-                        key={item}
                         sx={{
-                          border: `1px solid #eeeeee`,
-                          px: 1,
-                          py: 0.3,
+                          my: 3,
                           display: "flex",
-                          gap: 0.7,
-                          alignItems: "center",
-                          borderRadius: "6px",
+                          gap: 1,
+                          justifyContent: "flex-end",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px" }}>
-                          {item}
-                        </Typography>
-                        <IconButton
-                          disabled={submitting}
-                          size="small"
-                          color="error"
-                          onClick={() => {
-                            handleRemoveEmail(item);
+                        <Button
+                          variant="contained"
+                          type="submit"
+                          size="large"
+                          sx={{
+                            minWidth: { xs: "150px", sm: "184px" },
                           }}
+                          disabled={isSubmitting}
                         >
-                          <RemoveCircleOutlineRoundedIcon
-                            style={{ fontSize: "17px" }}
-                          />
-                        </IconButton>
+                          {isSubmitting ? "Processing" : "Submit"}
+                        </Button>
                       </Box>
-                    ))}
+                    </Box>
                   </Box>
-                </Box>
-              ) : (
-                <Box>
-                  <Typography sx={{ textAlign: "center", my: 2 }}>
-                    No emails added yet
-                  </Typography>
-                </Box>
-              )}
-              <Box
-                sx={{
-                  my: 3,
-                  display: "flex",
-                  gap: 1,
-                  justifyContent: "flex-end",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  type="submit"
-                  size="large"
-                  sx={{
-                    minWidth: { xs: "150px", sm: "184px" },
-                  }}
-                  disabled={isSubmitting || submitting}
-                >
-                  {isSubmitting ? "Processing" : "Submit"}
-                </Button>
+                )}
               </Box>
-            </Box>
+            )}
+            {selectedTab === "MANAGE" && (
+              <ManageDiscounts
+                selectedDiscount={selectedDiscount}
+                setSelectedDiscount={setSelectedDiscount}
+                handleOpenEditDiscount={handleOpenEditDiscount}
+              />
+            )}
           </Box>
         )}
       </DialogContent>

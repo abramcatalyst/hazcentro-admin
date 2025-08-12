@@ -52,6 +52,7 @@ export default function GeneralConfirmDialog({
             sx={dialogButtonStyles}
             variant="contained"
             onClick={handleSubmit}
+            disabled={isSubmitting}
           >
             {isSubmitting ? "Processing" : "Yes"}
           </Button>
@@ -60,6 +61,7 @@ export default function GeneralConfirmDialog({
             variant="contained"
             color="error"
             onClick={handleCloseModal}
+            disabled={isSubmitting}
           >
             No
           </Button>

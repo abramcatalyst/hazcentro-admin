@@ -16,3 +16,17 @@ export type SettingsType = {
     updated_at: string;
   };
 };
+
+export type SettingsDiscountType = {
+  id: string;
+  name: string;
+  rate: string;
+  start_date: string;
+  end_date: string;
+  applicable_categories: string[];
+  is_active: boolean;
+  override_vendor_discount: boolean;
+  description: string;
+  created_at: string;
+  updated_at: string;
+};

@@ -140,56 +140,57 @@ const SettingsWrapper = () => {
   console.log(handleOpenCurrencyDialog, handleOpenPreferenceDialog);
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 1,
-          flexWrap: "wrap",
-          mb: 2,
-        }}
-      >
-        <AppHeader text="Settings" />
-      </Box>
-      {openEmailNotificationDialog && (
-        <EmailNotificationDialog
-          open={openEmailNotificationDialog}
-          data={data || null}
-          handleClose={handleCloseEmailDialog}
-        />
-      )}
-      {openDiscountSetting && (
-        <DiscountSettingDialog
-          open={openDiscountSetting}
-          data={data || null}
-          handleClose={handleCloseDiscountDialog}
-        />
-      )}
-      {openPreferenceDialog && (
-        <PayoutPreferenceDialog
-          open={openPreferenceDialog}
-          data={data || null}
-          handleClose={handleClosePreferenceDialog}
-        />
-      )}
-      {openSubscriptionSetting && (
-        <SubscriptionPlanDialog
-          open={openSubscriptionSetting}
-          data={data || null}
-          handleClose={handleCloseSubscriptionDialog}
-        />
-      )}
-      {openCurrencySetting && (
-        <CurrencySettingDialog
-          open={openCurrencySetting}
-          data={data || null}
-          handleClose={handleCloseCurrencyDialog}
-        />
-      )}
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 1,
+            flexWrap: "wrap",
+            mb: 2,
+          }}
+        >
+          <AppHeader text="Settings" />
+        </Box>
+        {openEmailNotificationDialog && (
+          <EmailNotificationDialog
+            open={openEmailNotificationDialog}
+            data={data || null}
+            handleClose={handleCloseEmailDialog}
+          />
+        )}
+        {openDiscountSetting && (
+          <DiscountSettingDialog
+            open={openDiscountSetting}
+            handleClose={handleCloseDiscountDialog}
+          />
+        )}
+        {openPreferenceDialog && (
+          <PayoutPreferenceDialog
+            open={openPreferenceDialog}
+            data={data || null}
+            handleClose={handleClosePreferenceDialog}
+          />
+        )}
+        {openSubscriptionSetting && (
+          <SubscriptionPlanDialog
+            open={openSubscriptionSetting}
+            data={data || null}
+            handleClose={handleCloseSubscriptionDialog}
+          />
+        )}
+        {openCurrencySetting && (
+          <CurrencySettingDialog
+            open={openCurrencySetting}
+            data={data || null}
+            handleClose={handleCloseCurrencyDialog}
+          />
+        )}
 
-      <Box sx={{ my: 2, px: { xs: 0.5, sm: 1 }, py: 2, background: "#ffffff" }}>
-        <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <Box
+          sx={{ my: 2, px: { xs: 0.5, sm: 1 }, py: 2, background: "#ffffff" }}
+        >
           <Box>
             <Grid container spacing={1}>
               <Grid size={sizing}>
@@ -226,8 +227,8 @@ const SettingsWrapper = () => {
               </Grid>
             </Grid>
           </Box>
-        </ErrorBoundary>
-      </Box>
+        </Box>
+      </ErrorBoundary>
     </Box>
   );
 };

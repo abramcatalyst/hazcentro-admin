@@ -627,3 +627,17 @@ export const generateRandomColour = () => {
   let n = (Math.random() * 0xfffff * 1000000).toString(16);
   return "#" + n.slice(0, 6);
 };
+
+export const convertStringToBoolean = (val: string) => {
+  if (val === "true") {
+    return true;
+  }
+  return false;
+};
+
+export const convertBooleanToString = (val: boolean) => {
+  if (val === true) {
+    return "true";
+  }
+  return "false";
+};

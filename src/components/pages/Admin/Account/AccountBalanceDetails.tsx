@@ -6,6 +6,7 @@ import { currencyFormater } from "src/utils";
 import { useTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
+import { SettingsSummaryType } from "src/types/settings";
 
 dayjs.extend(advancedFormat);
 const sizing = { xs: 12, sm: 6 };
@@ -13,7 +14,10 @@ type BalanceCardProps = {
   title: string;
   value: string | number;
 };
-const AccountBalanceDetails = () => {
+type Props = {
+  data: SettingsSummaryType;
+};
+const AccountBalanceDetails = ({ data }: Props) => {
   const theme = useTheme();
   const BalanceCard = ({ title, value }: BalanceCardProps) => {
     return (
@@ -66,10 +70,13 @@ const AccountBalanceDetails = () => {
       <Box sx={{ my: 2 }}>
         <Grid container spacing={2}>
           <Grid size={sizing}>
-            <BalanceCard title="E-Commerce" value="6785904" />
+            <BalanceCard title="E-Commerce" value={data?.e_commerce_sales} />
           </Grid>
           <Grid size={sizing}>
-            <BalanceCard title="Sub - Service App" value="6785904" />
+            <BalanceCard
+              title="Sub - Service App"
+              value={data?.service_app_revenue}
+            />
           </Grid>
         </Grid>
       </Box>

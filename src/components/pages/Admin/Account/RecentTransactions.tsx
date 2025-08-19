@@ -6,17 +6,21 @@ import CreditImage from "src/assets/icons/credit.svg";
 import { currencyFormater } from "src/utils";
 import { alpha, useTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
+import {
+  SettingsSummaryRecentTransactionType,
+  SettingsSummaryType,
+} from "src/types/settings";
 
 type TransactionCardProps = {
-  transactionType: "debit" | "credit";
-  amount: number | string;
+  data: SettingsSummaryRecentTransactionType;
 };
-const RecentTransactions = () => {
+type Props = {
+  data: SettingsSummaryType;
+};
+const RecentTransactions = ({ data }: Props) => {
   const theme = useTheme();
-  const TransactionCard = ({
-    transactionType,
-    amount,
-  }: TransactionCardProps) => {
+  const TransactionCard = ({ data }: TransactionCardProps) => {
+    const { amount, status: transactionType, created_at } = data;
     return (
       <Box
         sx={{
@@ -44,8 +48,11 @@ const RecentTransactions = () => {
             sx={{
               borderRadius: "6px",
               background:
-                transactionType === "credit"
+                transactionType?.toLowerCase()?.includes("complet") ||
+                transactionType?.toLowerCase()?.includes("success")
                   ? "#47B48E1A"
+                  : transactionType?.toLowerCase()?.includes("pending")
+                  ? alpha("#ffe51dff", 0.3)
                   : alpha("#EE1616", 0.1),
               width: "52px",
               height: "52px",
@@ -55,7 +62,12 @@ const RecentTransactions = () => {
             }}
           >
             <img
-              src={transactionType === "credit" ? CreditImage : DebitImage}
+              src={
+                transactionType?.toLowerCase()?.includes("complet") ||
+                transactionType?.toLowerCase()?.includes("success")
+                  ? CreditImage
+                  : DebitImage
+              }
               alt="trans"
               style={{ width: "32px", height: "32px", objectFit: "contain" }}
             />
@@ -68,17 +80,20 @@ const RecentTransactions = () => {
               sx={{
                 fontSize: "12px",
                 color:
-                  transactionType === "credit"
+                  transactionType?.toLowerCase()?.includes("complet") ||
+                  transactionType?.toLowerCase()?.includes("success")
                     ? theme.palette.success.main
+                    : transactionType?.toLowerCase()?.includes("pending")
+                    ? theme.palette.warning.main
                     : theme.palette.error.main,
               }}
             >
-              {transactionType === "credit" ? "Credited" : "Debited"}
+              {transactionType}
             </Typography>
           </Box>
         </Box>
         <Typography variant="subtitle2">
-          {dayjs().format("MMM Do YY")}
+          {dayjs(created_at).format("MMM Do YY")}
         </Typography>
       </Box>
     );
@@ -110,6 +125,7 @@ const RecentTransactions = () => {
           color="inherit"
           size="small"
           sx={{
+            display: "none",
             background: theme.palette.grey[100],
             "&:hover": { background: theme.palette.grey[200] },
           }}
@@ -117,10 +133,16 @@ const RecentTransactions = () => {
           Download History
         </Button>
       </Box>
-      <Box sx={{ my: 1, maxHeight: "300px", overflowY: "auto" }}>
-        <TransactionCard amount={345000} transactionType="credit" />
-        <TransactionCard amount={45000} transactionType="credit" />
-        <TransactionCard amount={3000} transactionType="debit" />
+      <Box
+        sx={{
+          my: 1,
+          // maxHeight: "500px",
+          overflowY: "auto",
+        }}
+      >
+        {data?.recent_transactions?.slice(0, 10)?.map((item) => (
+          <TransactionCard key={item?.id} data={item} />
+        ))}
       </Box>
     </Box>
   );

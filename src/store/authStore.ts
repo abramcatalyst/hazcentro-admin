@@ -1,4 +1,5 @@
 import { LoginResponseProfileType } from "src/types/auth";
+import { removeTokenFromStorage } from "src/utils";
 import { create } from "zustand";
 
 interface AuthState {
@@ -22,8 +23,10 @@ const useAuthStore = create<AuthState>()((set) => ({
         profile: userProfile,
       };
     }),
-  handleLogout: () =>
-    set((_state) => ({ isAuthenticated: false, profile: null })),
+  handleLogout: () => {
+    set((_state) => ({ isAuthenticated: false, profile: null }));
+    removeTokenFromStorage();
+  },
 }));
 
 export default useAuthStore;

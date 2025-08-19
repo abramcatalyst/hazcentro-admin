@@ -30,3 +30,27 @@ export type SettingsDiscountType = {
   created_at: string;
   updated_at: string;
 };
+
+export type SettingsSummaryRecentTransactionType = {
+  id: string;
+  wallet_id: string;
+  order_id: string;
+  order_item_id: null;
+  type: string;
+  status: string;
+  amount: string;
+  description: string;
+  meta: {
+    payment_reference: string;
+    vendor_id: string;
+  };
+  created_at: string;
+  updated_at: string;
+};
+
+export type SettingsSummaryType = {
+  available_funds: number;
+  recent_transactions: SettingsSummaryRecentTransactionType[];
+  e_commerce_sales: number;
+  service_app_revenue: number;
+};

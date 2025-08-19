@@ -9,7 +9,12 @@ import CreateItemNotification from "src/components/shared/CreateItemNotification
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import ChangePasswordDialog from "./ChangePasswordDialog";
-const AccountBalance = () => {
+import { SettingsSummaryType } from "src/types/settings";
+
+type Props = {
+  data: SettingsSummaryType;
+};
+const AccountBalance = ({ data }: Props) => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const handleOpenChangePasswordDialog = () => {
     setOpenChangePassword(true);
@@ -86,7 +91,7 @@ const AccountBalance = () => {
                 fontSize: { xs: "20px", sm: "28px" },
               }}
             >
-              &#8358;{currencyFormater(401000590)}
+              &#8358;{currencyFormater(data?.available_funds)}
             </Typography>
             <Typography sx={{ textAlign: "right", fontSize: "12px" }}>
               Available Balance

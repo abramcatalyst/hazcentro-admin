@@ -19,7 +19,7 @@ import CoupounImg from "src/assets/images/coupon-percent.png";
 import EmailNotificationDialog from "./EmailNotificationDialog";
 import DiscountSettingDialog from "./DiscountSettingDialog";
 import CurrencySettingDialog from "./CurrencySettingDialog";
-import SubscriptionPlanDialog from "./SubscriptionPlanDialog";
+import SubscriptionPlanDialog from "./SubscriptionPlansDialog";
 import PayoutPreferenceDialog from "./PayoutPreferenceDialog";
 
 {
@@ -176,7 +176,7 @@ const SettingsWrapper = () => {
         {openSubscriptionSetting && (
           <SubscriptionPlanDialog
             open={openSubscriptionSetting}
-            data={data || null}
+            // data={data || null}
             handleClose={handleCloseSubscriptionDialog}
           />
         )}

@@ -5,6 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import rolesPermissions, { adminRoles } from "./roles-permission";
 import dayjs from "dayjs";
+import { SxProps } from "@mui/material/styles";
 
 // export const baseUrl = "https://reevaluateme.online/api";
 export const baseUrl = "https://haz.reevaluateme.online/api/v1";
@@ -129,7 +130,7 @@ export const reportsDateFilterFormat = {
   WEEKLY: "DD-MM-YYYY",
   MONTHLY: "MMM YYYY",
 };
-export const dialogButtonStyles = {};
+export const dialogButtonStyles: SxProps = { minWidth: "125px" };
 export const reportsIntervals = {
   DAILY: "daily",
   WEEKLY: "weekly",

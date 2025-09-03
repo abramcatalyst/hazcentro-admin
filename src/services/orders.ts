@@ -112,13 +112,12 @@ export const fetchSingleDistributorOrders = async ({
   startDate,
 }: QueryFilterType): Promise<{
   data: OrderType[];
-  
-    current_page: number;
-    last_page: number;
-    next_page: number;
-    per_page: number;
-    total: number;
-  
+
+  current_page: number;
+  last_page: number;
+  next_page: number;
+  per_page: number;
+  total: number;
 }> => {
   setDefaultHeaders();
   isAuthTokenExpired();
@@ -130,5 +129,34 @@ export const fetchSingleDistributorOrders = async ({
     }${search ? `&search=${search}` : ""}`
   );
   console.log("dddddddddddddd", data?.data);
+  return data?.data;
+};
+
+export const fetchCustomerCareOrders = async ({
+  page,
+  limit,
+  search,
+  status,
+  startDate,
+  endDate,
+  lastLoginDate,
+}: QueryFilterType): Promise<{
+  data: OrderType[];
+  current_page: number;
+  last_page: number;
+  next_page: number;
+  per_page: number;
+  total: number;
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/agents/orders?limit=${limit}${page ? `&page=${page}` : ""}${
+      startDate ? `&minCreateDate=${startDate}` : ""
+    }${endDate ? `&maxCreateDate=${endDate}` : ""}${
+      lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
+    }${status ? `&status=${status}` : ""}${search ? `&search=${search}` : ""}`
+  );
+
   return data?.data;
 };

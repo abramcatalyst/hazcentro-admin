@@ -39,6 +39,7 @@ import Disputes from "./pages/customercare/Disputes";
 import CustomerDisputeDetails from "./pages/customercare/DisputeDetails";
 import Distributors from "./pages/customercare/Distributors";
 import DistributorDetails from "./pages/customercare/DistributorDetails";
+import CustomerCareOrders from "./pages/customercare/CustomerCareOrders";
 
 function App() {
   const CustomerCareRoutes = () => (
@@ -64,6 +65,10 @@ function App() {
         <Route
           path={CUSTOMER_ROUTE_SUB_LINKS.DISTRIBUTORS}
           element={<Distributors />}
+        />
+        <Route
+          path={CUSTOMER_ROUTE_SUB_LINKS.ORDERS}
+          element={<CustomerCareOrders />}
         />
 
         <Route path="*" element={<NotFoundPage />} />

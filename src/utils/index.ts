@@ -642,3 +642,19 @@ export const convertBooleanToString = (val: boolean) => {
   }
   return "false";
 };
+
+export const renderOrderStatus = (val: number) => {
+  if (val === 1) {
+    return "order-placed";
+  }
+  if (val === 2) {
+    return "order-confirmed";
+  }
+  if (val === 3) {
+    return "in-transit";
+  }
+  if (val === 4) {
+    return "pickup-ready";
+  }
+  return "order-delivered";
+};

@@ -149,8 +149,6 @@ const OrderStages = ({ selectedOrder, refetch }: Props) => {
     }
   }, [selectedOrder]);
 
-  console.log("ssssssssss");
-
   const handleSubmitUpdateStatus = async (index: number) => {
     try {
       setDefaultHeaders();
@@ -161,7 +159,7 @@ const OrderStages = ({ selectedOrder, refetch }: Props) => {
         delivery_status: renderOrderStatus(index),
       };
       const res = await axios.patch(
-        `${baseUrl}/admin/orders/${selectedOrder?.id}/delivery-status`,
+        `${baseUrl}/agents/orders/${selectedOrder?.id}/delivery-status`,
         payload
       );
       const successMsg = formatSuccessMessage(res?.data);
@@ -170,7 +168,7 @@ const OrderStages = ({ selectedOrder, refetch }: Props) => {
       // setActiveStep(index + 1);
       await refetch();
       await queryClient.invalidateQueries({
-        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ORDERS],
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CUSTOMER_CARE_ORDERS],
       });
     } catch (error) {
       const errorMsg = formatErrorMessage(error);

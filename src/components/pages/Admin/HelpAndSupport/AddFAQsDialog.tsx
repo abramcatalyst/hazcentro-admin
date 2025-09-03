@@ -59,7 +59,6 @@ function AddFAQsDialog({ open, handleClose }: Props) {
       try {
         helpers.setSubmitting(true);
         const res = await axios.post(`${baseUrl}/admin/faqs`, values);
-        console.log("xxxxxxxxxxxxxxxxxxxxxxx", res?.data);
         await queryClient.invalidateQueries({
           queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FAQS],
         });

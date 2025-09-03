@@ -25,7 +25,6 @@ const AccountWrapper = () => {
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
-  console.log("dddddddddddd", data);
   return (
     <Box>
       <Box

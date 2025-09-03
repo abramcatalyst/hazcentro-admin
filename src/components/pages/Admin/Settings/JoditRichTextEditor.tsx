@@ -61,7 +61,7 @@ const JoditRichTextEditor = ({
     }),
     [placeholder]
   );
-  console.log("");
+
   return (
     <div>
       <JoditEditor

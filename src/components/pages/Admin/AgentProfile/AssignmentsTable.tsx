@@ -113,7 +113,6 @@ const AssignmentsTable = ({ selectedTab }: Props) => {
     return <HalfScreenLoader />;
   }
 
-  console.log("bbbbbbbbbbbbbbb", data);
   return (
     <Box sx={{ background: "#ffffff", p: 1, borderRadius: "20px", mb: 1 }}>
       {openPreview && selectedOrder && (

@@ -128,7 +128,6 @@ export const fetchSingleDistributorOrders = async ({
       status ? `&status=${status}` : ""
     }${search ? `&search=${search}` : ""}`
   );
-  console.log("dddddddddddddd", data?.data);
   return data?.data;
 };
 

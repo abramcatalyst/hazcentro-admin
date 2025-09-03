@@ -277,7 +277,6 @@ export const saveTokenToStorage = (token: string) => {
 };
 
 export const formatErrorMessage = (errObj: any) => {
-  // console.log("errObjerrObjerrObjerrObj", errObj);
   if (errObj && errObj?.status && errObj?.status >= 500) {
     return "An Unexepected error occured";
   }

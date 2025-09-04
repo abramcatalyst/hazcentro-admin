@@ -9,7 +9,12 @@ function HeaderProfileLeft() {
   const { profile } = useAuthStore();
 
   return (
-    <Box sx={{ display: "flex", gap: 1 }}>
+    <Box
+      sx={{
+        display: { xs: "none", md: "flex" },
+        gap: 1,
+      }}
+    >
       <Box>
         <Typography sx={{ color: "#000000", fontSize: "17px", mb: -0.2 }}>
           {`Hi, ${profile?.name}`}

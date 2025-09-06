@@ -16,8 +16,8 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomerCarePendingOrders } from "src/services/orders";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
-import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import TableSkeletonLoader from "src/components/shared/TableSkeletonLoader/TableSkeletonLoader";
 
 dayjs.extend(advancedFormat);
 
@@ -54,7 +54,7 @@ function PendingOrderTable() {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
   if (isPending) {
-    return <HalfScreenLoader />;
+    return <TableSkeletonLoader />;
   }
   return (
     <Box

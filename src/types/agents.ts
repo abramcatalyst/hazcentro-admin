@@ -78,3 +78,12 @@ export type AgentType = {
     tracking_id: string;
   }[];
 };
+
+export type CustomerCareOverviewDataType = {
+  orders_needing_attention: number;
+  total_open_disputes: number;
+  avg_resolution_time_days: number;
+  dispute_resolved_today: number;
+};
+
+export type CustomerCareTrendDataType = { month: string; value: number }[];

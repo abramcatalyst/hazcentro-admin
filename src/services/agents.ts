@@ -1,5 +1,9 @@
 import axios from "axios";
-import { AgentType } from "src/types/agents";
+import {
+  AgentType,
+  CustomerCareOverviewDataType,
+  CustomerCareTrendDataType,
+} from "src/types/agents";
 import { QueryFilterType } from "src/types/filters";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
@@ -53,3 +57,30 @@ export const fetchSingleAgent = async (id: string): Promise<AgentType> => {
 
   return data?.agent;
 };
+
+export const fetchAgentDashboardOverview =
+  async (): Promise<CustomerCareOverviewDataType> => {
+    setDefaultHeaders();
+    isAuthTokenExpired();
+    const { data } = await axios.get(`${baseUrl}/agents/dashboard`);
+
+    return data?.data;
+  };
+
+export const fetchAgentDisputesTrends =
+  async (): Promise<CustomerCareTrendDataType> => {
+    setDefaultHeaders();
+    isAuthTokenExpired();
+    const { data } = await axios.get(`${baseUrl}/agents/disputes/trends`);
+
+    return data?.data;
+  };
+
+export const fetchCustomerCareDisputes =
+  async (): Promise<CustomerCareTrendDataType> => {
+    setDefaultHeaders();
+    isAuthTokenExpired();
+    const { data } = await axios.get(`${baseUrl}/agents/disputes`);
+
+    return data?.data;
+  };

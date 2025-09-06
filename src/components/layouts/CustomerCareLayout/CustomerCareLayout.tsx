@@ -173,6 +173,7 @@ export default function CustomerCareLayout() {
             sx={[
               {
                 marginRight: 5,
+                display: { xs: "block", sm: "none" },
               },
             ]}
           >

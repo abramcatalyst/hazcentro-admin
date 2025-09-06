@@ -1,13 +1,19 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
+import Skeleton from "@mui/material/Skeleton";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { currencyFormater } from "src/utils";
+import { currencyFormater, formatErrorMessage } from "src/utils";
 import DisputeImg from "src/assets/icons/fluent_scales-32-filled.svg";
 import BasketImg from "src/assets/icons/basket_cart_shop_shopping_store_icon.svg";
 import CheckedImg from "src/assets/icons/pepicons-pop_checkmark-filled.svg";
 import ResolutionImg from "src/assets/icons/bi_hourglass-split.svg";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchAgentDashboardOverview } from "src/services/agents";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import { SxProps } from "@mui/material";
 
 const itemSizing = { xs: 6, sm: 4, md: 3 };
 
@@ -106,6 +112,37 @@ const StatsCard = ({ kind, title, value }: StatsCardProps) => {
   );
 };
 const DashboardTop = () => {
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CUSTOMER_CARE_OVERVIEW, {}],
+    queryFn: () => fetchAgentDashboardOverview(),
+  });
+
+  const skelentonStyle: SxProps = { height: "100px" };
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  if (isPending) {
+    return (
+      <Box sx={{ my: 1, background: "#ffffff", p: { xs: 0.5, sm: 1 } }}>
+        <Grid container spacing={1}>
+          <Grid size={itemSizing}>
+            <Skeleton sx={skelentonStyle} />
+          </Grid>
+          <Grid size={itemSizing}>
+            <Skeleton sx={skelentonStyle} />
+          </Grid>
+          <Grid size={itemSizing}>
+            <Skeleton sx={skelentonStyle} />
+          </Grid>
+
+          <Grid size={itemSizing}>
+            <Skeleton sx={skelentonStyle} />
+          </Grid>
+        </Grid>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ my: 1, background: "#ffffff", p: { xs: 0.5, sm: 1 } }}>
       <Grid container spacing={1}>
@@ -113,7 +150,7 @@ const DashboardTop = () => {
           <StatsCard
             kind="order"
             title="Orders Needing Attention"
-            value={12456320}
+            value={data?.orders_needing_attention}
             trend={"+2.5%"}
           />
         </Grid>
@@ -121,7 +158,7 @@ const DashboardTop = () => {
           <StatsCard
             kind="dispute"
             title="Total Open Disputes"
-            value={12456320}
+            value={data?.total_open_disputes}
             trend={"+2.5%"}
           />
         </Grid>
@@ -129,7 +166,7 @@ const DashboardTop = () => {
           <StatsCard
             kind="resolution"
             title="Average Resolution Time"
-            value={10320}
+            value={data?.avg_resolution_time_days}
             trend={"+2.5%"}
           />
         </Grid>
@@ -138,7 +175,7 @@ const DashboardTop = () => {
           <StatsCard
             kind="today"
             title="Resolved Disputes Today"
-            value={1230}
+            value={data?.dispute_resolved_today}
             trend={"+2.5%"}
           />
         </Grid>

@@ -10,6 +10,12 @@ import { useTheme } from "@mui/material/styles";
 import { GrStatusInfo } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchCustomerCareDisputes } from "src/services/agents";
+import TableSkeletonLoader from "src/components/shared/TableSkeletonLoader/TableSkeletonLoader";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import { formatErrorMessage } from "src/utils";
 // import UserProfileDialog from "../UserProfileDialog/UserProfileDialog";
 // import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
 dayjs.extend(advancedFormat);
@@ -18,6 +24,10 @@ function DisputesTable() {
 
   const theme = useTheme();
   const navigate = useNavigate();
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CUSTOMER_CARE_DISPUTES, {}],
+    queryFn: () => fetchCustomerCareDisputes(),
+  });
   const handleOpenPreview = () => {
     setOpenPreview(true);
   };
@@ -66,6 +76,15 @@ function DisputesTable() {
       </Box>
     );
   };
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+
+  if (isPending) {
+    return <TableSkeletonLoader />;
+  }
+  console.log("bbbbbbbbbbbbbb", data);
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openPreview && (

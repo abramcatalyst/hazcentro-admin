@@ -2,6 +2,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import { LineChart, lineElementClasses } from "@mui/x-charts/LineChart";
+import { useQuery } from "@tanstack/react-query";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import TableSkeletonLoader from "src/components/shared/TableSkeletonLoader/TableSkeletonLoader";
+import { fetchAgentDisputesTrends } from "src/services/agents";
+import { formatErrorMessage } from "src/utils";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 
 export const dataset = [
   { date: "JAN", dl: 34260.29 },
@@ -19,13 +25,28 @@ export const dataset = [
 ];
 
 function DisputeChart() {
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_CUSTOMER_CARE_DISPUTES_TRENDS,
+      {},
+    ],
+    queryFn: () => fetchAgentDisputesTrends(),
+  });
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  if (isPending) {
+    return <TableSkeletonLoader />;
+  }
+
   return (
     <Box>
       <Box sx={{ my: 1 }}>
         <Typography variant="subtitle2">Dispute Trends Over Time</Typography>
       </Box>
       <LineChart
-        dataset={dataset}
+        dataset={data}
         sx={{
           [`& .${lineElementClasses.root}`]: {
             // strokeDasharray: "10 5",
@@ -45,7 +66,7 @@ function DisputeChart() {
           {
             id: "Years",
             scaleType: "point",
-            dataKey: "date",
+            dataKey: "month",
           },
         ]}
         yAxis={[
@@ -57,7 +78,7 @@ function DisputeChart() {
         series={[
           {
             id: "Germany",
-            dataKey: "dl",
+            dataKey: "value",
             stack: "total",
             area: true,
             showMark: false,

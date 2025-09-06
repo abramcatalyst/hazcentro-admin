@@ -73,6 +73,7 @@ export type OrderType = {
   payment_status: string;
   payment_reference: string;
   status: string;
+  handoff_status: string;
   tracking_id: string;
   tracking: TrackingType[];
   created_at: string;

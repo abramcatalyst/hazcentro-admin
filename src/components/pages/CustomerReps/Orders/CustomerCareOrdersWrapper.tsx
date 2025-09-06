@@ -125,7 +125,7 @@ const CustomerCareOrdersWrapper = () => {
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
-  console.log("bbbbbbb", data);
+
   return (
     <Box>
       <Box

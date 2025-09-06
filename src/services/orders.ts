@@ -159,3 +159,34 @@ export const fetchCustomerCareOrders = async ({
 
   return data?.data;
 };
+
+export const fetchCustomerCarePendingOrders = async ({
+  page,
+  limit,
+  search,
+  status,
+  startDate,
+  endDate,
+  lastLoginDate,
+}: QueryFilterType): Promise<{
+  data: OrderType[];
+  current_page: number;
+  last_page: number;
+  next_page: number;
+  per_page: number;
+  total: number;
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/agents/orders/pending?limit=${limit}${
+      page ? `&page=${page}` : ""
+    }${startDate ? `&minCreateDate=${startDate}` : ""}${
+      endDate ? `&maxCreateDate=${endDate}` : ""
+    }${lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""}${
+      status ? `&status=${status}` : ""
+    }${search ? `&search=${search}` : ""}`
+  );
+
+  return data?.data;
+};

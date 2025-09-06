@@ -25,6 +25,7 @@ import {
 import { FiLogOut } from "react-icons/fi";
 import { ADMIN_ROUTE_LINKS, GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 export default function AppNavigation({
   open,
@@ -38,7 +39,8 @@ export default function AppNavigation({
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
     const token = getAuthToken();
 
@@ -160,7 +162,9 @@ export default function AppNavigation({
                     onClick={() => {
                       if (row?.url) {
                         navigate(row?.url);
-                        handleDrawerClose();
+                        if (matches) {
+                          handleDrawerClose();
+                        }
                       }
                     }}
                   >

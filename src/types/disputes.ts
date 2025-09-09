@@ -89,15 +89,19 @@ export type SingleDisputeType = {
   id: string;
   order_id: string;
   order_item_id: string;
+  created_at: string;
+  updated_at: string;
   user: {
     id: string;
-    unique_id: string;
     name: string;
     email: string;
+    phone_number: string;
+    profile_picture_url: string;
   };
   type: string;
   status: string;
   message: string;
+  attachments: { id: number; url: string }[];
   product: {
     id: string;
     name: string;
@@ -107,9 +111,23 @@ export type SingleDisputeType = {
       name: string;
     };
   };
-  attachments: string[];
-  created_at: string;
-  updated_at: string;
+  order: {
+    id: string;
+    tracking_id: string;
+    status: string;
+    total_quantity: number;
+  };
 
-  replies: [];
+  replies: [
+    {
+      id: string;
+      message: string;
+      created_at: string;
+      user: {
+        id: "02a4762a-6105-4d0a-8dfd-8e31047a1bb9";
+        name: "Agent Account";
+      };
+      attachments: { id: number; url: string }[];
+    }
+  ];
 };

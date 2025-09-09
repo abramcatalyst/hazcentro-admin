@@ -9,6 +9,7 @@ import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenErr
 import { formatErrorMessage } from "src/utils";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import DisputeMessageForm from "./DisputeMessageForm";
+import SentMessages from "./SentMessages";
 
 const DisputeDetailsWrapper = () => {
   const { id } = useParams();
@@ -32,6 +33,7 @@ const DisputeDetailsWrapper = () => {
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
+          {<SentMessages data={data} />}
           <DisputeMessageForm />
           {/* <RecentCoveredAreas />
           <RecentActivities /> */}

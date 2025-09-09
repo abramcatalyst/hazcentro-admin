@@ -34,8 +34,8 @@ const DisputeMessageForm = () => {
       if (selectedFile) {
         formData.append("attachments", selectedFile);
       }
-      const res = await axios.patch(
-        `${baseUrl}/admin/agents/${id}/replies`,
+      const res = await axios.post(
+        `${baseUrl}/agents/disputes/${id}/replies`,
         formData
       );
 
@@ -47,6 +47,9 @@ const DisputeMessageForm = () => {
           TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_CUSTOMER_CARE_DISPUTE,
         ],
       });
+
+      setText("");
+      setSelectedFile(null);
     } catch (error) {
       const errorMsg = formatErrorMessage(error);
       toast.error(errorMsg);

@@ -9,5 +9,5 @@ export const fetchSingleDispute = async (
   isAuthTokenExpired();
   const { data } = await axios.get(`${baseUrl}/agents/disputes/${id}`);
 
-  return data?.dispute;
+  return data;
 };

@@ -3,14 +3,22 @@ import Box from "@mui/material/Box";
 import DisputeChart from "./DisputeChart";
 import DashboardTop from "./DashboardTop";
 import PendingOrderTable from "./PendingOrderTable";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 const OverviewWrapper = () => {
   return (
     <Box>
-      <DashboardTop />
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <DashboardTop />
+      </ErrorBoundary>
       <Box>
-        <DisputeChart />
+        <ErrorBoundary FallbackComponent={ErrorFallBack}>
+          <DisputeChart />
+        </ErrorBoundary>
       </Box>
-      <PendingOrderTable />
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <PendingOrderTable />
+      </ErrorBoundary>
     </Box>
   );
 };

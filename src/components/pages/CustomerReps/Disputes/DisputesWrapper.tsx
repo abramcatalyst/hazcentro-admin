@@ -3,11 +3,13 @@ import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import DisputesTable from "./DisputesTable";
 import DisputeTab from "./DisputeTab";
 import { useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 export const tabOptionsObj = {
   ACTIVE: "ACTIVE",
-  PENDING: "PENDING",
-  RESOLVED: "RESOLVED",
+  PENDING: "open",
+  RESOLVED: "resolved",
 };
 export const tabOptions = [
   // {
@@ -43,7 +45,9 @@ const DisputesWrapper = () => {
         <AppHeader text="Dispute" />
       </Box>
       <DisputeTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <DisputesTable />
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <DisputesTable selectedTab={selectedTab} />
+      </ErrorBoundary>
     </Box>
   );
 };

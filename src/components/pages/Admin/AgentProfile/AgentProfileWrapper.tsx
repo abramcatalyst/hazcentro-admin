@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import AgentProfileTab from "./AgentsProfileTab";
@@ -7,7 +7,7 @@ import AppHeader from "src/components/shared/AppHeader/AppHeader";
 import ProfileInformation from "./ProfileInformation";
 import ActiveAssignment from "./ActiveAssignment";
 import AssignmentsTable from "./AssignmentsTable";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { useParams } from "react-router-dom";
 import { fetchSingleAgent } from "src/services/agents";
@@ -36,10 +36,19 @@ export const ordersTabOptions = [
 const AgentProfileWrapper = () => {
   const [selectedTab, setSelectedTab] = useState(ordersTabOptions[0].value);
   const { id } = useParams();
+  const queryClient = useQueryClient();
   const { isPending, error, data, isError } = useQuery({
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_AGENT, {}],
     queryFn: () => fetchSingleAgent(id || ""),
   });
+  useEffect(() => {
+    return () => {
+      queryClient.invalidateQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_AGENT],
+      });
+    };
+  }, []);
+
   return (
     <Box>
       <Box

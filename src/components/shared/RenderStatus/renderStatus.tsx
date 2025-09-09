@@ -13,6 +13,7 @@ const redStates = [
   "unapproved",
   "ended",
   "offline",
+  "open",
   "not paid",
   "cancelled",
   "canceled",
@@ -27,6 +28,8 @@ const greenStates = [
   "delivered",
   "complete",
   "completed",
+  "dropped",
+  "resolved",
 ];
 const yellowStates = ["ongoing", "pending", "not claimed"];
 const blueStates = ["processing"];
@@ -45,7 +48,13 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
             background: theme.palette.error.light,
           }}
         />
-        <Typography sx={{ fontSize: "12px", textTransform: "capitalize" }}>
+        <Typography
+          sx={{
+            fontSize: "12px",
+            textTransform: "capitalize",
+            color: theme.palette.error.main,
+          }}
+        >
           {stat || "Not active"}
         </Typography>
       </Box>
@@ -115,7 +124,13 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
             background: theme.palette.success.light,
           }}
         />
-        <Typography sx={{ fontSize: "12px", textTransform: "capitalize" }}>
+        <Typography
+          sx={{
+            fontSize: "12px",
+            textTransform: "capitalize",
+            color: theme.palette.success.main,
+          }}
+        >
           {stat || "Active"}
         </Typography>
       </Box>

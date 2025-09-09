@@ -22,7 +22,7 @@ import useAppStore from "src/store/appStore";
 import { appPermissions } from "src/utils/permissions";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
 import { IoChatbubblesSharp } from "react-icons/io5";
-import { LuBell, LuRepeat } from "react-icons/lu";
+import { LuBell } from "react-icons/lu";
 import { useTheme } from "@mui/material/styles";
 
 export default function HeaderProfile() {
@@ -68,12 +68,12 @@ export default function HeaderProfile() {
           <IconButton>
             <LuBell />
           </IconButton>
-          <IconButton>
+          <IconButton sx={{ display: "none" }}>
             <IoChatbubblesSharp />
           </IconButton>
-          <IconButton>
+          {/* <IconButton>
             <LuRepeat />
-          </IconButton>
+          </IconButton> */}
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
           <IconButton

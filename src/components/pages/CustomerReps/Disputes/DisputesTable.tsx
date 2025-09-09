@@ -1,32 +1,54 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import User from "src/assets/tempimages/user1.png";
+import User from "src/assets/images/avatar-male.png";
 
 import OrderPreviewDialog from "./OrderPreviewDialog/OrderPreviewDialog";
 import { useTheme } from "@mui/material/styles";
-import { GrStatusInfo } from "react-icons/gr";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 import { useQuery } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchCustomerCareDisputes } from "src/services/agents";
 import TableSkeletonLoader from "src/components/shared/TableSkeletonLoader/TableSkeletonLoader";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
-import { formatErrorMessage } from "src/utils";
+import {
+  formatErrorMessage,
+  rowsPerPageOptions,
+  sLimit,
+  sPage,
+} from "src/utils";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 // import UserProfileDialog from "../UserProfileDialog/UserProfileDialog";
 // import DistributorProfileDialog from "../DistributorProfileDialog/DistributorProfileDialog";
 dayjs.extend(advancedFormat);
-function DisputesTable() {
+
+type Props = {
+  selectedTab: string;
+};
+function DisputesTable({ selectedTab }: Props) {
   const [openPreview, setOpenPreview] = useState(false);
 
   const theme = useTheme();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams({
+    limit: rowsPerPageOptions[0].toString(),
+    page: "1",
+  });
+  const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
+  const page = Number(searchParams.get(sPage)) || 1;
+
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CUSTOMER_CARE_DISPUTES, {}],
-    queryFn: () => fetchCustomerCareDisputes(),
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_CUSTOMER_CARE_DISPUTES,
+      { limit, page, selectedTab },
+    ],
+    queryFn: () =>
+      fetchCustomerCareDisputes({ limit: limit, page, status: selectedTab }),
   });
   const handleOpenPreview = () => {
     setOpenPreview(true);
@@ -34,48 +56,30 @@ function DisputesTable() {
   const handleClosePreviewProfile = () => {
     setOpenPreview(false);
   };
-  console.log(handleOpenPreview);
-  type RenderStatusProps = {
-    status: string;
-  };
-  const RenderStatus = ({ status }: RenderStatusProps) => {
-    if (status === "active") {
-      return (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "25px",
-            height: "25px",
-            borderRadius: "50%",
-            background: theme.palette.warning.dark,
-            color: "#ffffff",
-          }}
-        >
-          <Typography variant="subtitle2">4</Typography>
-        </Box>
-      );
-    }
-    if (status === "pending") {
-      return (
-        <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
-          <GrStatusInfo style={{ color: theme.palette.info.main }} />
-          <Typography variant="subtitle2">Pending</Typography>
-        </Box>
-      );
-    }
-    return (
-      <Box>
-        <Typography
-          variant="subtitle2"
-          sx={{ color: theme.palette.success.main }}
-        >
-          Resolved
-        </Typography>
-      </Box>
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setSearchParams(
+      (params) => {
+        params.set(sPage, `${newPage + 1}`);
+        return params;
+      },
+      { replace: true }
     );
   };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchParams(
+      (params) => {
+        params.set(sLimit, event.target.value.toString());
+        params.set(sPage, "1");
+        return params;
+      },
+      { replace: true }
+    );
+  };
+
+  console.log(handleOpenPreview);
 
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
@@ -84,7 +88,6 @@ function DisputesTable() {
   if (isPending) {
     return <TableSkeletonLoader />;
   }
-  console.log("bbbbbbbbbbbbbb", data);
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openPreview && (
@@ -94,105 +97,144 @@ function DisputesTable() {
         />
       )}
 
-      <Box>
-        {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
-          return (
-            <Box
-              key={row}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                background: "#ffffff",
-                px: 1,
-                py: 0.6,
-                borderRadius: "8px",
-
-                my: 0.9,
-              }}
-            >
-              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+      <Box sx={{ minHeight: "50vh" }}>
+        {data && data?.total > 0 ? (
+          <Box>
+            {data?.data?.map((row) => {
+              return (
                 <Box
+                  key={row?.id}
                   sx={{
-                    width: "45px",
-                    height: "45px",
-                    borderRadius: "50%",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    navigate(
-                      `${CUSTOMER_ROUTE_LINKS.CUSTOMER_SINGLE_DISPUTE}/1234`
-                    );
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    background: "#ffffff",
+                    px: 1,
+                    py: 0.6,
+                    borderRadius: "8px",
+                    gap: { xs: 1, sm: 1.5 },
+                    my: 0.9,
                   }}
                 >
-                  <img
-                    src={User}
-                    alt="user"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </Box>
-                <Box>
-                  <Box sx={{ display: "flex", gap: 0.6, alignItems: "center" }}>
-                    <Typography
-                      sx={{ fontWeight: 600, cursor: "pointer" }}
+                  <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        width: "45px",
+                        height: "45px",
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                      }}
                       onClick={() => {
                         navigate(
-                          `${CUSTOMER_ROUTE_LINKS.CUSTOMER_SINGLE_DISPUTE}/1234`
+                          `${CUSTOMER_ROUTE_LINKS.CUSTOMER_SINGLE_DISPUTE}/${row?.id}`
                         );
                       }}
                     >
-                      David Stunter
+                      <img
+                        src={
+                          row?.user?.profile_picture_url &&
+                          typeof row?.user?.profile_picture_url === "string"
+                            ? row?.user?.profile_picture_url
+                            : User
+                        }
+                        alt="user"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </Box>
+                    <Box>
+                      <Box
+                        sx={{ display: "flex", gap: 0.6, alignItems: "center" }}
+                      >
+                        <Link
+                          to={`${CUSTOMER_ROUTE_LINKS.CUSTOMER_SINGLE_DISPUTE}/${row?.id}`}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <Typography
+                            sx={{ fontWeight: 600, cursor: "pointer" }}
+                          >
+                            {row?.user?.name}
+                          </Typography>
+                        </Link>
+
+                        <Typography
+                          sx={{
+                            pl: 0.5,
+                            color: theme.palette.secondary.main,
+                            fontSize: "12px",
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {row?.user?.role}
+                        </Typography>
+                      </Box>
+                      <Link
+                        to={`${CUSTOMER_ROUTE_LINKS.CUSTOMER_SINGLE_DISPUTE}/${row?.id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <Typography sx={{ fontSize: "13.1px" }} noWrap>
+                          {row?.message}
+                        </Typography>
+                      </Link>
+                    </Box>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      minWidth: "140px",
+                      textAlign: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 0.3,
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px" }}>
+                      {dayjs(row?.created_at).format("MMM Do YYYY")}
                     </Typography>
-                    <Typography
+
+                    <Box
                       sx={{
-                        pl: 0.5,
-                        color: theme.palette.secondary.main,
-                        fontSize: "12px",
+                        display: "flex",
+                        gap: 1,
+                        alignItems: "center",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        navigate(
+                          `${CUSTOMER_ROUTE_LINKS.CUSTOMER_SINGLE_DISPUTE}/${row?.id}`
+                        );
                       }}
                     >
-                      Buyer
-                    </Typography>
+                      <Typography sx={{ fontSize: "12.4px" }}>
+                        Status:
+                      </Typography>
+                      {renderStatus(row?.status)}
+                    </Box>
                   </Box>
-                  <Typography sx={{ fontSize: "13.1px" }} noWrap>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Sequi voluptate iusto provident corporis quisquam!
-                  </Typography>
                 </Box>
-              </Box>
-
-              <Box
-                sx={{
-                  minWidth: "140px",
-                  textAlign: "center",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 0.3,
-                  flexDirection: "column",
-                }}
-              >
-                <Typography sx={{ fontSize: "14px" }}>
-                  {dayjs().format("MMM Do YYYY")}
-                </Typography>
-
-                <RenderStatus
-                  status={
-                    index >= 3 && index < 5
-                      ? "success"
-                      : index < 3
-                      ? "active"
-                      : "pending"
-                  }
-                />
-              </Box>
-            </Box>
-          );
-        })}
+              );
+            })}
+          </Box>
+        ) : (
+          <EmptyTable subText="No disputes found" />
+        )}
+      </Box>
+      <Box sx={{ my: 1 }}>
+        <TablePagination
+          rowsPerPageOptions={rowsPerPageOptions}
+          component="div"
+          count={data?.total || 0}
+          rowsPerPage={limit || rowsPerPageOptions[0]}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Box>
     </Box>
   );

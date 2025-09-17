@@ -1,8 +1,27 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import EscrowChart from "./EscrowChart";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchEscrowBalance } from "src/services/escrow";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import { formatErrorMessage } from "src/utils";
 
 function BalanceSection() {
+  const { error, data, isError, isPending } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_ESCROW_BALANCE],
+    queryFn: () => fetchEscrowBalance(),
+  });
+
+  if (isPending) {
+    return <HalfScreenLoader />;
+  }
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+
   return (
     <Box
       sx={{
@@ -24,7 +43,7 @@ function BalanceSection() {
           Active escrow balance
         </Typography>
       </Box>
-      <EscrowChart />
+      <EscrowChart data={data} />
     </Box>
   );
 }

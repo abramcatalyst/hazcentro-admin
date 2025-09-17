@@ -1,8 +1,8 @@
 // import { useState } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import { SlShareAlt } from "react-icons/sl";
+// import { SlShareAlt } from "react-icons/sl";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
@@ -13,18 +13,18 @@ import { alpha, useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
 
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
-import { PayoutType } from "src/types/followers";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import dayjs from "dayjs";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
+import { EscrowRecentTransactionType } from "src/types/escrow";
 // import OrderItemCard from "src/components/shared/OrderItemCard/OrderItemCard";
 
 dayjs.extend(advancedFormat);
 
 type Props = {
   open: boolean;
-  data: PayoutType;
+  data: EscrowRecentTransactionType;
   handleClose: () => void;
 };
 
@@ -105,6 +105,7 @@ function PreviewPayoutDialog({ open, data, handleClose }: Props) {
     justifyContent: "space-between",
     flexWrap: "wrap",
   };
+
   return (
     <StyledDialog
       fullWidth
@@ -135,40 +136,40 @@ function PreviewPayoutDialog({ open, data, handleClose }: Props) {
         </Box>
       </DialogActions>
       <DialogContent>
-        <Box sx={boxStyles}>
+        <Box sx={{ ...boxStyles, mb: 1 }}>
           <Box>
             <Box
               sx={{
                 background:
-                  data?.transactionType === "credit"
+                  data?.status == "completed"
                     ? "#47B48E0D"
                     : alpha(theme.palette.error.light, 0.1),
                 color:
-                  data?.transactionType === "credit"
+                  data?.status == "completed"
                     ? GLOBAL_COLORS.GREEN_MAIN
                     : theme.palette.error.main,
-                fontSize: "13px",
+                fontSize: "12.7px",
                 height: "26px",
                 borderRadius: "5px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "60px",
+                width: "87px",
                 p: 0,
                 textTransform: "capitalize",
               }}
             >
-              {data.transactionType}
+              {data.status}
             </Box>
             <Typography sx={{ fontWeight: 600, fontSize: "22px", mt: 1 }}>
-              &#8358;{currencyFormater(40500, 2)}
+              &#8358;{currencyFormater(data?.amount, 2)}
             </Typography>
 
             <Box>
               <Typography
                 sx={{ fontWeight: 500, lineHeight: "100%", fontSize: "13px" }}
               >
-                {dayjs().format("dddd, MMM Do YYYY | H:m A")}
+                {dayjs(data?.created_at).format("dddd, MMM Do YYYY | H:m A")}
               </Typography>
             </Box>
           </Box>
@@ -185,12 +186,12 @@ function PreviewPayoutDialog({ open, data, handleClose }: Props) {
               px: 0.3,
             }}
           >
-            <Typography sx={{ fontSize: "14px", textTransform: "uppercase" }}>
-              Via atm card
+            <Typography sx={{ fontSize: "13px", textTransform: "uppercase" }}>
+              {data?.type}
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ my: 1 }}>
+        {/* <Box sx={{ my: 1 }}>
           <Button
             size="large"
             fullWidth
@@ -199,7 +200,7 @@ function PreviewPayoutDialog({ open, data, handleClose }: Props) {
           >
             Download
           </Button>
-        </Box>
+        </Box> */}
         <Box sx={boxStyles}>
           <Box
             sx={{
@@ -211,23 +212,28 @@ function PreviewPayoutDialog({ open, data, handleClose }: Props) {
               flexDirection: { xs: "column", sm: "row" },
             }}
           >
-            <UserInfoBox title="Buyer" value="Ismialia Bello" allowBorder />
+            {/* <UserInfoBox title="Buyer" value="Ismialia Bello" allowBorder />
             <UserInfoBox title="Agent" value="Wal Yaks" allowBorder />
-            <UserInfoBox title="Seller (Merchant)" value="Oriano Nigeria" />
+            <UserInfoBox title="Seller (Merchant)" value="Oriano Nigeria" /> */}
+            <UserInfoBox
+              title="User"
+              value={data?.wallet?.user?.name}
+              allowBorder
+            />
+
+            <UserInfoBox
+              title="User ID"
+              value={data?.wallet?.user?.unique_user_id}
+            />
           </Box>
         </Box>
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="subtitle2" gutterBottom>
-            Order details
-          </Typography>
-          {/* <OrderItemCard /> */}
-        </Box>
+
         <Box sx={{ mt: 2 }}>
           <Typography variant="subtitle2" gutterBottom>
             Other details
           </Typography>
           <Box>
-            <OtherDetailsInfoBox
+            {/* <OtherDetailsInfoBox
               title="Beneficiary"
               value="Transfer-Hazcentro | 2345689709"
             />
@@ -240,6 +246,26 @@ function PreviewPayoutDialog({ open, data, handleClose }: Props) {
             <OtherDetailsInfoBox
               title="Beneficiary Institution"
               value="Zenith Bank"
+            /> */}
+            <Divider />
+            <OtherDetailsInfoBox
+              title="Phone"
+              value={data?.wallet?.user?.phone_number || "N/A"}
+            />
+            <Divider />
+            <OtherDetailsInfoBox
+              title="Email"
+              value={data?.wallet?.user?.email || "N/A"}
+            />
+            <Divider />
+            <OtherDetailsInfoBox
+              title="Payment Reference"
+              value={data?.meta?.payment_reference}
+            />
+            <Divider />
+            <OtherDetailsInfoBox
+              title="Description"
+              value={data?.description}
             />
             <Divider />
           </Box>

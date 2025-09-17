@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import { alpha } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { EscrowActiveBalanceType } from "src/types/escrow";
 const uData = [
   4000, 3000, 2000, 2780, 1890, 2390, 4000, 3000, 2000, 2780, 1890, 2390,
 ];
@@ -26,15 +27,17 @@ const xLabels = [
   "Nov",
   "Dec",
 ];
-
-export default function EscrowChart() {
+type Props = {
+  data: EscrowActiveBalanceType;
+};
+export default function EscrowChart({ data }: Props) {
   return (
     <Box>
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Typography
           sx={{ fontWeight: 600, fontSize: { xs: "1.5rem", sm: "2rem" } }}
         >
-          &#8358;{currencyFormater(40804500, 2)}
+          &#8358;{currencyFormater(data?.active_escrow_balance, 2)}
         </Typography>
         <IconButton>
           <KeyboardArrowRightIcon />

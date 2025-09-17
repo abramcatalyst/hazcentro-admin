@@ -12,27 +12,24 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
-import { currencyFormater, GLOBAL_COLORS } from "src/utils";
+import { currencyFormater, formatErrorMessage, GLOBAL_COLORS } from "src/utils";
 import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 import PreviewPayoutDialog from "./PreviewPayoutDialog";
-import { PayoutType } from "src/types/followers";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchRecentTransactions } from "src/services/escrow";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import TableSkeletonLoader from "src/components/shared/TableSkeletonLoader/TableSkeletonLoader";
+import { EscrowRecentTransactionType } from "src/types/escrow";
 
 type PayoutCardProps = {
-  data: PayoutType;
-  handleOpenDialog: (data: PayoutType) => void;
+  data: EscrowRecentTransactionType;
+  handleOpenDialog: (data: EscrowRecentTransactionType) => void;
 };
-
-const tempAgents: PayoutType[] = [
-  { name: "Pi Colines", transactionType: "payout", state: "Lagos" },
-  { name: "John Colines", transactionType: "payout", state: "Lagos" },
-  { name: "Tasha Philip", transactionType: "credit", state: "Abuja" },
-  { name: "Sarah Colines", transactionType: "credit", state: "Lagos" },
-  { name: "Sam Doe", transactionType: "payout", state: "Lagos" },
-];
 
 const PayoutCard = ({ data, handleOpenDialog }: PayoutCardProps) => {
   const navigate = useNavigate();
-  const { name, transactionType } = data;
+  const { status } = data;
 
   const handleViewProfile = () => {
     navigate(`${ADMIN_ROUTE_LINKS.ADMIN_AGENT_PROFILE}/1234`);
@@ -49,8 +46,8 @@ const PayoutCard = ({ data, handleOpenDialog }: PayoutCardProps) => {
     >
       <Box>
         <img
-          src={transactionType === "credit" ? PaymentGreen : PaymentRed}
-          alt={name}
+          src={status == "completed" ? PaymentGreen : PaymentRed}
+          alt={data?.meta?.payment_reference}
           style={{ width: "56px", height: "56px", cursor: "pointer" }}
           onClick={() => {
             handleViewProfile();
@@ -60,29 +57,31 @@ const PayoutCard = ({ data, handleOpenDialog }: PayoutCardProps) => {
       <Box>
         <Chip
           size="small"
-          label={transactionType}
+          label={status}
           sx={{
-            background: transactionType === "credit" ? "#47B48E0D" : "#000000",
+            background: status == "completed" ? "#47B48E0D" : "#ffd5b21a",
             color:
-              transactionType === "credit"
+              status == "completed"
                 ? GLOBAL_COLORS.GREEN_MAIN
                 : GLOBAL_COLORS.PRIMARY_MAIN,
-            fontSize: "10.5px",
+            fontSize: "10.8px",
             height: "21px",
             borderRadius: "12px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "60px",
+            width: "80px",
             p: 0,
           }}
         />
 
         <Typography sx={{ fontWeight: 600, fontSize: "15px" }}>
-          &#8358;{currencyFormater(404500, 2)}
+          &#8358;{currencyFormater(data?.amount, 2)}
         </Typography>
 
-        <Typography sx={{ fontSize: "11px" }}>Oriano Nig Plc.</Typography>
+        <Typography sx={{ fontSize: "11px" }}>
+          {data?.wallet?.user?.name}
+        </Typography>
       </Box>
       <Box sx={{ ml: "auto" }}>
         <Button
@@ -93,7 +92,7 @@ const PayoutCard = ({ data, handleOpenDialog }: PayoutCardProps) => {
             handleOpenDialog(data);
           }}
         >
-          Receipt
+          View more
         </Button>
       </Box>
     </Box>
@@ -101,8 +100,26 @@ const PayoutCard = ({ data, handleOpenDialog }: PayoutCardProps) => {
 };
 const RecentPayoutTable = () => {
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
-  const [selectedPayout, setSelectedPayout] = useState<PayoutType | null>(null);
-  const handleOpenPreviewDialog = (data: PayoutType) => {
+  const [selectedPayout, setSelectedPayout] =
+    useState<EscrowRecentTransactionType | null>(null);
+
+  const { error, data, isError, isPending } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_RECENT_TRANSACTIONS],
+    queryFn: () => fetchRecentTransactions({ limit: 8 }),
+  });
+
+  if (isPending) {
+    return (
+      <Box>
+        <TableSkeletonLoader />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+  const handleOpenPreviewDialog = (data: EscrowRecentTransactionType) => {
     setOpenPreviewDialog(true);
     setSelectedPayout(data);
   };
@@ -130,12 +147,12 @@ const RecentPayoutTable = () => {
           mb: 0.5,
         }}
       >
-        <ProfileTitle text="Recent Payout" />
+        <ProfileTitle text="Recent Transactions" />
         <IconButton>
           <SettingsIcon />
         </IconButton>
       </Box>
-      <Box sx={{ mb: 1, px: 1 }}>
+      <Box sx={{ mb: 1, px: 1, display: "none" }}>
         <FormControl fullWidth size="small">
           <OutlinedInput
             placeholder="Search for info, data..."
@@ -143,7 +160,7 @@ const RecentPayoutTable = () => {
           />
         </FormControl>
       </Box>
-      {tempAgents.map((row) => (
+      {data.map((row) => (
         <PayoutCard data={row} handleOpenDialog={handleOpenPreviewDialog} />
       ))}
     </Box>

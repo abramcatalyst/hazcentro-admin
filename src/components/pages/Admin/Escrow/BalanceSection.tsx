@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import EscrowChart from "./EscrowChart";
 import { useQuery } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
-import { fetchEscrowBalance } from "src/services/escrow";
+import { fetchEscrowBalance, fetchEscrowChart } from "src/services/escrow";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import { formatErrorMessage } from "src/utils";
@@ -13,8 +13,17 @@ function BalanceSection() {
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_ESCROW_BALANCE],
     queryFn: () => fetchEscrowBalance(),
   });
+  const {
+    error: errorChart,
+    data: dataChart,
+    isError: isErrorChart,
+    isPending: isPendingChart,
+  } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_ESCROW_CHARTS],
+    queryFn: () => fetchEscrowChart(),
+  });
 
-  if (isPending) {
+  if (isPending || isPendingChart) {
     return <HalfScreenLoader />;
   }
 
@@ -22,6 +31,12 @@ function BalanceSection() {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
 
+  if (isErrorChart) {
+    return <HalfScreenError text={formatErrorMessage(errorChart)} />;
+  }
+  const labels = Object.keys(dataChart);
+  const values = Object.values(dataChart);
+  const parsedValues = [...values?.map((item) => Number(item))];
   return (
     <Box
       sx={{
@@ -43,7 +58,7 @@ function BalanceSection() {
           Active escrow balance
         </Typography>
       </Box>
-      <EscrowChart data={data} />
+      <EscrowChart data={data} labels={labels} values={parsedValues} />
     </Box>
   );
 }

@@ -49,6 +49,7 @@ export default function GeneralConfirmDialog({
           }}
         >
           <Button
+            size="large"
             sx={dialogButtonStyles}
             variant="contained"
             onClick={handleSubmit}
@@ -57,6 +58,7 @@ export default function GeneralConfirmDialog({
             {isSubmitting ? "Processing" : "Yes"}
           </Button>
           <Button
+            size="large"
             sx={dialogButtonStyles}
             variant="contained"
             color="error"

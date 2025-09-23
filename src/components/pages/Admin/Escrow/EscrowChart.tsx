@@ -10,27 +10,13 @@ import IconButton from "@mui/material/IconButton";
 import { alpha } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { EscrowActiveBalanceType } from "src/types/escrow";
-const uData = [
-  4000, 3000, 2000, 2780, 1890, 2390, 4000, 3000, 2000, 2780, 1890, 2390,
-];
-const xLabels = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+
 type Props = {
   data: EscrowActiveBalanceType;
+  labels: string[];
+  values: number[];
 };
-export default function EscrowChart({ data }: Props) {
+export default function EscrowChart({ data, labels, values }: Props) {
   return (
     <Box>
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
@@ -44,9 +30,9 @@ export default function EscrowChart({ data }: Props) {
         </IconButton>
       </Box>
       <LineChart
-        xAxis={[{ data: xLabels, scaleType: "point" }]}
+        xAxis={[{ data: labels, scaleType: "point" }]}
         yAxis={[{ valueFormatter }]}
-        series={[{ data: uData, showMark: false, area: true }]}
+        series={[{ data: values, showMark: false, area: true }]}
         height={250}
         margin={{ top: 10, bottom: 30, left: 35, right: 10 }}
         sx={{

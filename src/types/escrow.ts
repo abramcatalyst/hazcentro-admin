@@ -64,3 +64,7 @@ export type EscrowRecentTransactionType = {
     };
   };
 };
+
+export type EscrowChartResType = {
+  [key: string]: number | string;
+};

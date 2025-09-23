@@ -3,12 +3,13 @@ import {
   CustomerCareOverviewDataType,
   CustomerCareTrendDataType,
 } from "src/types/agents";
-import { DisputeType } from "src/types/disputes";
 import {
   EscrowActiveBalanceType,
+  EscrowChartResType,
   EscrowRecentTransactionType,
 } from "src/types/escrow";
 import { QueryFilterType } from "src/types/filters";
+import { PendingPayoutType } from "src/types/payout";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
 export const fetchRecentTransactions = async ({
@@ -62,15 +63,16 @@ export const fetchAgentDisputesTrends =
     return data?.data;
   };
 
-export const fetchCustomerCareDisputes = async ({
+export const fetchPendingPayouts = async ({
   page,
   limit,
   search,
   status,
   startDate,
   endDate,
+  lastLoginDate,
 }: QueryFilterType): Promise<{
-  data: DisputeType[];
+  data: PendingPayoutType[];
   current_page: number;
   first_page_url: string;
   from: number;
@@ -92,11 +94,23 @@ export const fetchCustomerCareDisputes = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/agents/disputes?limit=${limit}${page ? `&page=${page}` : ""}${
-      startDate ? `&minCreateDate=${startDate}` : ""
-    }${endDate ? `&maxCreateDate=${endDate}` : ""}${
-      status ? `&status=${status}` : ""
+    `${baseUrl}/admin/wallets/escrow/pending-payouts?limit=${limit}${
+      page ? `&page=${page}` : ""
+    }${startDate ? `&minCreateDate=${startDate}` : ""}${
+      endDate ? `&maxCreateDate=${endDate}` : ""
+    }${lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""}${
+      status ? `&status=${status === "true" ? true : false}` : ""
     }${search ? `&search=${search}` : ""}`
+  );
+
+  return data;
+};
+
+export const fetchEscrowChart = async (): Promise<EscrowChartResType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/wallets/escrow/monthly-chart`
   );
 
   return data;

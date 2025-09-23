@@ -65,14 +65,14 @@ const navigation: NavigationType[] = [
     url: ADMIN_ROUTE_LINKS.ADMIN_AGENT,
     permission: "",
   },
-  {
-    id: 7,
-    kind: "page",
-    icon: <PiNotebook />,
-    title: "Messages",
-    url: ADMIN_ROUTE_LINKS.ADMIN_MESSAGES,
-    permission: "",
-  },
+  // {
+  //   id: 7,
+  //   kind: "page",
+  //   icon: <PiNotebook />,
+  //   title: "Messages",
+  //   url: ADMIN_ROUTE_LINKS.ADMIN_MESSAGES,
+  //   permission: "",
+  // },
   {
     id: 8,
     kind: "gap",

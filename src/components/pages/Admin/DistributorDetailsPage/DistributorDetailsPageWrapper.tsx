@@ -49,10 +49,10 @@ export const profileTabOptions = [
     title: "Escrow",
     value: usersPageTabOptionsObj.ESCROW,
   },
-  {
-    title: "Message",
-    value: usersPageTabOptionsObj.MESSAGE,
-  },
+  // {
+  //   title: "Message",
+  //   value: usersPageTabOptionsObj.MESSAGE,
+  // },
   {
     title: "Rate & Reviews",
     value: usersPageTabOptionsObj.RATE_AND_REVIEWS,
@@ -61,10 +61,10 @@ export const profileTabOptions = [
     title: "Feeds & Followers",
     value: usersPageTabOptionsObj.FEEDS_AND_FOLLOWERS,
   },
-  {
-    title: "Voucher & Coupon",
-    value: usersPageTabOptionsObj.VOUCHER_AND_COUPON,
-  },
+  // {
+  //   title: "Voucher & Coupon",
+  //   value: usersPageTabOptionsObj.VOUCHER_AND_COUPON,
+  // },
 ];
 
 const DistributorDetailsPageWrapper = ({ data }: UserDetailsPageProps) => {

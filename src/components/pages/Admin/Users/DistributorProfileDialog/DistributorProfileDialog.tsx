@@ -173,7 +173,14 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
         <ErrorBoundary FallbackComponent={ErrorFallBack}>
           {data && <ActiveOrders data={data} />}
         </ErrorBoundary>
-        <QuickActions />
+        <QuickActions
+          selected={selectedUser}
+          handleClose={handleClose}
+          queries={[
+            TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_VENDOR_OVERVIEW,
+            TANSTACK_REQUEST_CACHE_TAGS.FETCH_E_COMMERCE_DISTRIBUTORS,
+          ]}
+        />
         <Divider />
         <Box sx={{ my: 1, display: "flex", gap: 1 }}>
           <Button

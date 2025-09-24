@@ -149,8 +149,6 @@ const OrderStages = ({ selectedOrder, refetch }: Props) => {
     }
   }, [selectedOrder]);
 
-  console.log("ssssssssss");
-
   const handleSubmitUpdateStatus = async (index: number) => {
     try {
       setDefaultHeaders();

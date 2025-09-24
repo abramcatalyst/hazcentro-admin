@@ -91,6 +91,8 @@ function AppNavigation({
     <Box
       sx={{
         background: GLOBAL_COLORS.GREY_50,
+        height: "100%",
+        overflow: "hidden",
       }}
     >
       <Box
@@ -120,7 +122,7 @@ function AppNavigation({
         )}
       </IconButton> */}
       </Box>
-      <List sx={{ px: 0.5, height: "95%" }}>
+      <List sx={{ px: 0.5, height: "99%" }}>
         {navigation.map((row) => (
           <ListItem key={row?.id} disablePadding sx={{ display: "block" }}>
             {row?.kind === "divider" ? (

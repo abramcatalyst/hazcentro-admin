@@ -35,12 +35,14 @@ import { useSearchParams } from "react-router-dom";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { UserType } from "src/types/users";
+import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 
 dayjs.extend(advancedFormat);
 
 const headCells = [
   "User ID",
   "Customer Name",
+  "Status",
   "Location",
   "Date Joined",
   "Email Address",
@@ -188,6 +190,9 @@ function DistributorsTable({ selectedUsers }: Props) {
                       </StyledTableCell> */}
                       <StyledTableCell>{row?.unique_user_id}</StyledTableCell>
                       <StyledTableCell>{row?.name}</StyledTableCell>
+                      <StyledTableCell>
+                        {renderStatus(row?.status)}
+                      </StyledTableCell>
                       <StyledTableCell>{`${row?.state}, ${row?.country}`}</StyledTableCell>
                       <StyledTableCell>
                         {dayjs(row?.created_at).format("MMM Do YYYY")}

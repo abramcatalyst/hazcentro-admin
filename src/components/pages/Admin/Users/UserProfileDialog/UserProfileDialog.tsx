@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material/styles";
 import AvatarFemale from "src/assets/images/avatar-female.png";
 import AvatarMale from "src/assets/images/avatar-male.png";
 import { formatErrorMessage, userRoles } from "src/utils";
-import QuickActions from "./QuickActions";
+import QuickActions from "../DistributorProfileDialog/QuickActions";
 import ActiveOrders from "./ActiveOrders";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import { useNavigate } from "react-router-dom";
@@ -186,7 +186,14 @@ function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
         {data?.role === userRoles.USER ? (
           <ActiveOrders selectedUser={data} />
         ) : null}
-        <QuickActions />
+        <QuickActions
+          selected={selectedUser}
+          handleClose={handleClose}
+          queries={[
+            TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER,
+            TANSTACK_REQUEST_CACHE_TAGS.FETCH_ALL_WORKERS,
+          ]}
+        />
         <Divider />
         <Box sx={{ my: 1, display: "flex", gap: 1 }}>
           <Button

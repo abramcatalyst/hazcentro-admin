@@ -35,10 +35,10 @@ export const profileTabOptions = [
     title: "Followings",
     value: usersPageTabOptionsObj.FOLLOWINGS,
   },
-  {
-    title: "Message",
-    value: usersPageTabOptionsObj.MESSAGE,
-  },
+  // {
+  //   title: "Message",
+  //   value: usersPageTabOptionsObj.MESSAGE,
+  // },
   {
     title: "Dispute Log",
     value: usersPageTabOptionsObj.DISPUTE_LOG,

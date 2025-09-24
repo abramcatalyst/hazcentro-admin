@@ -35,12 +35,14 @@ import { useSearchParams } from "react-router-dom";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { UserType } from "src/types/users";
+import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 
 dayjs.extend(advancedFormat);
 
 const headCells = [
   "User ID",
   "Customer Name",
+  "Status",
   "Location",
   "Date Joined",
   "Email Address",
@@ -74,7 +76,7 @@ function ServiceWorkersTable({ selectedUsers }: Props) {
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 0;
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ALl_WORKERS, { limit, page }],
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ALL_WORKERS, { limit, page }],
     queryFn: () => fetchUsers({ limit: limit, page: page, role: "worker" }),
   });
 
@@ -154,6 +156,9 @@ function ServiceWorkersTable({ selectedUsers }: Props) {
                     >
                       <StyledTableCell>{row?.unique_user_id}</StyledTableCell>
                       <StyledTableCell>{row?.name}</StyledTableCell>
+                      <StyledTableCell>
+                        {renderStatus(row?.status)}
+                      </StyledTableCell>
                       <StyledTableCell>{`${row?.state}, ${row?.country}`}</StyledTableCell>
                       <StyledTableCell>
                         {dayjs(row?.created_at).format("MMM Do YYYY")}

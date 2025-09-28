@@ -57,7 +57,11 @@ function PreviewDialog({ open, value, handleClose }: Props) {
             borderRadius: "12px",
           }}
         >
-          {value}
+          <img
+            src={value}
+            alt="document"
+            style={{ width: "100%", height: "100%" }}
+          />
         </Box>
       </DialogContent>
     </StyledDialog>

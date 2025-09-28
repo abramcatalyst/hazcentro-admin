@@ -6,6 +6,7 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
 import { GLOBAL_COLORS } from "src/utils";
 import PreviewDialog from "./PreviewDialog";
+import { handleDownloadJPGFile } from "src/utils/index-async";
 
 type ProfileInfoBoxProps = {
   value: string;
@@ -67,7 +68,12 @@ const ProfileInfoBox = ({
             {value?.length > splitValue ? "..." : ""}
           </Typography>{" "}
           {enableDownload && (
-            <IconButton size="small">
+            <IconButton
+              size="small"
+              onClick={() => {
+                handleDownloadJPGFile({ url: value, fileName: title });
+              }}
+            >
               <MdOutlineFileDownload />
             </IconButton>
           )}

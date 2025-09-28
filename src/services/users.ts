@@ -6,6 +6,7 @@ import { FeedType } from "src/types/feeds";
 import { QueryFilterType } from "src/types/filters";
 import { FollowerType, VendorFullFollowerType } from "src/types/followers";
 import { RateType } from "src/types/rates";
+import { SubscriptionResType } from "src/types/subscription";
 import { UserType } from "src/types/users";
 import { VendorOverviewType } from "src/types/vendor";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
@@ -121,10 +122,7 @@ export const fetchVendorCategoriesAndActivityData = async ({
 
 export const fetchVendorSubscriptionsData = async ({
   id,
-}: QueryFilterType): Promise<{
-  categories: VendorProductCategoryType[];
-  recent_activities: VendorActivityType[];
-}> => {
+}: QueryFilterType): Promise<SubscriptionResType> => {
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(

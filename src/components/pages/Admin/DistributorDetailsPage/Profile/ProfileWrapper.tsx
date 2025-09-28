@@ -26,10 +26,10 @@ export const profileTabOptions = [
     title: "Profile",
     value: tabOptionsObj.PROFILE,
   },
-  {
-    title: "Products",
-    value: tabOptionsObj.PRODUCTS,
-  },
+  // {
+  //   title: "Products",
+  //   value: tabOptionsObj.PRODUCTS,
+  // },
   {
     title: "Documents ",
     value: tabOptionsObj.DOCUMENTS,

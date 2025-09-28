@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
-import QuickActions from "./QuickActions";
+// import QuickActions from "./QuickActions";
 import { MdOutlineStar } from "react-icons/md";
 import DistributorStats from "./DistributorStats";
 import { profileTabOptions, tabOptionsObj } from "./ProfileWrapper";
@@ -186,33 +186,32 @@ const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
         }}
       >
         <ProfileTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            background: "#47B48E12",
-            borderRadius: "4px",
-            py: 0.4,
-            px: 1,
-          }}
-        >
-          <img
-            src={VerifiedIcon}
-            alt="verified"
-            style={{ width: "24px", height: "24px" }}
-          />
-          <Box>
-            <Typography
-              sx={{ fontSize: "10px", color: GLOBAL_COLORS.GREEN_MAIN }}
-            >
-              Verified
-            </Typography>
-            <Typography sx={{ fontSize: "8px", color: "GrayText" }}>
-              Wal Yaks
-            </Typography>
+        {userData?.kyc_status === "approved" && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              background: "#47B48E12",
+              borderRadius: "4px",
+              py: 0.4,
+              px: 1,
+            }}
+          >
+            <img
+              src={VerifiedIcon}
+              alt="verified"
+              style={{ width: "24px", height: "24px" }}
+            />
+            <Box>
+              <Typography
+                sx={{ fontSize: "10px", color: GLOBAL_COLORS.GREEN_MAIN }}
+              >
+                Verified
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+        )}
       </Box>
       <Box my={2}>
         {selectedTab === tabOptionsObj.PROFILE ? (
@@ -222,10 +221,12 @@ const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
           />
         ) : null}
         {selectedTab === tabOptionsObj.PRODUCTS ? <ProductInfo /> : null}
-        {selectedTab === tabOptionsObj.DOCUMENTS ? <DocumentInfo /> : null}
+        {selectedTab === tabOptionsObj.DOCUMENTS ? (
+          <DocumentInfo userData={userData} />
+        ) : null}
         {selectedTab === tabOptionsObj.PAYMENT ? <PaymentInfo /> : null}
       </Box>
-      <QuickActions />
+      {/* <QuickActions /> */}
     </Box>
   );
 };

@@ -2,9 +2,14 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
 import ProfileInfoBox from "src/components/shared/ProfileInfoBox/ProfileInfoBox";
+import { UserType } from "src/types/users";
 
-const sizing = { xs: 12, sm: 6, md: 4, lg: 3 };
-const DocumentInfo = () => {
+const sizing = { xs: 12, sm: 6, md: 4 };
+
+type Props = {
+  userData: UserType;
+};
+const DocumentInfo = ({ userData }: Props) => {
   return (
     <Box
       component={Paper}
@@ -17,33 +22,16 @@ const DocumentInfo = () => {
     >
       <Box my={2}>
         <Grid container spacing={1}>
-          <Grid size={sizing}>
-            <ProfileInfoBox
-              title="CAC Certificate"
-              value="uyt6789"
-              enablePreview
-              enableDownload
-            />
-          </Grid>
-          <Grid size={sizing}>
-            <ProfileInfoBox
-              title="TAX/TIN ID Cert"
-              value="1234560987345"
-              enablePreview
-              enableDownload
-            />
-          </Grid>
-          <Grid size={sizing}>
-            <ProfileInfoBox title="Prof. of Biz. Premises" value="Esther" />
-          </Grid>
-          <Grid size={sizing}>
-            <ProfileInfoBox
-              title="Warehouse Picture"
-              value="johndoecom"
-              enablePreview
-              enableDownload
-            />
-          </Grid>
+          {userData?.vendor?.documents?.map((item) => (
+            <Grid key={item?.document_type} size={sizing}>
+              <ProfileInfoBox
+                title={item?.document_type}
+                value={item?.file_urls[0]}
+                enablePreview
+                enableDownload
+              />
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </Box>

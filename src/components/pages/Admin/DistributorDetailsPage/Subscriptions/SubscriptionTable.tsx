@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { useQuery } from "@tanstack/react-query";
 import { fetchVendorSubscriptionsData } from "src/services/users";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
 const headCells = [
   "Order ID",
@@ -23,7 +24,7 @@ function SubscriptionTable() {
 
   const { error, data, isError, isPending } = useQuery({
     queryKey: [
-      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_VENDOR_OVERVIEW,
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_SUBSCRIPTION_DATA,
       { id },
     ],
     queryFn: () => fetchVendorSubscriptionsData({ id: id }),
@@ -36,7 +37,7 @@ function SubscriptionTable() {
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
-  console.log("dddddddddddddd", data);
+  console.log("vvvvvvvvvvvvvvvvvvvvvvv", data);
   return (
     <Box
       sx={{
@@ -53,9 +54,13 @@ function SubscriptionTable() {
       </Box>
 
       <Box>
-        {headCells.map((row) => {
-          return <SubscriptionItem key={row} />;
-        })}
+        {data?.history?.total === 0 ? (
+          <EmptyTable isSmall subText="No history found" />
+        ) : (
+          headCells.map((row) => {
+            return <SubscriptionItem key={row} />;
+          })
+        )}
       </Box>
     </Box>
   );

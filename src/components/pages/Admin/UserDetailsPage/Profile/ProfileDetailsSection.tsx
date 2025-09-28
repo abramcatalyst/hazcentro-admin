@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid2";
 import { useTheme } from "@mui/material/styles";
 import MaleAvatar from "src/assets/tempimages/user1.png";
 import ProfileInfoBox from "src/components/shared/ProfileInfoBox/ProfileInfoBox";
-import QuickActions from "./QuickActions";
+// import QuickActions from "./QuickActions";
 import { UserType } from "src/types/users";
 
 type Props = {
@@ -97,7 +97,7 @@ const ProfileDetailsSection = ({ data }: Props) => {
           </Grid>
         </Grid>
       </Box>
-      <QuickActions />
+      {/* <QuickActions /> */}
     </Box>
   );
 };

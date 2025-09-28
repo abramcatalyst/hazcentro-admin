@@ -16,10 +16,19 @@ export type UserType = {
   longitude: string;
   latitude: string;
   kyc_status: string;
+  address: string | null;
   email_verified_at: string;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
   role: "user" | "vendor" | "worker";
   roles: RoleType[];
+  vendor: {
+    id: string;
+    business_name: string;
+    documents: {
+      document_type: string;
+      file_urls: string[];
+    }[];
+  };
 };

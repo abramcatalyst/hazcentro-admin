@@ -2,6 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 // import QuickActions from "./QuickActions";
 import { MdOutlineStar } from "react-icons/md";
@@ -19,6 +20,8 @@ import { VendorOverviewType } from "src/types/vendor";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"; // ES 2015
 import renderUserProfileImage from "src/utils/renderUserProfileImage";
+import renderStatus from "src/components/shared/RenderStatus/renderStatus";
+import UpdateKYCDialog from "./UpdateKYCDialog";
 
 dayjs.extend(relativeTime);
 type Props = {
@@ -26,6 +29,7 @@ type Props = {
   vendorOverviewData: VendorOverviewType;
 };
 const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [selectedTab, setSelectedTab] = useState(profileTabOptions[0].value);
 
   const theme = useTheme();
@@ -33,6 +37,9 @@ const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
     remoteImageUrl: vendorOverviewData?.profile?.profile_picture_url,
     gender: userData?.gender,
   });
+  const handleCloseUpdateDialog = () => {
+    setOpenUpdateDialog(false);
+  };
   return (
     <Box
       component={Paper}
@@ -43,7 +50,22 @@ const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
       }}
       elevation={0}
     >
-      <Box sx={{ my: 1.5 }}>
+      {openUpdateDialog && (
+        <UpdateKYCDialog
+          open={openUpdateDialog}
+          user={userData}
+          handleClose={handleCloseUpdateDialog}
+        />
+      )}
+      <Box
+        sx={{
+          my: 1.5,
+          display: "flex",
+          gap: 2,
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography
           sx={{
             fontSize: "17px",
@@ -52,6 +74,21 @@ const ProfileDetailsSection = ({ userData, vendorOverviewData }: Props) => {
         >
           Profile Info
         </Typography>{" "}
+        <Box>
+          <Box sx={{ display: "flex", gap: 0.7, alignItems: "center" }}>
+            <Typography variant="subtitle2">KYC:</Typography>{" "}
+            {renderStatus(userData?.kyc_status)}
+          </Box>
+          <Button
+            size="small"
+            color="success"
+            onClick={() => {
+              setOpenUpdateDialog(true);
+            }}
+          >
+            Update KYC
+          </Button>
+        </Box>
       </Box>
 
       <Box

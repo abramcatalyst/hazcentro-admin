@@ -5,6 +5,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import ChevronLeftSharpIcon from "@mui/icons-material/ChevronLeftSharp";
+import MetaDecorator from "../MetaDecorator/MetaDecorator";
 
 type Props = {
   text: string;
@@ -37,6 +38,7 @@ const AppHeader = ({ isCapitalized, text }: Props) => {
         alignItems: "center",
       }}
     >
+      <MetaDecorator title={` ${text} `} />
       {isNestedRoute && (
         <IconButton onClick={() => navigate(-1)} size="small">
           <ChevronLeftSharpIcon />

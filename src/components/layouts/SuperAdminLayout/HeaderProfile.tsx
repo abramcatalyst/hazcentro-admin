@@ -17,13 +17,14 @@ import {
   reformatRoleName,
   removeTokenFromStorage,
 } from "src/utils";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAppStore from "src/store/appStore";
 import { appPermissions } from "src/utils/permissions";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
 import { IoChatbubblesSharp } from "react-icons/io5";
 import { LuBell } from "react-icons/lu";
 import { useTheme } from "@mui/material/styles";
+import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 
 export default function HeaderProfile() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -65,9 +66,11 @@ export default function HeaderProfile() {
             py: 0.2,
           }}
         >
-          <IconButton>
-            <LuBell />
-          </IconButton>
+          <Link to={ADMIN_ROUTE_LINKS.ADMIN_NOTIFICATIONS}>
+            <IconButton>
+              <LuBell />
+            </IconButton>
+          </Link>
           <IconButton sx={{ display: "none" }}>
             <IoChatbubblesSharp />
           </IconButton>

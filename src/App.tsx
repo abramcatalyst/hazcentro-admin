@@ -41,6 +41,7 @@ import Distributors from "./pages/customercare/Distributors";
 import DistributorDetails from "./pages/customercare/DistributorDetails";
 import CustomerCareOrders from "./pages/customercare/CustomerCareOrders";
 import CustomerCareProfile from "./pages/customercare/CustomerCareProfile";
+import AdminNotifications from "./pages/admin/AdminNotifications";
 
 function App() {
   const CustomerCareRoutes = () => (
@@ -116,6 +117,10 @@ function App() {
         <Route
           path={ADMIN_ROUTE_SUB_LINKS.ESCROW_DASHBOARD}
           element={<AdminEscrowDashboard />}
+        />
+        <Route
+          path={ADMIN_ROUTE_SUB_LINKS.NOTIFICATIONS}
+          element={<AdminNotifications />}
         />
         <Route path={ADMIN_ROUTE_SUB_LINKS.AGENT} element={<AdminAgents />} />
         <Route

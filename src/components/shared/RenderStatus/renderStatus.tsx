@@ -18,6 +18,7 @@ const redStates = [
   "cancelled",
   "canceled",
   "suspended",
+  "declined",
 ];
 const greenStates = [
   "approved",
@@ -113,7 +114,10 @@ const renderStatus = (stat: string | boolean | number | null | undefined) => {
   if (typeof stat === "boolean" && stat === false) {
     return <Chip color="error" label={"Not active"} size="small" />;
   }
-  if (typeof stat === "string" && greenStates?.includes(stat?.toLowerCase())) {
+  if (
+    (typeof stat === "string" && greenStates?.includes(stat?.toLowerCase())) ||
+    Boolean(stat) === true
+  ) {
     return (
       <Box sx={{ display: "flex", gap: 0.5, my: 0.4, alignItems: "center" }}>
         <Box

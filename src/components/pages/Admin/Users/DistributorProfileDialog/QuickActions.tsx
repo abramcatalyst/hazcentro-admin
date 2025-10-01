@@ -90,13 +90,14 @@ function QuickActions({ selected, queries, handleClose }: Props) {
     val: "active" | "suspended" | "inactive";
     onSuccess: () => void;
   }) => {
+    // 'pending', 'approved', 'declined', 'none'
     try {
       setDefaultHeaders();
       isAuthTokenExpired();
       setIsSubmitting(true);
 
       const payload = {
-        delivery_status: val,
+        status: val,
       };
       const res = await axios.patch(
         `${baseUrl}/admin/users/${selected?.id}`,

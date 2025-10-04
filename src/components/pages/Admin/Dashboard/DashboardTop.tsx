@@ -147,7 +147,7 @@ const DashboardTop = ({ data }: Props) => {
             title="Total Sales"
             value={data?.total_sales?.amount}
             trend={`${data?.total_sales?.change_pct}%`}
-            decimalPoint={2}
+            decimalPoint={0}
           />
         </Grid>
         <Grid size={itemSizing}>

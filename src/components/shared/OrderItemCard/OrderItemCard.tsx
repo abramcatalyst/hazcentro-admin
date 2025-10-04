@@ -4,12 +4,17 @@ import Typography from "@mui/material/Typography";
 import PlaceholderImage from "src/assets/images/placeholder.png";
 import { alpha, useTheme } from "@mui/material/styles";
 import { OrderType } from "src/types/orders";
+import { Link } from "react-router-dom";
+import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
+import useAuthStore from "src/store/authStore";
 
 type Props = {
   data: OrderType;
 };
 function OrderItemCard({ data }: Props) {
   const theme = useTheme();
+  const { profile } = useAuthStore((state) => state);
+
   return (
     <Box
       sx={{
@@ -62,19 +67,27 @@ function OrderItemCard({ data }: Props) {
           </Typography>
         </Box>
       </Box>
-      <Button
-        color="error"
-        sx={{
-          background: alpha(theme.palette.error.light, 0.05),
-          color: "#000000",
-          "&:hover": {
-            background: alpha(theme.palette.error.light, 0.7),
-            color: "#ffffff",
-          },
-        }}
+      <Link
+        to={
+          profile?.role === "admin"
+            ? `${ADMIN_ROUTE_LINKS.ADMIN_ORDER_DETAILS}/${data?.id}`
+            : `${CUSTOMER_ROUTE_LINKS.CUSTOMER_ORDER_DETAILS}/${data?.id}`
+        }
       >
-        View details
-      </Button>
+        <Button
+          color="error"
+          sx={{
+            background: alpha(theme.palette.error.light, 0.05),
+            color: "#000000",
+            "&:hover": {
+              background: alpha(theme.palette.error.light, 0.7),
+              color: "#ffffff",
+            },
+          }}
+        >
+          View details
+        </Button>
+      </Link>
     </Box>
   );
 }

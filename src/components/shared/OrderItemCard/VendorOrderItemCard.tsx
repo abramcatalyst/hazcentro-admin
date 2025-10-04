@@ -4,12 +4,16 @@ import Typography from "@mui/material/Typography";
 import PlaceholderImage from "src/assets/images/placeholder.png";
 import { alpha, useTheme } from "@mui/material/styles";
 import { PartOrderType } from "src/types/vendor";
+import { Link } from "react-router-dom";
+import useAuthStore from "src/store/authStore";
+import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 
 type Props = {
   data: PartOrderType;
 };
 function VendorOrderItemCard({ data }: Props) {
   const theme = useTheme();
+  const { profile } = useAuthStore((state) => state);
 
   return (
     <Box
@@ -60,22 +64,30 @@ function VendorOrderItemCard({ data }: Props) {
           </Typography>
         </Box>
       </Box>
-      <Button
-        size="small"
-        color="error"
-        sx={{
-          minWidth: "93px",
-          fontSize: "12.4px",
-          background: alpha(theme.palette.error.light, 0.05),
-          color: "#000000",
-          "&:hover": {
-            background: alpha(theme.palette.error.light, 0.7),
-            color: "#ffffff",
-          },
-        }}
+      <Link
+        to={
+          profile?.role === "admin"
+            ? `${ADMIN_ROUTE_LINKS.ADMIN_ORDER_DETAILS}/${data?.id}`
+            : `${CUSTOMER_ROUTE_LINKS.CUSTOMER_ORDER_DETAILS}/${data?.id}`
+        }
       >
-        View details
-      </Button>
+        <Button
+          size="small"
+          color="error"
+          sx={{
+            minWidth: "93px",
+            fontSize: "12.4px",
+            background: alpha(theme.palette.error.light, 0.05),
+            color: "#000000",
+            "&:hover": {
+              background: alpha(theme.palette.error.light, 0.7),
+              color: "#ffffff",
+            },
+          }}
+        >
+          View details
+        </Button>
+      </Link>
     </Box>
   );
 }

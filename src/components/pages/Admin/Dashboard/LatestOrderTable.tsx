@@ -18,6 +18,9 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchOrders } from "src/services/orders";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import useAuthStore from "src/store/authStore";
+import { Link } from "react-router-dom";
+import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 
 dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat);
@@ -43,6 +46,7 @@ function EnhancedTableHead() {
 }
 
 function LatestOrderTable() {
+  const { profile } = useAuthStore((state) => state);
   const { isPending, error, data, isError } = useQuery({
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_RECENT_ORDERS, {}],
     queryFn: () => fetchOrders({ limit: 8, page: 1 }),
@@ -75,7 +79,17 @@ function LatestOrderTable() {
             {data?.data.map((row) => {
               return (
                 <TableRow key={row.id}>
-                  <StyledTableCell>{row?.tracking_id}</StyledTableCell>
+                  <StyledTableCell>
+                    <Link
+                      to={
+                        profile?.role === "admin"
+                          ? `${ADMIN_ROUTE_LINKS.ADMIN_ORDER_DETAILS}/${row?.id}`
+                          : `${CUSTOMER_ROUTE_LINKS.CUSTOMER_ORDER_DETAILS}/${row?.id}`
+                      }
+                    >
+                      {row?.tracking_id}
+                    </Link>
+                  </StyledTableCell>
                   <StyledTableCell>{row?.buyer?.name || "N/A"}</StyledTableCell>
                   <StyledTableCell>{row?.order_items?.length}</StyledTableCell>
                   <StyledTableCell>

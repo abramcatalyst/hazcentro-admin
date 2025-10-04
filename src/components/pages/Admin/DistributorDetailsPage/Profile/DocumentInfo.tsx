@@ -3,6 +3,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
 import ProfileInfoBox from "src/components/shared/ProfileInfoBox/ProfileInfoBox";
 import { UserType } from "src/types/users";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
 const sizing = { xs: 12, sm: 6, md: 4 };
 
@@ -21,18 +22,23 @@ const DocumentInfo = ({ userData }: Props) => {
       elevation={0}
     >
       <Box my={2}>
-        <Grid container spacing={1}>
-          {userData?.vendor?.documents?.map((item) => (
-            <Grid key={item?.document_type} size={sizing}>
-              <ProfileInfoBox
-                title={item?.document_type}
-                value={item?.file_urls[0]}
-                enablePreview
-                enableDownload
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {userData?.vendor?.documents &&
+        userData?.vendor?.documents?.length > 0 ? (
+          <Grid container spacing={1}>
+            {userData?.vendor?.documents?.map((item) => (
+              <Grid key={item?.document_type} size={sizing}>
+                <ProfileInfoBox
+                  title={item?.document_type}
+                  value={item?.file_urls[0]}
+                  enablePreview
+                  enableDownload
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <EmptyTable isSmall subText="No document uploaded yet" />
+        )}
       </Box>
     </Box>
   );

@@ -14,6 +14,9 @@ import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import dayjs from "dayjs";
 import { VendorOverviewType } from "src/types/vendor";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import { Link } from "react-router-dom";
+import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
+import useAuthStore from "src/store/authStore";
 
 const headCells = ["Order ID", "Item", "Amount", "Date", "Status", ""];
 
@@ -33,6 +36,7 @@ type Props = {
   vendorOverviewData: VendorOverviewType;
 };
 const LatestOrderTable = ({ vendorOverviewData }: Props) => {
+  const { profile } = useAuthStore((state) => state);
   return (
     <Box sx={{ background: "#ffffff", borderRadius: "20px", mb: 1 }}>
       <Box sx={{ p: 1, pl: 2 }}>
@@ -49,7 +53,15 @@ const LatestOrderTable = ({ vendorOverviewData }: Props) => {
                   return (
                     <TableRow key={`${row?.id}${index}`} hover>
                       <StyledTableCell sx={{ fontSize: "11px" }}>
-                        {row?.tracking_id}
+                        <Link
+                          to={
+                            profile?.role === "admin"
+                              ? `${ADMIN_ROUTE_LINKS.ADMIN_ORDER_DETAILS}/${row?.id}`
+                              : `${CUSTOMER_ROUTE_LINKS.CUSTOMER_ORDER_DETAILS}/${row?.id}`
+                          }
+                        >
+                          {row?.tracking_id}
+                        </Link>
                       </StyledTableCell>
                       <StyledTableCell>
                         <Typography

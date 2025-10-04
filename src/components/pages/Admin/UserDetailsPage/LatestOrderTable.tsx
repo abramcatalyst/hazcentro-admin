@@ -18,11 +18,13 @@ import {
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import dayjs from "dayjs";
 import { fetchSingleUsersOrders } from "src/services/orders";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import useAuthStore from "src/store/authStore";
+import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 
 const headCells = [
   "Order ID",
@@ -46,6 +48,7 @@ function EnhancedTableHead() {
 }
 
 const LatestOrderTable = () => {
+  const { profile } = useAuthStore();
   const { id } = useParams();
   const { isPending, error, data, isError } = useQuery({
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_USER_ORDERS, { id }],
@@ -84,7 +87,15 @@ const LatestOrderTable = () => {
                 return (
                   <TableRow key={`${row?.id}${index}`} hover>
                     <StyledTableCell sx={{ fontSize: "11px" }}>
-                      {row?.tracking_id}
+                      <Link
+                        to={
+                          profile?.role === "admin"
+                            ? `${ADMIN_ROUTE_LINKS.ADMIN_ORDER_DETAILS}/${row?.id}`
+                            : `${CUSTOMER_ROUTE_LINKS.CUSTOMER_ORDER_DETAILS}/${row?.id}`
+                        }
+                      >
+                        {row?.tracking_id}
+                      </Link>
                     </StyledTableCell>
                     <StyledTableCell>
                       <Typography

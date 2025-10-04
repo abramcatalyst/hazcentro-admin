@@ -42,6 +42,8 @@ import DistributorDetails from "./pages/customercare/DistributorDetails";
 import CustomerCareOrders from "./pages/customercare/CustomerCareOrders";
 import CustomerCareProfile from "./pages/customercare/CustomerCareProfile";
 import AdminNotifications from "./pages/admin/AdminNotifications";
+import AdminOrderDetailsPage from "./pages/admin/AdminOrderDetailsPage";
+import CustomerCareOrderDetailsPage from "./pages/customercare/CustomerCareOrderDetailsPage";
 
 function App() {
   const CustomerCareRoutes = () => (
@@ -50,6 +52,10 @@ function App() {
         <Route
           path={`${CUSTOMER_ROUTE_SUB_LINKS.SINGLE_DISPUTE}/:id`}
           element={<CustomerDisputeDetails />}
+        />
+        <Route
+          path={`${CUSTOMER_ROUTE_SUB_LINKS.ORDER_DETAILS}/:id`}
+          element={<CustomerCareOrderDetailsPage />}
         />
         <Route
           path={`${CUSTOMER_ROUTE_SUB_LINKS.SINGLE_DISTRIBUTOR}/:id`}
@@ -85,6 +91,10 @@ function App() {
   const AdminRoutes = () => (
     <Routes>
       <Route element={<SuperAdminLayout />}>
+        <Route
+          path={`${ADMIN_ROUTE_SUB_LINKS.ORDER_DETAILS}/:id`}
+          element={<AdminOrderDetailsPage />}
+        />
         <Route
           path={`${ADMIN_ROUTE_SUB_LINKS.SINGLE_CATEGORY_PAGE}/:id`}
           element={<AdminSingleCategoryPage />}

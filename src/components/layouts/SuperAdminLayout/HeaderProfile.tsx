@@ -17,7 +17,7 @@ import {
   reformatRoleName,
   removeTokenFromStorage,
 } from "src/utils";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAppStore from "src/store/appStore";
 import { appPermissions } from "src/utils/permissions";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
@@ -32,6 +32,7 @@ export default function HeaderProfile() {
   const { handleOpenAdminDialog } = useAppStore((state) => state);
   const { isAuthorized } = useIsUserAuthorized();
   const theme = useTheme();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -67,7 +68,14 @@ export default function HeaderProfile() {
           }}
         >
           <Link to={ADMIN_ROUTE_LINKS.ADMIN_NOTIFICATIONS}>
-            <IconButton>
+            <IconButton
+              sx={{
+                color:
+                  pathname == ADMIN_ROUTE_LINKS.ADMIN_NOTIFICATIONS
+                    ? theme.palette.primary.main
+                    : "auto",
+              }}
+            >
               <LuBell />
             </IconButton>
           </Link>

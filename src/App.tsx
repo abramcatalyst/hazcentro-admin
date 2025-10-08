@@ -44,6 +44,7 @@ import CustomerCareProfile from "./pages/customercare/CustomerCareProfile";
 import AdminNotifications from "./pages/admin/AdminNotifications";
 import AdminOrderDetailsPage from "./pages/admin/AdminOrderDetailsPage";
 import CustomerCareOrderDetailsPage from "./pages/customercare/CustomerCareOrderDetailsPage";
+import CustomerCareNotifications from "./pages/customercare/CustomerCareNotifications";
 
 function App() {
   const CustomerCareRoutes = () => (
@@ -65,6 +66,10 @@ function App() {
         <Route
           path={CUSTOMER_ROUTE_SUB_LINKS.OVERVIEW}
           element={<CustomerOverview />}
+        />
+        <Route
+          path={CUSTOMER_ROUTE_SUB_LINKS.NOTIFICATIONS}
+          element={<CustomerCareNotifications />}
         />
         <Route
           path={CUSTOMER_ROUTE_SUB_LINKS.DISPUTES}

@@ -17,13 +17,14 @@ import {
   reformatRoleName,
   removeTokenFromStorage,
 } from "src/utils";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAppStore from "src/store/appStore";
 import { appPermissions } from "src/utils/permissions";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
 import { IoChatbubblesSharp } from "react-icons/io5";
 import { LuBell } from "react-icons/lu";
 import { useTheme } from "@mui/material/styles";
+import { CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 
 export default function HeaderProfile() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -31,6 +32,7 @@ export default function HeaderProfile() {
   const { handleOpenAdminDialog } = useAppStore((state) => state);
   const { isAuthorized } = useIsUserAuthorized();
   const theme = useTheme();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -65,9 +67,18 @@ export default function HeaderProfile() {
             py: 0.2,
           }}
         >
-          <IconButton>
-            <LuBell />
-          </IconButton>
+          <Link to={CUSTOMER_ROUTE_LINKS.CUSTOMER_NOTIFICATIONS}>
+            <IconButton
+              sx={{
+                color:
+                  pathname == CUSTOMER_ROUTE_LINKS.CUSTOMER_NOTIFICATIONS
+                    ? theme.palette.primary.main
+                    : "auto",
+              }}
+            >
+              <LuBell />
+            </IconButton>
+          </Link>
           <IconButton sx={{ display: "none" }}>
             <IoChatbubblesSharp />
           </IconButton>

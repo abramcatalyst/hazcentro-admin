@@ -3,9 +3,9 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import List from "@mui/material/List";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
-import User from "src/assets/images/logo.png";
 import { formatErrorMessage } from "src/utils";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
@@ -33,11 +33,9 @@ type Props = {
   error: Error | null;
   isPending: boolean;
   isError: boolean;
-  data:
-    | {
-        data: NotificationType[];
-      }
-    | undefined;
+  data: NotificationType[] | undefined;
+  isSubmitting: boolean;
+  handleClearAllNotifications: () => Promise<string | undefined>;
 };
 const NotificationCard = ({
   data,
@@ -47,7 +45,7 @@ const NotificationCard = ({
   const listItemBtnStyles = {
     display: "flex",
     gap: 1,
-    my: 1,
+    mb: 1,
     p: 1,
     background: theme.palette.mode === "dark" ? "#23232399" : "#ffffff",
     borderRadius: "10px",
@@ -62,18 +60,6 @@ const NotificationCard = ({
         })
       }
     >
-      <Box>
-        <img
-          src={User}
-          alt="contact"
-          style={{
-            width: "45px",
-            height: "45px",
-            objectFit: "cover",
-            borderRadius: "50%",
-          }}
-        />
-      </Box>
       <Box sx={{ width: "100%" }}>
         <Box
           sx={{
@@ -83,16 +69,6 @@ const NotificationCard = ({
             gap: 2,
           }}
         >
-          <Typography
-            sx={{
-              color:
-                theme.palette.mode === "dark"
-                  ? theme.palette.common.white
-                  : theme.palette.common.black,
-            }}
-          >
-            {data?.user?.name}
-          </Typography>
           <Typography
             variant="caption"
             sx={{
@@ -117,10 +93,11 @@ const NotificationCard = ({
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
+            textTransform: "capitalize",
+            fontWeight: 600,
           }}
-          title={data?.title}
         >
-          {data?.title}
+          {data?.type?.split("_")?.map((item) => `${item} `)}
         </Typography>
 
         <Typography
@@ -136,7 +113,7 @@ const NotificationCard = ({
             WebkitBoxOrient: "vertical",
           }}
         >
-          {data?.notification}
+          {data?.message}
         </Typography>
       </Box>
     </Box>
@@ -147,8 +124,11 @@ const NotificationsTable = ({
   isPending,
   error,
   data,
+  isSubmitting,
   handleSubmitMarkRead,
+  handleClearAllNotifications,
 }: Props) => {
+  const theme = useTheme();
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
@@ -159,12 +139,39 @@ const NotificationsTable = ({
   return (
     <Box>
       <AppHeader text="Notifications" />
+      <Box
+        sx={{
+          mt: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: 1,
+        }}
+      >
+        <>
+          {isSubmitting ? (
+            <CircularProgress size="13px" />
+          ) : (
+            <Typography
+              variant="subtitle2"
+              sx={{
+                color: theme.palette.primary.main,
+                cursor: "pointer",
+              }}
+              gutterBottom
+              onClick={() => handleClearAllNotifications()}
+            >
+              Clear all
+            </Typography>
+          )}
+        </>
+      </Box>
       <Box>
         <List sx={{ width: "100%" }} component="nav">
-          {data?.data?.length === 0 ? (
+          {data?.length === 0 ? (
             <EmptyTable subText="No notifications found" isSmall />
           ) : (
-            data?.data?.map((item) => (
+            data?.map((item) => (
               <NotificationCard
                 key={item.id}
                 data={item}

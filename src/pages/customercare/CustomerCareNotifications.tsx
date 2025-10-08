@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
-
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 import { baseUrl, formatErrorMessage, setDefaultHeaders } from "src/utils";
@@ -12,12 +11,12 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchNotifications } from "src/services/notifications";
 import NotificationsTable from "src/components/pages/shared/Notifications/NotificationsTable";
 
-const AdminNotifications = () => {
+const CustomerCareNotifications = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const queryClient = useQueryClient();
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_NOTIFICATIONS, {}],
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENT_NOTIFICATIONS, {}],
     queryFn: () => fetchNotifications({ limit: 50, status: "false" }),
     refetchInterval: 4000,
   });
@@ -67,6 +66,7 @@ const AdminNotifications = () => {
       setIsSubmitting(false);
     }
   };
+
   return (
     <Box>
       <Box
@@ -93,4 +93,4 @@ const AdminNotifications = () => {
   );
 };
 
-export default AdminNotifications;
+export default CustomerCareNotifications;

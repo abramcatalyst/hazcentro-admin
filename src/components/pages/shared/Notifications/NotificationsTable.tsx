@@ -152,33 +152,35 @@ const NotificationsTable = ({
   return (
     <Box>
       <AppHeader text="Notifications" />
-      <Box
-        sx={{
-          mt: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          px: 1,
-        }}
-      >
-        <>
-          {isSubmitting ? (
-            <CircularProgress size="13px" />
-          ) : (
-            <Typography
-              variant="subtitle2"
-              sx={{
-                color: theme.palette.primary.main,
-                cursor: "pointer",
-              }}
-              gutterBottom
-              onClick={() => handleClearAllNotifications()}
-            >
-              Clear all
-            </Typography>
-          )}
-        </>
-      </Box>
+      {data && data?.length > 0 && (
+        <Box
+          sx={{
+            mt: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            px: 1,
+          }}
+        >
+          <>
+            {isSubmitting ? (
+              <CircularProgress size="13px" />
+            ) : (
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: theme.palette.primary.main,
+                  cursor: "pointer",
+                }}
+                gutterBottom
+                onClick={() => handleClearAllNotifications()}
+              >
+                Clear all
+              </Typography>
+            )}
+          </>
+        </Box>
+      )}
       <Box>
         <List sx={{ width: "100%" }} component="nav">
           {data?.length === 0 ? (

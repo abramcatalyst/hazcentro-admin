@@ -15,7 +15,7 @@ export const fetchNotifications = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/global/notifications${limit ? `?limit=${limit}` : ""}${
+    `${baseUrl}/global/notifications/unread${limit ? `?limit=${limit}` : ""}${
       page ? `&page=${page}` : ""
     }${status ? `&status=${status}` : ""}`
   );

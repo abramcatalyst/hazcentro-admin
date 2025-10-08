@@ -5,6 +5,7 @@ import List from "@mui/material/List";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material";
 import { formatErrorMessage } from "src/utils";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
@@ -20,6 +21,7 @@ import AppHeader from "src/components/shared/AppHeader/AppHeader";
 dayjs.extend(relativeTime);
 type NotificationCardProps = {
   data: NotificationType;
+  isSubmitting: boolean;
   handleSubmitMarkRead: ({
     id,
     queryKey,
@@ -39,83 +41,94 @@ type Props = {
 };
 const NotificationCard = ({
   data,
+  isSubmitting,
   handleSubmitMarkRead,
 }: NotificationCardProps) => {
   const theme = useTheme();
   const listItemBtnStyles = {
     display: "flex",
     gap: 1,
-    mb: 1,
-    p: 1,
-    background: theme.palette.mode === "dark" ? "#23232399" : "#ffffff",
-    borderRadius: "10px",
   };
   return (
     <Box
-      sx={listItemBtnStyles}
-      onClick={() =>
-        handleSubmitMarkRead({
-          id: data?.id,
-          queryKey: TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_NOTIFICATIONS,
-        })
-      }
+      sx={{
+        mb: 1,
+        p: 1,
+        borderRadius: "10px",
+        background: theme.palette.mode === "dark" ? "#23232399" : "#ffffff",
+      }}
     >
-      <Box sx={{ width: "100%" }}>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
+      <Box sx={listItemBtnStyles}>
+        <Box sx={{ width: "100%" }}>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                color:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.grey[300]
+                    : theme.palette.common.black,
+              }}
+            >
+              {dayjs(data?.created_at).fromNow()}
+            </Typography>
+          </Box>
           <Typography
-            variant="caption"
+            variant="body2"
             sx={{
               color:
                 theme.palette.mode === "dark"
-                  ? theme.palette.grey[300]
+                  ? theme.palette.common.white
                   : theme.palette.common.black,
+              mb: 0.4,
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              textTransform: "capitalize",
+              fontWeight: 600,
             }}
           >
-            {dayjs(data?.created_at).fromNow()}
+            {data?.type?.split("_")?.map((item) => `${item} `)}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{
+              color:
+                theme.palette.mode === "dark"
+                  ? theme.palette.common.white
+                  : theme.palette.common.black,
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {data?.message}
           </Typography>
         </Box>
-        <Typography
-          variant="body2"
-          sx={{
-            color:
-              theme.palette.mode === "dark"
-                ? theme.palette.common.white
-                : theme.palette.common.black,
-            mb: 0.4,
-            overflow: "hidden",
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            textTransform: "capitalize",
-            fontWeight: 600,
-          }}
-        >
-          {data?.type?.split("_")?.map((item) => `${item} `)}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          sx={{
-            color:
-              theme.palette.mode === "dark"
-                ? theme.palette.common.white
-                : theme.palette.common.black,
-            overflow: "hidden",
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-          }}
-        >
-          {data?.message}
-        </Typography>
       </Box>
+      <Button
+        color="success"
+        disabled={isSubmitting}
+        size="small"
+        onClick={() =>
+          handleSubmitMarkRead({
+            id: data?.id,
+            queryKey: TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_NOTIFICATIONS,
+          })
+        }
+      >
+        Mark as read
+      </Button>
     </Box>
   );
 };
@@ -169,12 +182,17 @@ const NotificationsTable = ({
       <Box>
         <List sx={{ width: "100%" }} component="nav">
           {data?.length === 0 ? (
-            <EmptyTable subText="No notifications found" isSmall />
+            <EmptyTable
+              mainText="No Notifications"
+              subText="No notifications found"
+              isSmall
+            />
           ) : (
             data?.map((item) => (
               <NotificationCard
                 key={item.id}
                 data={item}
+                isSubmitting={isSubmitting}
                 handleSubmitMarkRead={handleSubmitMarkRead}
               />
             ))

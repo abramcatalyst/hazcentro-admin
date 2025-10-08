@@ -18,21 +18,22 @@ const CustomerCareNotifications = () => {
   const { isPending, error, data, isError } = useQuery({
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENT_NOTIFICATIONS, {}],
     queryFn: () => fetchNotifications({ limit: 50, status: "false" }),
-    refetchInterval: 4000,
+    refetchInterval: 30000,
   });
 
   const handleSubmitMarkRead = async ({
     id,
-    queryKey,
   }: MarkNotificationReadPayloadType) => {
     try {
       setDefaultHeaders();
       setIsSubmitting(true);
 
       const payload = { is_read: true };
-      await axios.post(`${baseUrl}/global/notifications/${id}`, payload);
+      await axios.post(`${baseUrl}/global/notifications/${id}/read`, payload);
       // const successMsg = await formatSuccessMessage(res?.data);
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      queryClient.invalidateQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENT_NOTIFICATIONS],
+      });
       // await toast.success(successMsg);
     } catch (error) {
       const errMsg = formatErrorMessage(error);
@@ -56,7 +57,7 @@ const CustomerCareNotifications = () => {
       });
       // const successMsg = await formatSuccessMessage(res?.data);
       queryClient.invalidateQueries({
-        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_NOTIFICATIONS],
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENT_NOTIFICATIONS],
       });
       // await toast.success(successMsg);
     } catch (error) {

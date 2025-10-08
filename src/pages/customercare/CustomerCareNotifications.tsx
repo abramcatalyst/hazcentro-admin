@@ -51,7 +51,7 @@ const CustomerCareNotifications = () => {
       setIsSubmitting(true);
 
       const payload = [...data?.map((item) => item.id)];
-      await axios.post(`${baseUrl}/global/notifications/mark/all`, {
+      await axios.post(`${baseUrl}/global/notifications/read-all`, {
         ids: payload,
       });
       // const successMsg = await formatSuccessMessage(res?.data);

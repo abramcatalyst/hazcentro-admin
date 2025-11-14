@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
-import { useTheme } from "@mui/material/styles";
 import { GLOBAL_COLORS } from "src/utils";
 import MaleAvatar from "src/assets/images/avatar-male.png";
 import FemaleAvatar from "src/assets/images/avatar-female.png";
@@ -16,30 +15,11 @@ import { InfoBox } from "src/components/pages/Admin/AgentProfile/ProfileInformat
 dayjs.extend(advancedFormat);
 
 const ProfileInformation = () => {
-  const theme = useTheme();
   const { profile } = useAuthStore();
   const sizing = { xs: 12, sm: 6 };
 
   return (
     <Box component={Paper} sx={{ p: 1, borderRadius: "20px" }} elevation={0}>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          mb: 1,
-          background: theme.palette.grey[100],
-          py: 1.2,
-          px: 1,
-          maxWidth: "120px",
-          borderRadius: "5px",
-        }}
-      >
-        <Typography sx={{ fontWeight: 500, fontSize: "14px" }}>
-          User Profile
-        </Typography>
-      </Box>
       <Box
         sx={{
           background: "#dffdff1a",

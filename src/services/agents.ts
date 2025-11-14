@@ -3,6 +3,7 @@ import {
   AgentType,
   CustomerCareOverviewDataType,
   CustomerCareTrendDataType,
+  DropInformationType,
 } from "src/types/agents";
 import { DisputeType } from "src/types/disputes";
 import { QueryFilterType } from "src/types/filters";
@@ -115,4 +116,30 @@ export const fetchCustomerCareDisputes = async ({
   );
 
   return data;
+};
+export const fetchCustomerCareDropInformation = async (): Promise<{
+  data: DropInformationType[];
+  current_page: number;
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  lings: {
+    url: null | string;
+    label: string;
+    active: boolean;
+  }[];
+  next_page: number;
+  next_page_url: string;
+  path: string;
+  per_page: number;
+  prev_page_url: null | string;
+  to: number;
+  total: number;
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/agents/drop-information`);
+
+  return data?.data;
 };

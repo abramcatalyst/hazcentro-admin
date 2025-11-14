@@ -87,3 +87,18 @@ export type CustomerCareOverviewDataType = {
 };
 
 export type CustomerCareTrendDataType = { month: string; value: number }[];
+
+export type DropInformationType = {
+  id: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  zip_code: string;
+  phone_number: string;
+  latitude: number;
+  longitude: number;
+  is_default: boolean;
+  created_at: string;
+  updated_at: string;
+};

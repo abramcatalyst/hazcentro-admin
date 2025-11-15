@@ -10,7 +10,7 @@ export const nigeriaStates: {
 }[] = [
   {
     states: {
-      name: "Abia State",
+      name: "Abia",
       id: 1,
       locals: [
         { name: "Aba North", id: 1 },
@@ -35,7 +35,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Adamawa State",
+      name: "Adamawa",
       id: 2,
       locals: [
         { name: "Demsa", id: 18 },
@@ -64,7 +64,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Akwa Ibom State",
+      name: "Akwa Ibom",
       id: 3,
       locals: [
         { name: "Abak", id: 39 },
@@ -103,7 +103,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Anambra State",
+      name: "Anambra",
       id: 4,
       locals: [
         { name: "Aguata", id: 70 },
@@ -132,7 +132,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Bauchi State",
+      name: "Bauchi",
       id: 5,
       locals: [
         { name: "Alkaleri", id: 91 },
@@ -160,7 +160,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Bayelsa State",
+      name: "Bayelsa",
       id: 6,
       locals: [
         { name: "Brass", id: 111 },
@@ -176,7 +176,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Benue State",
+      name: "Benue",
       id: 7,
       locals: [
         { name: "Agatu", id: 119 },
@@ -207,7 +207,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Borno State",
+      name: "Borno",
       id: 8,
       locals: [
         { name: "Abadam", id: 142 },
@@ -242,7 +242,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Cross River State",
+      name: "Cross River",
       id: 9,
       locals: [
         { name: "Abi", id: 169 },
@@ -268,7 +268,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Delta State",
+      name: "Delta",
       id: 10,
       locals: [
         { name: "Aniocha North", id: 187 },
@@ -301,7 +301,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Ebonyi State",
+      name: "Ebonyi",
       id: 11,
       locals: [
         { name: "Abakaliki", id: 212 },
@@ -322,7 +322,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Edo State",
+      name: "Edo",
       id: 12,
       locals: [
         { name: "Akoko-Edo", id: 225 },
@@ -348,7 +348,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Ekiti State",
+      name: "Ekiti",
       id: 13,
       locals: [
         { name: "Ado Ekiti", id: 243 },
@@ -372,7 +372,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Enugu State",
+      name: "Enugu",
       id: 14,
       locals: [
         { name: "Aninri", id: 259 },
@@ -397,7 +397,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "FCT",
+      name: "FCT - Abuja",
       id: 15,
       locals: [
         { name: "Abaji", id: 276 },
@@ -411,7 +411,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Gombe State",
+      name: "Gombe",
       id: 16,
       locals: [
         { name: "Akko", id: 282 },
@@ -430,7 +430,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Imo State",
+      name: "Imo",
       id: 17,
       locals: [
         { name: "Aboh Mbaise", id: 293 },
@@ -465,7 +465,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Jigawa State",
+      name: "Jigawa",
       id: 18,
       locals: [
         { name: "Auyo", id: 320 },
@@ -500,7 +500,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Kaduna State",
+      name: "Kaduna",
       id: 19,
       locals: [
         { name: "Birnin Gwari", id: 347 },
@@ -531,7 +531,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Kano State",
+      name: "Kano",
       id: 20,
       locals: [
         { name: "Ajingi", id: 370 },
@@ -583,7 +583,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Katsina State",
+      name: "Katsina",
       id: 21,
       locals: [
         { name: "Bakori", id: 414 },
@@ -625,7 +625,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Kebbi State",
+      name: "Kebbi",
       id: 22,
       locals: [
         { name: "Aleiro", id: 448 },
@@ -654,7 +654,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Kogi State",
+      name: "Kogi",
       id: 23,
       locals: [
         { name: "Adavi", id: 469 },
@@ -683,7 +683,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Kwara State",
+      name: "Kwara",
       id: 24,
       locals: [
         { name: "Asa", id: 490 },
@@ -707,7 +707,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Lagos State",
+      name: "Lagos",
       id: 25,
       locals: [
         { name: "Agege", id: 506 },
@@ -735,7 +735,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Nasarawa State",
+      name: "Nasarawa",
       id: 26,
       locals: [
         { name: "Akwanga", id: 526 },
@@ -756,7 +756,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Niger State",
+      name: "Niger",
       id: 27,
       locals: [
         { name: "Agaie", id: 539 },
@@ -789,7 +789,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Ogun State",
+      name: "Ogun",
       id: 28,
       locals: [
         { name: "Abeokuta North", id: 564 },
@@ -817,7 +817,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Ondo State",
+      name: "Ondo",
       id: 29,
       locals: [
         { name: "Akoko North-East", id: 584 },
@@ -843,7 +843,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Osun State",
+      name: "Osun",
       id: 30,
       locals: [
         { name: "Atakunmosa East", id: 602 },
@@ -881,7 +881,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Oyo State",
+      name: "Oyo",
       id: 31,
       locals: [
         { name: "Afijio", id: 632 },
@@ -922,7 +922,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Plateau State",
+      name: "Plateau",
       id: 32,
       locals: [
         { name: "Bokkos", id: 665 },
@@ -947,7 +947,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Rivers State",
+      name: "Rivers",
       id: 33,
       locals: [
         { name: "Abua/Odual", id: 682 },
@@ -978,7 +978,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Sokoto State",
+      name: "Sokoto",
       id: 34,
       locals: [
         { name: "Binji", id: 705 },
@@ -1009,7 +1009,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Taraba State",
+      name: "Taraba",
       id: 35,
       locals: [
         { name: "Ardo Kola", id: 728 },
@@ -1033,7 +1033,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Yobe State",
+      name: "Yobe",
       id: 36,
       locals: [
         { name: "Bade", id: 744 },
@@ -1058,7 +1058,7 @@ export const nigeriaStates: {
   },
   {
     states: {
-      name: "Zamfara State",
+      name: "Zamfara",
       id: 37,
       locals: [
         { name: "Anka", id: 761 },

@@ -24,6 +24,9 @@ export type OrderItemType = {
   quantity: number;
   price_at_sale: string;
   total_price: string;
+  handoff_status: string;
+  handoff_confirmed_at: string;
+  has_dispute: boolean;
   created_at: string;
   updated_at: string;
   product: {

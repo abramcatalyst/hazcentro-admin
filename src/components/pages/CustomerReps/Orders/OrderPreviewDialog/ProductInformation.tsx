@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
@@ -6,11 +7,29 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
 import Logo from "src/assets/images/logo.png";
 
 import Typography from "@mui/material/Typography";
-import { currencyFormater, GLOBAL_COLORS } from "src/utils";
-import { OrderType } from "src/types/orders";
+import {
+  baseUrl,
+  currencyFormater,
+  formatErrorMessage,
+  formatSuccessMessage,
+  FULL_DATE_FORMAT,
+  GLOBAL_COLORS,
+  isAuthTokenExpired,
+  setDefaultHeaders,
+} from "src/utils";
+import { OrderItemType, OrderType } from "src/types/orders";
+import renderStatus from "src/components/shared/RenderStatus/renderStatus";
+import dayjs from "dayjs";
+import GeneralConfirmDialog from "src/components/shared/GeneralConfirmDialog/GeneralConfirmDialog";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { useQueryClient } from "@tanstack/react-query";
+import useAuthStore from "src/store/authStore";
 
 type Props = {
   selectedOrder: OrderType;
@@ -22,11 +41,53 @@ const headCells = [
   "Title",
   "Price",
   "Discount Price",
-  "Warranty",
+  "Dropped Status",
   "Vendor",
 ];
 const tableCellStyles = { fontSize: "13px" };
 function ProductInformation({ selectedOrder }: Props) {
+  const [openConfirmDropedDialog, setOpenConfirmDropedDialog] = useState(false);
+  const [selected, setSelected] = useState<OrderItemType | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { profile } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  const handleCloseConfirmDrop = () => {
+    setSelected(null);
+    setOpenConfirmDropedDialog(true);
+  };
+  const handleOpenConfirmDrop = (val: OrderItemType) => {
+    setSelected(val);
+    setOpenConfirmDropedDialog(true);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setDefaultHeaders();
+      isAuthTokenExpired();
+      setIsSubmitting(true);
+
+      const payload = {
+        order_item_ids: [selected?.id],
+      };
+      const res = await axios.post(
+        `${baseUrl}/agents/order-items/confirm-drop`,
+        payload
+      );
+      const successMsg = formatSuccessMessage(res?.data);
+      toast.success(successMsg);
+
+      await queryClient.invalidateQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_ORDER],
+      });
+    } catch (error) {
+      const errorMsg = formatErrorMessage(error);
+      toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -36,41 +97,15 @@ function ProductInformation({ selectedOrder }: Props) {
         borderRadius: "16px",
       }}
     >
-      {/* <Box
-        sx={{
-          my: 1,
-          background: "#F1F1F1",
-          maxWidth: "381px",
-          display: "flex",
-          alignItems: "center",
-          gap: 0.7,
-        }}
-      >
-        {options.map((item) => {
-          return (
-            <Box
-              key={item}
-              sx={{
-                borderRadius: "6px",
-                py: 0.5,
-                width: { xs: "100%", sm: "100px" },
-                height: "33px",
-                background: selectedOption === item ? "#DDDDDD" : "#F8F8F9",
-                cursor: "pointer",
-                textAlign: "center",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onClick={() => {
-                setSelectedOption(item);
-              }}
-            >
-              <Typography variant="body2">{item}</Typography>
-            </Box>
-          );
-        })}
-      </Box> */}
+      {openConfirmDropedDialog && selected ? (
+        <GeneralConfirmDialog
+          hint={`Confirm this item (${selected?.product?.name}) has been recieved by you, quantity is ${selected?.quantity}`}
+          open={openConfirmDropedDialog}
+          handleClose={handleCloseConfirmDrop}
+          isSubmitting={isSubmitting}
+          handleSubmit={handleSubmit}
+        />
+      ) : null}
       <Box>
         <Typography sx={{ fontSize: "14px", fontWeight: 600, mb: 0.6, ml: 1 }}>
           Ordered Items
@@ -115,7 +150,31 @@ function ProductInformation({ selectedOrder }: Props) {
                     &#8358;{currencyFormater(row?.product?.discounted_price, 2)}
                   </TableCell>
                   <TableCell sx={tableCellStyles}>
-                    {row?.product?.warranty}
+                    <Box>
+                      {renderStatus(row?.handoff_status)}
+                      {row?.handoff_confirmed_at &&
+                      row?.handoff_status == "dropped" ? (
+                        <Typography sx={{ fontSize: "11px" }}>
+                          Confirmed at{" "}
+                          {dayjs(row?.handoff_confirmed_at).format(
+                            FULL_DATE_FORMAT
+                          )}
+                        </Typography>
+                      ) : row?.handoff_status == "dropped" &&
+                        !row?.handoff_confirmed_at &&
+                        profile?.role !== "admin" ? (
+                        <Button
+                          variant="contained"
+                          color="success"
+                          sx={{ fontSize: "10.2px", px: 0.6, py: 0.2 }}
+                          onClick={() => {
+                            handleOpenConfirmDrop(row);
+                          }}
+                        >
+                          Confirm drop
+                        </Button>
+                      ) : null}
+                    </Box>
                   </TableCell>
                   <TableCell sx={tableCellStyles}>
                     {row?.product?.vendor?.business_name}

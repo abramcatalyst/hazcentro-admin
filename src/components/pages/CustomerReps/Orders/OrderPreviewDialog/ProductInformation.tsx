@@ -80,6 +80,7 @@ function ProductInformation({ selectedOrder }: Props) {
       await queryClient.invalidateQueries({
         queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_ORDER],
       });
+      handleCloseConfirmDrop();
     } catch (error) {
       const errorMsg = formatErrorMessage(error);
       toast.error(errorMsg);

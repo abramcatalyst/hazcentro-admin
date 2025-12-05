@@ -7,9 +7,58 @@ export type SettingsType = {
     created_at: string;
     updated_at: string;
   };
+  delivery_fee_same_state: {
+    id: number;
+    key: "delivery_fee_same_state";
+    value: string;
+    type: "float";
+    created_at: string;
+    updated_at: string;
+  };
+  delivery_fee_different_state: {
+    id: number;
+    key: "delivery_fee_different_state";
+    value: string;
+    type: "float";
+    created_at: string;
+    updated_at: string;
+  };
   payout_preference: {
     id: 1;
     key: "payout_preference";
+    value: string;
+    type: "string";
+    created_at: string;
+    updated_at: string;
+  };
+
+  tax_rate_percentage: {
+    id: number;
+    key: "tax_rate_percentage";
+    value: string;
+    type: "float";
+    created_at: string;
+    updated_at: string;
+  };
+  contact_emails: {
+    id: number;
+    key: "contact_emails";
+    value: string; // stringified array,
+    type: "array";
+    created_at: string;
+    updated_at: string;
+  };
+  contact_phone_numbers: {
+    id: number;
+    key: "contact_phone_numbers";
+    value: string; // stringified array,
+    type: "array";
+    created_at: string;
+    updated_at: string;
+  };
+  whatsapp_line: {
+    id: number;
+    key: "whatsapp_line";
     value: string;
     type: "string";
     created_at: string;

@@ -21,6 +21,16 @@ import DiscountSettingDialog from "./DiscountSettingDialog";
 import CurrencySettingDialog from "./CurrencySettingDialog";
 import SubscriptionPlanDialog from "./SubscriptionPlansDialog";
 import PayoutPreferenceDialog from "./PayoutPreferenceDialog";
+import { GrDeliver } from "react-icons/gr";
+import { MdDirectionsBus, MdOutlineEmail } from "react-icons/md";
+import { FaPercentage, FaPhoneSquareAlt, FaWhatsapp } from "react-icons/fa";
+import { IconType } from "react-icons/lib";
+import SameStateDeliveryFeeDialog from "./SameStateDeliveryFeeDialog";
+import DifferentStateDeliveryFeeDialog from "./DifferentStateDeliveryFeeDialog";
+import TaxFeeDialog from "./TaxFeeDialog";
+import ContactEmailDialog from "./ContactEmailDialog";
+import ContactWhatsappDialog from "./ContactWhatsappDialog";
+import ContactPhoneDialog from "./ContactPhoneDialog";
 
 {
   // "key": "admin_email_for_alerts",
@@ -40,7 +50,8 @@ import PayoutPreferenceDialog from "./PayoutPreferenceDialog";
 type OptionCardProps = {
   title: string;
   content: string;
-  icon: string;
+  icon: string | ReturnType<IconType>;
+  iconType?: "image" | "icon";
   handleClick: () => void;
 };
 const sizing = { xs: 12, sm: 6, md: 4 };
@@ -51,6 +62,14 @@ const SettingsWrapper = () => {
   const [openDiscountSetting, setOpenDiscountSetting] = useState(false);
   const [openSubscriptionSetting, setOpenSubscriptionSetting] = useState(false);
   const [openPreferenceDialog, setOpenPreferenceDialog] = useState(false);
+  const [openDeliverySameStateDialog, setOpenDeliverySameStateDialog] =
+    useState(false);
+  const [openDeliveryOtherStateDialog, setOpenDeliveryOtherStateDialog] =
+    useState(false);
+  const [openTaxPercentDialog, setOpenTaxPercentDialog] = useState(false);
+  const [openEmailContactDialog, setOpenEmailContactDialog] = useState(false);
+  const [openWhatsappDialog, setOpenWhatsappDialog] = useState(false);
+  const [openPhoneContactDialog, setOpenPhoneContactDialog] = useState(false);
 
   const { isError, error, isLoading, data } = useQuery({
     queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SETTINGS, {}],
@@ -96,6 +115,43 @@ const SettingsWrapper = () => {
   const handleClosePreferenceDialog = () => {
     setOpenPreferenceDialog(false);
   };
+  const handleOpenDeliverySameStateDialog = () => {
+    setOpenDeliverySameStateDialog(true);
+  };
+  const handleCloseDeliverySameStateDialog = () => {
+    setOpenDeliverySameStateDialog(false);
+  };
+  const handleOpenDeliveryOtherStateDialog = () => {
+    setOpenDeliveryOtherStateDialog(true);
+  };
+  const handleCloseDeliveryOtherStateDialog = () => {
+    setOpenDeliveryOtherStateDialog(false);
+  };
+  const handleOpenTaxSettingsDialog = () => {
+    setOpenTaxPercentDialog(true);
+  };
+  const handleCloseTaxSettingsDialog = () => {
+    setOpenTaxPercentDialog(false);
+  };
+
+  const handleOpenContactEmailDialog = () => {
+    setOpenEmailContactDialog(true);
+  };
+  const handleCloseContactEmailDialog = () => {
+    setOpenEmailContactDialog(false);
+  };
+  const handleOpenContactPhoneDialog = () => {
+    setOpenPhoneContactDialog(true);
+  };
+  const handleCloseContactPhoneDialog = () => {
+    setOpenPhoneContactDialog(false);
+  };
+  const handleOpenContactWhatsappDialog = () => {
+    setOpenWhatsappDialog(true);
+  };
+  const handleCloseContactWhatsappDialog = () => {
+    setOpenWhatsappDialog(false);
+  };
 
   const OptionCard = ({
     title,
@@ -125,19 +181,25 @@ const SettingsWrapper = () => {
           <Typography sx={{ fontSize: "12.5px" }}>{content}</Typography>
         </Box>
         <Box>
-          <img
-            src={icon}
-            style={{
-              objectFit: "contain",
-              width: "22px",
-              height: "22px",
-            }}
-          />
+          {typeof icon === "string" ? (
+            <img
+              src={icon}
+              style={{
+                objectFit: "contain",
+                width: "22px",
+                height: "22px",
+              }}
+            />
+          ) : (
+            <Box>{icon}</Box>
+          )}
         </Box>
       </Box>
     );
   };
   console.log(handleOpenCurrencyDialog, handleOpenPreferenceDialog);
+  const iconStyles = { fontSize: "16px" };
+
   return (
     <Box>
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
@@ -187,6 +249,51 @@ const SettingsWrapper = () => {
             handleClose={handleCloseCurrencyDialog}
           />
         )}
+        {openDeliverySameStateDialog && data && (
+          <SameStateDeliveryFeeDialog
+            open={openDeliverySameStateDialog}
+            data={data}
+            handleClose={handleCloseDeliverySameStateDialog}
+          />
+        )}
+
+        {openDeliveryOtherStateDialog && data && (
+          <DifferentStateDeliveryFeeDialog
+            open={openDeliveryOtherStateDialog}
+            data={data}
+            handleClose={handleCloseDeliveryOtherStateDialog}
+          />
+        )}
+        {openTaxPercentDialog && data && (
+          <TaxFeeDialog
+            open={openTaxPercentDialog}
+            data={data}
+            handleClose={handleCloseTaxSettingsDialog}
+          />
+        )}
+        {openEmailContactDialog && data && (
+          <ContactEmailDialog
+            open={openEmailContactDialog}
+            data={data}
+            handleClose={handleCloseContactEmailDialog}
+          />
+        )}
+
+        {openWhatsappDialog && data && (
+          <ContactWhatsappDialog
+            open={openWhatsappDialog}
+            data={data}
+            handleClose={handleCloseContactWhatsappDialog}
+          />
+        )}
+
+        {openPhoneContactDialog && data && (
+          <ContactPhoneDialog
+            open={openPhoneContactDialog}
+            data={data}
+            handleClose={handleCloseContactPhoneDialog}
+          />
+        )}
 
         <Box
           sx={{ my: 2, px: { xs: 0.5, sm: 1 }, py: 2, background: "#ffffff" }}
@@ -223,6 +330,60 @@ const SettingsWrapper = () => {
                   content="Configure automated email notifications for orders, payments, and user activities."
                   icon={MailImg}
                   handleClick={handleOpenEmailDialog}
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <OptionCard
+                  iconType="icon"
+                  title="Delivery Fee (Same state)"
+                  content="Define order delivery fees for the same state"
+                  icon={<GrDeliver style={iconStyles} />}
+                  handleClick={handleOpenDeliverySameStateDialog}
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <OptionCard
+                  iconType="icon"
+                  title="Delivery Fee (Different state)"
+                  content="Define order delivery fees for different state"
+                  icon={<MdDirectionsBus style={iconStyles} />}
+                  handleClick={handleOpenDeliveryOtherStateDialog}
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <OptionCard
+                  iconType="icon"
+                  title="Tax Rate Percent (%)"
+                  content="Define the tax rate percent"
+                  icon={<FaPercentage style={iconStyles} />}
+                  handleClick={handleOpenTaxSettingsDialog}
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <OptionCard
+                  iconType="icon"
+                  title="Support Whatsapp Number"
+                  content="Manage support Whatsapp phone number"
+                  icon={<FaWhatsapp style={iconStyles} />}
+                  handleClick={handleOpenContactWhatsappDialog}
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <OptionCard
+                  iconType="icon"
+                  title="Support Phone Numbers"
+                  content="Manage support phone numbers"
+                  icon={<FaPhoneSquareAlt style={iconStyles} />}
+                  handleClick={handleOpenContactPhoneDialog}
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <OptionCard
+                  iconType="icon"
+                  title="Support Emails"
+                  content="Manage support email address"
+                  icon={<MdOutlineEmail style={iconStyles} />}
+                  handleClick={handleOpenContactEmailDialog}
                 />
               </Grid>
             </Grid>

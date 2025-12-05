@@ -14,6 +14,12 @@ export const ADMIN_ROUTE_SUB_LINKS = {
   USER_PROFILE: "users/profile",
   NOTIFICATIONS: "notifications",
   ORDER_DETAILS: "order-details",
+  ADS_SETTINGS: "ads-settings",
+  ADD_ADS: "ads-settings/add-ads",
+  ADS_DETAILS: "ads-settings/ads-details",
+  EDIT_ADS_DETAILS: "ads-settings/edit-ads-details",
+  ADD_ADS_CATEGORY: "ads-settings/add-ads-category",
+  EDIT_ADS_CATEGORY: "ads-settings/edit-ads-category",
 };
 export const ADMIN_ROUTE_LINKS = {
   ADMIN_OVERVIEW: `/admin/${ADMIN_ROUTE_SUB_LINKS.OVERVIEW}`,
@@ -31,6 +37,11 @@ export const ADMIN_ROUTE_LINKS = {
   ADMIN_USER_PROFILE: `/admin/${ADMIN_ROUTE_SUB_LINKS.USER_PROFILE}`,
   ADMIN_NOTIFICATIONS: `/admin/${ADMIN_ROUTE_SUB_LINKS.NOTIFICATIONS}`,
   ADMIN_ORDER_DETAILS: `/admin/${ADMIN_ROUTE_SUB_LINKS.ORDER_DETAILS}`,
+  ADMIN_ADS_SETTINGS: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADS_SETTINGS}`,
+  ADMIN_ADD_ADS: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADD_ADS}`,
+  ADMIN_EDIT_ADS: `/admin/${ADMIN_ROUTE_SUB_LINKS.EDIT_ADS_DETAILS}`,
+  ADMIN_ADD_ADS_CATEGORY: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADD_ADS_CATEGORY}`,
+  ADMIN_EDIT_ADS_CATEGORY: `/admin/${ADMIN_ROUTE_SUB_LINKS.EDIT_ADS_CATEGORY}`,
 };
 
 export const CUSTOMER_ROUTE_SUB_LINKS = {

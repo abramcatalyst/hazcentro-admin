@@ -54,7 +54,7 @@ function SameStateDeliveryFeeDialog({ open, data, handleClose }: Props) {
       setDefaultHeaders();
       let payload = {
         key: data?.delivery_fee_same_state?.key,
-        value: [values.delivery_fee_same_state],
+        value: values.delivery_fee_same_state,
       };
       try {
         helpers.setSubmitting(true);
@@ -91,7 +91,7 @@ function SameStateDeliveryFeeDialog({ open, data, handleClose }: Props) {
     handleSubmit,
     isSubmitting,
   } = formik;
-
+  console.log("66666666666", data);
   return (
     <StyledDialog
       fullWidth

@@ -198,7 +198,7 @@ const SettingsWrapper = () => {
     );
   };
   console.log(handleOpenCurrencyDialog, handleOpenPreferenceDialog);
-  const iconStyles = { fontSize: "16px" };
+  const iconStyles = { fontSize: "20px" };
 
   return (
     <Box>

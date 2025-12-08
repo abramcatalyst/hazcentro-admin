@@ -23,6 +23,7 @@ import {
   baseUrl,
   convertBooleanToString,
   convertStringToBoolean,
+  DATE_FORMAT,
   formatErrorMessage,
   formatSuccessMessage,
   setDefaultHeaders,
@@ -167,7 +168,6 @@ function EditDiscountSetting({ selectedDiscount, handleClose }: Props) {
     setFieldValue("start_date", selectedDiscount?.start_date);
     setFieldValue("end_date", selectedDiscount?.end_date);
   }, [selectedDiscount]);
-  const DATE_FORMAT = "YYYY-MM-DD";
   if (isLoading) {
     return <HalfScreenLoader />;
   }

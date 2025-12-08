@@ -54,7 +54,7 @@ function ContactWhatsappDialog({ open, data, handleClose }: Props) {
       setDefaultHeaders();
       let payload = {
         key: data?.whatsapp_line?.key,
-        value: [values.whatsapp_line],
+        value: values.whatsapp_line,
       };
       try {
         helpers.setSubmitting(true);
@@ -74,7 +74,7 @@ function ContactWhatsappDialog({ open, data, handleClose }: Props) {
       }
     },
     validationSchema: yup.object().shape({
-      whatsapp_line: yup.string().required().label("Amount"),
+      whatsapp_line: yup.string().required().label("WhatsApp Line"),
     }),
   });
 

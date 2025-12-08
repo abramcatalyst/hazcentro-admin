@@ -4,6 +4,8 @@ import { PiGraduationCapFill, PiNotebook, PiUser } from "react-icons/pi";
 import { TbTie } from "react-icons/tb";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { HiOutlineRectangleStack } from "react-icons/hi2";
+import { RiAdvertisementLine } from "react-icons/ri";
+import { MdOutlineCategory } from "react-icons/md";
 import { NavigationType } from "src/utils/types";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 
@@ -49,6 +51,7 @@ const navigation: NavigationType[] = [
     permission: "",
     invertIcon: true,
   },
+
   {
     id: 5,
     kind: "page",
@@ -65,14 +68,22 @@ const navigation: NavigationType[] = [
     url: ADMIN_ROUTE_LINKS.ADMIN_AGENT,
     permission: "",
   },
-  // {
-  //   id: 7,
-  //   kind: "page",
-  //   icon: <PiNotebook />,
-  //   title: "Messages",
-  //   url: ADMIN_ROUTE_LINKS.ADMIN_MESSAGES,
-  //   permission: "",
-  // },
+  {
+    id: 7,
+    kind: "page",
+    icon: <RiAdvertisementLine />,
+    title: "Ads Management",
+    url: ADMIN_ROUTE_LINKS.ADMIN_ADS_MANAGEMENT,
+    permission: "",
+  },
+  {
+    id: 14,
+    kind: "page",
+    icon: <MdOutlineCategory />,
+    title: "Ads Category",
+    url: ADMIN_ROUTE_LINKS.ADS_CATEGORY,
+    permission: "",
+  },
   {
     id: 8,
     kind: "gap",

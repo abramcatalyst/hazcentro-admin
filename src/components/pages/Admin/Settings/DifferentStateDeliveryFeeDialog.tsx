@@ -55,7 +55,7 @@ function DifferentStateDeliveryFeeDialog({ open, data, handleClose }: Props) {
       setDefaultHeaders();
       let payload = {
         key: data?.delivery_fee_different_state?.key,
-        value: [values.delivery_fee_different_state],
+        value: values.delivery_fee_different_state,
       };
       try {
         helpers.setSubmitting(true);

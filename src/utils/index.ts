@@ -1,10 +1,9 @@
 import { jwtDecode } from "jwt-decode";
 
-import { IToken, TicketResultType } from "./types";
+import { IToken } from "./types";
 import axios from "axios";
 import toast from "react-hot-toast";
 import rolesPermissions, { adminRoles } from "./roles-permission";
-import dayjs from "dayjs";
 import { SxProps } from "@mui/material/styles";
 
 // export const baseUrl = "https://reevaluateme.online/api";
@@ -15,6 +14,7 @@ export const PROFILE_KEY = "H_PROFILE_KEY";
 export const PREV_PATH = "prevPath";
 export const rowsPerPageOptions = [20, 50, 100];
 export const FULL_DATE_FORMAT = "MMM Do YYYY, HH:mm";
+export const DATE_FORMAT = "YYYY-MM-DD";
 
 export const INDOOR_GAME = "indoor-game";
 export const INDOOR_BET_OPTIONS = "indoor-game-bet-options";
@@ -49,6 +49,12 @@ export const allTransactionTypes = {
   WINNING: "winning",
   COMMISSION: "commission",
   WITHDRAWAL: "withdrawal",
+};
+
+export const bannerLinkTypes = {
+  external: "external",
+  ad_category: "ad_category",
+  product: "product",
 };
 
 export const tableMenuStyles = {
@@ -503,12 +509,7 @@ export const safeJSONParseObj = (str: string) => {
 export function getImgUrl(name: string) {
   return new URL(`${name}`, import.meta.url).href;
 }
-export const renderGameDrawDate = (value: TicketResultType): string => {
-  if (!value?.Game?.recurring && value?.dateTime) {
-    return dayjs(value.dateTime).format(FULL_DATE_FORMAT);
-  }
-  return dayjs(value.createdAt).format(FULL_DATE_FORMAT);
-};
+
 export const isUserAuthorized = (permission: string): boolean => {
   try {
     const token = getAuthToken();

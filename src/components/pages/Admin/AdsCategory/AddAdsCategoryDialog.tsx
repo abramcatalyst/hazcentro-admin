@@ -8,25 +8,23 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
-import FormLabel from "@mui/material/FormLabel";
+import Grid from "@mui/material/Grid2";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
-import CreateItemNotification from "src/components/shared/CreateItemNotification/CreateItemNotification";
-
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import axios from "axios";
 import {
   baseUrl,
+  DATE_FORMAT,
   formatErrorMessage,
   formatSuccessMessage,
   isAuthTokenExpired,
@@ -36,13 +34,18 @@ import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import useManageToken from "src/hooks/useManageToken";
+import dayjs, { Dayjs } from "dayjs";
 
+const sizing = { xs: 12, sm: 6 };
 type Props = {
   open: boolean;
   handleClose: () => void;
 };
 
-function AddCategoryDialog({ open, handleClose }: Props) {
+function AddAdsCategoryDialog({ open, handleClose }: Props) {
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
   const theme = useTheme();
@@ -50,11 +53,15 @@ function AddCategoryDialog({ open, handleClose }: Props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const queryClient = useQueryClient();
   const { logOutUser } = useManageToken();
+
   const formik = useFormik({
     initialValues: {
       name: "",
       description: "",
-      is_featured: "0",
+      is_active: true,
+      start_date: "",
+      end_date: "",
+      order: "",
     },
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
@@ -66,18 +73,23 @@ function AddCategoryDialog({ open, handleClose }: Props) {
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("description", values.description);
-        formData.append("is_featured", values.is_featured.toString());
+        formData.append("start_date", values.start_date);
+        formData.append("description", values.description);
+        formData.append("is_active", values.is_active.toString());
 
         if (image) {
-          formData.append("icon", image);
+          formData.append("image", image);
         }
-        const res = await axios.post(`${baseUrl}/admin/categories`, formData);
+        const res = await axios.post(
+          `${baseUrl}/admin/categories-for-ads`,
+          formData
+        );
         const successMsg = formatSuccessMessage(res);
         setImagePreview("");
         setImage(null);
         toast.success(successMsg);
         queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CATEGORIES],
+          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADS_CATEGORIES],
         });
         handleClose();
       } catch (error) {
@@ -101,6 +113,7 @@ function AddCategoryDialog({ open, handleClose }: Props) {
     handleChange,
     handleBlur,
     handleSubmit,
+    setFieldValue,
   } = formik;
   return (
     <StyledDialog
@@ -122,7 +135,7 @@ function AddCategoryDialog({ open, handleClose }: Props) {
           }}
         >
           <Typography variant="h6" sx={{ color: "GrayText" }}>
-            Add Category
+            Add Ads Category
           </Typography>
           <DialogCloseButtonWrapper>
             <IconButton onClick={handleClose} color="error">
@@ -133,57 +146,84 @@ function AddCategoryDialog({ open, handleClose }: Props) {
       </DialogActions>
       <DialogContent>
         <Box component={"form"} onSubmit={handleSubmit}>
-          <Box>
-            <FormControl fullWidth sx={{ my: 1 }}>
-              <InputLabel>Enter a name for the catalog</InputLabel>
-              <OutlinedInput
-                label="Enter a name for the catalog"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.name && touched.name && (
-                <FormHelperText error>{errors.name}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl fullWidth sx={{ my: 1 }}>
-              <InputLabel>Enter a description</InputLabel>
-              <OutlinedInput
-                multiline
-                rows={2}
-                label="Enter a description"
-                name="description"
-                value={values.description}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.description && touched.description && (
-                <FormHelperText error>{errors.description}</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl>
-              <FormLabel>Is Featured</FormLabel>
-              <RadioGroup
-                row
-                name="is_featured"
-                value={values.is_featured}
-                onChange={handleChange}
-              >
-                <FormControlLabel value="0" control={<Radio />} label="No" />
-                <FormControlLabel value="1" control={<Radio />} label="Yes" />
-              </RadioGroup>
-            </FormControl>
-          </Box>
-          <CreateItemNotification />
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 12 }}>
+              <FormControl size="small" fullWidth sx={{ my: 1 }}>
+                <InputLabel>Enter category name</InputLabel>
+                <OutlinedInput
+                  label="Enter category name"
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.name && touched.name && (
+                  <FormHelperText error>{errors.name}</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+            <Grid size={sizing}>
+              <FormControl fullWidth>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Start date"
+                    value={startDate}
+                    slotProps={{ textField: { size: "small" } }}
+                    onChange={(value) => {
+                      setStartDate(value);
+                      if (value) {
+                        setFieldValue(
+                          "start_date",
+                          dayjs(value).format(DATE_FORMAT)
+                        );
+                      }
+                    }}
+                  />
+                </LocalizationProvider>
+              </FormControl>
+            </Grid>
+            <Grid size={sizing}>
+              <FormControl fullWidth>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="End date"
+                    value={endDate}
+                    slotProps={{ textField: { size: "small" } }}
+                    onChange={(value) => {
+                      setEndDate(value);
+                      if (value) {
+                        setFieldValue(
+                          "end_date",
+                          dayjs(value).format(DATE_FORMAT)
+                        );
+                      }
+                    }}
+                  />
+                </LocalizationProvider>
+              </FormControl>
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <FormControl fullWidth sx={{ my: 1 }}>
+                <InputLabel>Enter a description</InputLabel>
+                <OutlinedInput
+                  multiline
+                  rows={2}
+                  label="Enter a description"
+                  name="description"
+                  value={values.description}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.description && touched.description && (
+                  <FormHelperText error>{errors.description}</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+          </Grid>
           <Box
             sx={{
               mt: 1,
-              mb: 2,
-              background: "#F7F7F980",
-              borderTopLeftRadius: "16px",
-              borderTopRightRadius: "16px",
-              p: 1,
+              mb: 1,
             }}
           >
             <FormControl variant="outlined" sx={{ display: "none" }}>
@@ -200,7 +240,7 @@ function AddCategoryDialog({ open, handleClose }: Props) {
               />
             </FormControl>
             <Typography gutterBottom variant="body2">
-              Customizations
+              Image (Optional)
             </Typography>
             <Box
               sx={{ display: "flex", flexWrap: "wrap", gap: 1, py: 1, px: 0.5 }}
@@ -217,11 +257,8 @@ function AddCategoryDialog({ open, handleClose }: Props) {
               {imagePreview && (
                 <Box
                   sx={{
-                    width: { xs: "40px", sm: "46px" },
-                    height: { xs: "40px", sm: "46px" },
-                    borderRadius: "50%",
-                    cursor: "pointer",
-                    border: `1.5px solid ${theme.palette.primary.main}`,
+                    width: { xs: "70px", sm: "86px" },
+                    height: { xs: "40px", sm: "56px" },
                   }}
                 >
                   <img
@@ -230,7 +267,6 @@ function AddCategoryDialog({ open, handleClose }: Props) {
                     style={{
                       width: "100%",
                       height: "100%",
-                      borderRadius: "50%",
                       objectFit: "cover",
                     }}
                   />
@@ -249,11 +285,11 @@ function AddCategoryDialog({ open, handleClose }: Props) {
               type="submit"
               disabled={isSubmitting}
               sx={{
-                height: "55px",
+                height: "50px",
                 minWidth: { xs: "150px", sm: "184px" },
               }}
             >
-              {isSubmitting ? "Processing" : "Save Changes"}
+              {isSubmitting ? "Processing" : "Submit"}
             </Button>
           </Box>
         </Box>
@@ -262,4 +298,4 @@ function AddCategoryDialog({ open, handleClose }: Props) {
   );
 }
 
-export default AddCategoryDialog;
+export default AddAdsCategoryDialog;

@@ -1,5 +1,9 @@
 import axios from "axios";
-import { AdsCategoryType, BannerType } from "src/types/banners";
+import {
+  AdsCategoryProductType,
+  AdsCategoryType,
+  BannerType,
+} from "src/types/banners";
 import { QueryFilterType } from "src/types/filters";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
@@ -47,7 +51,7 @@ export const fetchSingleBanner = async (id: string): Promise<BannerType> => {
   isAuthTokenExpired();
   const { data } = await axios.get(`${baseUrl}/admin/banners/${id}`);
 
-  return data?.user;
+  return data?.data;
 };
 
 export const fetchAdsCategories = async ({
@@ -87,4 +91,26 @@ export const fetchAdsCategories = async ({
   );
 
   return data?.data;
+};
+
+export const fetchSingleAdsCategoryProducts = async (
+  id: string
+): Promise<{
+  data: AdsCategoryProductType[];
+  meta: {
+    current_page: number;
+    from: number;
+    last_page: number;
+    links: [];
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+  };
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/admin/categories-for-ads/${id}`);
+
+  return data;
 };

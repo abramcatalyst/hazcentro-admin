@@ -51,6 +51,20 @@ export const allTransactionTypes = {
   WITHDRAWAL: "withdrawal",
 };
 
+export const bannerPlacementList = [
+  {
+    title: "Top",
+    value: "listing_top",
+  },
+  {
+    title: "Middle",
+    value: "listing_middle",
+  },
+  {
+    title: "Bottom",
+    value: "listing_bottom",
+  },
+];
 export const bannerLinkTypes = {
   external: "external",
   ad_category: "ad_category",

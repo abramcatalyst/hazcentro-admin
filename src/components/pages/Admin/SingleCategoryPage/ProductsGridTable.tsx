@@ -63,16 +63,20 @@ function ProductsGridTable({ data, handleOpenPreview }: ProductTableProps) {
                         &#8358;{currencyFormater(row?.price, 2)}
                       </Typography>
                     </Box>
-                    <img
-                      src={row?.media[0]?.original_url || ProductImg}
-                      alt="product"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        borderRadius: "6px",
-                      }}
-                    />
+                    {row?.media && row?.media[0]?.original_url ? (
+                      <img
+                        src={row?.media[0]?.original_url || ProductImg}
+                        alt="product"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "6px",
+                        }}
+                      />
+                    ) : (
+                      "N/A"
+                    )}
                   </Box>
                   <Box
                     sx={{

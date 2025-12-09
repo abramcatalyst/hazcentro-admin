@@ -1,17 +1,17 @@
 import { ErrorBoundary } from "react-error-boundary";
-import EscrowWrapper from "src/components/pages/Admin/Escrow/EscrowWrapper";
+import AdsCategoryDetailsWrapper from "src/components/pages/Admin/AdsCategoryDetailsProducts/AdsCategoryDetailsProductsWrapper";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 import MetaDecorator from "src/components/shared/MetaDecorator/MetaDecorator";
 
-const AdminEscrowDashboard = () => {
+const AdminAdsCategoryDetails = () => {
   return (
     <div>
-      <MetaDecorator title=" Escrow Dashboard" />
+      <MetaDecorator title=" Ads Category Details" />
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
-        <EscrowWrapper />
+        <AdsCategoryDetailsWrapper />
       </ErrorBoundary>
     </div>
   );
 };
 
-export default AdminEscrowDashboard;
+export default AdminAdsCategoryDetails;

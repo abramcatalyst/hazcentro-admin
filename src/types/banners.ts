@@ -20,3 +20,13 @@ export type AdsCategoryType = {
   start_date: string;
   updated_at: string;
 };
+
+export type AdsCategoryProductType = {
+  id: string;
+  name: string;
+  price: number;
+  discounted_price: null | number;
+  discount_percentage: null | number;
+  stock_quantity: number;
+  image: string;
+};

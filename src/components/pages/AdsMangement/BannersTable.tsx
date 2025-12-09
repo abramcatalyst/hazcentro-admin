@@ -60,18 +60,12 @@ type Props = {
         total: number;
       }
     | undefined;
+  queryKey?: string;
 };
 function EnhancedTableHead() {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            size="small"
-            color="warning"
-
-          />
-        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell key={headCell}>{headCell}</TableCell>
         ))}
@@ -128,7 +122,6 @@ function BannersTable({ data, isError, isPending, error }: Props) {
     return <HalfScreenLoader />;
   }
 
-  console.log("first", data);
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openPreviewProfile && selected && (

@@ -19,6 +19,8 @@ export const ADMIN_ROUTE_SUB_LINKS = {
   ADS_DETAILS: "ads-management/ads-details",
   EDIT_ADS_DETAILS: "ads-management/edit-ads-details",
   ADS_CATEGORY: "ads-category",
+  ADS_CATEGORY_ADD_PRODUCT: "ads-category/add-product",
+  ADS_CATEGORY_DETAILS: "ads-category/details",
   ADD_ADS_CATEGORY: "ads-management/add-ads-category",
   EDIT_ADS_CATEGORY: "ads-management/edit-ads-category",
 };
@@ -44,6 +46,8 @@ export const ADMIN_ROUTE_LINKS = {
   ADS_CATEGORY: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADS_CATEGORY}`,
   ADMIN_ADD_ADS_CATEGORY: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADD_ADS_CATEGORY}`,
   ADMIN_EDIT_ADS_CATEGORY: `/admin/${ADMIN_ROUTE_SUB_LINKS.EDIT_ADS_CATEGORY}`,
+  ADMIN_ADS_CATEGORY_ADD_PRODUCT: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADS_CATEGORY_ADD_PRODUCT}`,
+  ADMIN_ADS_CATEGORY_DETAILS: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADS_CATEGORY_DETAILS}`,
 };
 
 export const CUSTOMER_ROUTE_SUB_LINKS = {

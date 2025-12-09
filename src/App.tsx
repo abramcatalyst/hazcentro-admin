@@ -47,6 +47,8 @@ import CustomerCareOrderDetailsPage from "./pages/customercare/CustomerCareOrder
 import CustomerCareNotifications from "./pages/customercare/CustomerCareNotifications";
 import AdminAdsManagement from "./pages/admin/AdminAdsManagement";
 import AdminAdsCategory from "./pages/admin/AdminAdsCategory";
+import AdminAdsCategoryDetails from "./pages/admin/AdminAdsCategoryDetails";
+import AdminAddProductsToAdsCategory from "./pages/admin/AdminAddProductsToAdsCategory";
 
 function App() {
   const CustomerCareRoutes = () => (
@@ -114,6 +116,14 @@ function App() {
         <Route
           path={`${ADMIN_ROUTE_SUB_LINKS.AGENT_PROFILE}/:id`}
           element={<AdminAgentProfile />}
+        />
+        <Route
+          path={`${ADMIN_ROUTE_SUB_LINKS.ADS_CATEGORY_DETAILS}/:id`}
+          element={<AdminAdsCategoryDetails />}
+        />
+        <Route
+          path={`${ADMIN_ROUTE_SUB_LINKS.ADS_CATEGORY_ADD_PRODUCT}/:id`}
+          element={<AdminAddProductsToAdsCategory />}
         />
         <Route
           path={ADMIN_ROUTE_SUB_LINKS.OVERVIEW}

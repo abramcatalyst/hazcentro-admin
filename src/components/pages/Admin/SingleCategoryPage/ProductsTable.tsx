@@ -82,38 +82,21 @@ function ProductsTable({ data, handleOpenPreview }: ProductTableProps) {
                   //     : "default",
                   // }}
                 >
-                  {/* <StyledTableCell padding="checkbox">
-                    <Checkbox
-                      color="warning"
-                      size="small"
-                      checked={isItemSelected}
-                      onChange={() => {
-                        if (selectedUsers.has(index)) {
-                          setSelectedUsers((prev) => {
-                            const newSet = new Set(prev);
-                            newSet.delete(index);
-                            return newSet;
-                          });
-                        } else {
-                          setSelectedUsers((prev) => new Set(prev).add(index));
-                        }
-                      }}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </StyledTableCell> */}
                   <StyledTableCell>
-                    <img
-                      src={row?.media[0]?.original_url || ProductImg}
-                      alt="product"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        objectFit: "cover",
-                        borderRadius: "6px",
-                      }}
-                    />
+                    {row?.media && row?.media[0]?.original_url ? (
+                      <img
+                        src={row?.media[0]?.original_url || ProductImg}
+                        alt="product"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                          borderRadius: "6px",
+                        }}
+                      />
+                    ) : (
+                      "N/A"
+                    )}
                   </StyledTableCell>
                   <StyledTableCell>{row?.name}</StyledTableCell>
                   <StyledTableCell>

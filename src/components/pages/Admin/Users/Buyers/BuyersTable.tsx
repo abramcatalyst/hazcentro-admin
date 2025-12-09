@@ -58,13 +58,6 @@ function EnhancedTableHead() {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            size="small"
-            color="warning"
-
-          />
-        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell key={headCell}>{headCell}</TableCell>
         ))}
@@ -191,7 +184,7 @@ function BuyersTable({ selectedUsers }: Props) {
                           inputProps={{
                             "aria-labelledby": labelId,
                           }}
-                        />
+                        /> 
                       </StyledTableCell> */}
                       <StyledTableCell>{row?.unique_user_id}</StyledTableCell>
                       <StyledTableCell>{row?.name}</StyledTableCell>

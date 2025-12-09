@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -35,14 +35,16 @@ import { useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import useManageToken from "src/hooks/useManageToken";
 import dayjs, { Dayjs } from "dayjs";
+import { AdsCategoryType } from "src/types/banners";
 
 const sizing = { xs: 12, sm: 6 };
 type Props = {
   open: boolean;
+  selected: AdsCategoryType;
   handleClose: () => void;
 };
 
-function AddAdsCategoryDialog({ open, handleClose }: Props) {
+function EditAdsCategoryDialog({ open, selected, handleClose }: Props) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -54,14 +56,21 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
   const queryClient = useQueryClient();
   const { logOutUser } = useManageToken();
 
+  useEffect(() => {
+    setStartDate(dayjs(selected?.start_date));
+    setEndDate(dayjs(selected?.end_date));
+
+    return () => {};
+  }, [selected]);
+
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
-      is_active: 1,
-      start_date: "",
-      end_date: "",
-      order: "",
+      name: selected?.name || "",
+      description: selected?.description || "",
+      // is_active: 1,
+      start_date: selected?.start_date || "",
+      end_date: selected?.end_date || "",
+      // order: "",
     },
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
@@ -77,13 +86,13 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
         formData.append("end_date", values.end_date);
         formData.append("description", values.description);
         //@ts-ignore
-        formData.append("is_active", values.is_active);
+        // formData.append("is_active", values.is_active);
 
         if (image) {
           formData.append("image", image);
         }
-        const res = await axios.post(
-          `${baseUrl}/admin/categories-for-ads`,
+        const res = await axios.patch(
+          `${baseUrl}/admin/categories-for-ads/${selected?.id}`,
           formData
         );
         const successMsg = formatSuccessMessage(res);
@@ -300,4 +309,4 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
   );
 }
 
-export default AddAdsCategoryDialog;
+export default EditAdsCategoryDialog;

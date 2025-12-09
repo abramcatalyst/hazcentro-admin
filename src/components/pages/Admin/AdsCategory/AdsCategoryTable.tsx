@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { ChangeEvent, Fragment, useState } from "react";
 import Box from "@mui/material/Box";
 import TablePagination from "@mui/material/TablePagination";
 import Table from "@mui/material/Table";
@@ -15,8 +15,12 @@ import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import dayjs from "dayjs";
 import {
+  baseUrl,
   formatErrorMessage,
+  formatSuccessMessage,
+  isAuthTokenExpired,
   rowsPerPageOptions,
+  setDefaultHeaders,
   sLimit,
   sPage,
   tableMenuStyles,
@@ -27,13 +31,18 @@ import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCe
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { fetchAdsCategories } from "src/services/banners";
 import { AdsCategoryType } from "src/types/banners";
 import PreviewAdsCategoryDialog from "./PreviewAdsCategory";
+import EditAdsCategoryDialog from "./EditAdsCategoryDialog";
+import toast from "react-hot-toast";
+import axios from "axios";
+import GeneralConfirmDialog from "src/components/shared/GeneralConfirmDialog/GeneralConfirmDialog";
+import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 
 dayjs.extend(advancedFormat);
 
@@ -50,13 +59,6 @@ function EnhancedTableHead() {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            size="small"
-            color="warning"
-
-          />
-        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell key={headCell}>{headCell}</TableCell>
         ))}
@@ -67,8 +69,12 @@ function EnhancedTableHead() {
 
 function AdsCategoryTable() {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selected, setSelected] = useState<AdsCategoryType | null>(null);
-
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
@@ -97,9 +103,7 @@ function AdsCategoryTable() {
     );
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchParams(
       (params) => {
         params.set(sLimit, event.target.value.toString());
@@ -119,6 +123,48 @@ function AdsCategoryTable() {
     setSelected(null);
     setOpenPreviewProfile(false);
   };
+
+  const handleOpenEditDialog = (info: AdsCategoryType) => {
+    setSelected(info);
+
+    setOpenEditDialog(true);
+  };
+  const handleCloseEditDialog = () => {
+    setSelected(null);
+    setOpenEditDialog(false);
+  };
+
+  const handleOpenDeleteDialog = (info: AdsCategoryType) => {
+    setSelected(info);
+
+    setOpenDeleteDialog(true);
+  };
+  const handleCloseDeleteDialog = () => {
+    setSelected(null);
+    setOpenDeleteDialog(false);
+  };
+  const handleSubmitDelete = async () => {
+    try {
+      setDefaultHeaders();
+      isAuthTokenExpired();
+      setIsSubmitting(true);
+
+      const res = await axios.delete(
+        `${baseUrl}/admin/categories-for-ads/${selected?.id}`
+      );
+      const successMsg = formatSuccessMessage(res?.data);
+      toast.success(successMsg);
+      queryClient.invalidateQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADS_CATEGORIES],
+      });
+      handleCloseDeleteDialog();
+    } catch (error) {
+      const errorMsg = formatErrorMessage(error);
+      toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
@@ -133,6 +179,24 @@ function AdsCategoryTable() {
           open={openPreviewProfile}
           selected={selected}
           handleClose={handleClosePreviewProfile}
+        />
+      )}
+
+      {openEditDialog && selected && (
+        <EditAdsCategoryDialog
+          open={openEditDialog}
+          selected={selected}
+          handleClose={handleCloseEditDialog}
+        />
+      )}
+
+      {openDeleteDialog && selected && (
+        <GeneralConfirmDialog
+          open={openDeleteDialog}
+          hint={`Do you realy wish to delete this category (${selected?.name})`}
+          handleSubmit={handleSubmitDelete}
+          isSubmitting={isSubmitting}
+          handleClose={handleCloseEditDialog}
         />
       )}
 
@@ -198,6 +262,46 @@ function AdsCategoryTable() {
                                   sx={tableMenuStyles}
                                 >
                                   Preview
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => {
+                                    handleOpenEditDialog(row);
+                                    popupState.close();
+                                  }}
+                                  sx={tableMenuStyles}
+                                >
+                                  Edit details
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => {
+                                    handleOpenDeleteDialog(row);
+                                    popupState.close();
+                                  }}
+                                  sx={tableMenuStyles}
+                                >
+                                  Delete
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => {
+                                    navigate(
+                                      `${ADMIN_ROUTE_LINKS.ADMIN_ADS_CATEGORY_ADD_PRODUCT}/${row?.id}`
+                                    );
+                                    popupState.close();
+                                  }}
+                                  sx={tableMenuStyles}
+                                >
+                                  Add products
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => {
+                                    navigate(
+                                      `${ADMIN_ROUTE_LINKS.ADMIN_ADS_CATEGORY_DETAILS}/${row?.id}`
+                                    );
+                                    popupState.close();
+                                  }}
+                                  sx={tableMenuStyles}
+                                >
+                                  View added products
                                 </MenuItem>
                               </Menu>
                             </Fragment>

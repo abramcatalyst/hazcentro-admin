@@ -1,6 +1,7 @@
 import axios from "axios";
 import { CategoryType } from "src/types/categories";
 import { QueryFilterType } from "src/types/filters";
+import { GlobalProductType } from "src/types/products";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
 export const fetchProducts = async ({
@@ -12,24 +13,26 @@ export const fetchProducts = async ({
   endDate,
   lastLoginDate,
 }: QueryFilterType): Promise<{
-  data: CategoryType[];
-  current_page: number;
-  first_page_url: string;
-  from: number;
-  last_page: number;
-  last_page_url: string;
-  lings: {
-    url: null | string;
-    label: string;
-    active: boolean;
-  }[];
-  next_page: number;
-  next_page_url: string;
-  path: string;
-  per_page: number;
-  prev_page_url: null | string;
-  to: number;
-  total: number;
+  data: GlobalProductType[];
+  meta: {
+    current_page: number;
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    lings: {
+      url: null | string;
+      label: string;
+      active: boolean;
+    }[];
+    next_page: number;
+    next_page_url: string;
+    path: string;
+    per_page: number;
+    prev_page_url: null | string;
+    to: number;
+    total: number;
+  };
 }> => {
   setDefaultHeaders();
   isAuthTokenExpired();

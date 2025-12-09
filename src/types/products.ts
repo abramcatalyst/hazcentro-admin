@@ -65,3 +65,13 @@ export type TrendingProductType = {
   total_revenue_generated: string;
   image_url: string;
 };
+
+export type GlobalProductType = {
+  discount_percentage: number;
+  discounted_price: number;
+  id: string;
+  image: string;
+  name: string;
+  price: number;
+  stock_quantity: number;
+};

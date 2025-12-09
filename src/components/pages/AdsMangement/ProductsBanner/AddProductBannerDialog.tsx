@@ -1,12 +1,14 @@
 import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Skeleton from "@mui/material/Skeleton";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import Grid from "@mui/material/Grid2";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
@@ -23,6 +25,8 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import axios from "axios";
 import {
+  bannerLinkTypes,
+  bannerPlacementList,
   baseUrl,
   DATE_FORMAT,
   formatErrorMessage,
@@ -31,10 +35,11 @@ import {
   setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import useManageToken from "src/hooks/useManageToken";
 import dayjs, { Dayjs } from "dayjs";
+import { fetchProducts } from "src/services/products";
 
 const sizing = { xs: 12, sm: 6 };
 type Props = {
@@ -42,7 +47,7 @@ type Props = {
   handleClose: () => void;
 };
 
-function AddAdsCategoryDialog({ open, handleClose }: Props) {
+function AddProductBannerDialog({ open, handleClose }: Props) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -54,14 +59,19 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
   const queryClient = useQueryClient();
   const { logOutUser } = useManageToken();
 
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SELECT_PRODUCTS, {}],
+    queryFn: () => fetchProducts({ limit: 500, page: 1 }),
+  });
+
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
+      link_target: "",
       is_active: 1,
       start_date: "",
       end_date: "",
       order: "",
+      placement: "",
     },
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
@@ -71,39 +81,34 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
       setDefaultHeaders();
       try {
         const formData = new FormData();
-        formData.append("name", values.name);
-        formData.append("description", values.description);
+
+        formData.append("link_target", values.link_target);
         formData.append("start_date", values.start_date);
         formData.append("end_date", values.end_date);
-        formData.append("description", values.description);
-        //@ts-ignore
-        formData.append("is_active", values.is_active);
+        formData.append("is_active", values.is_active.toString());
+        formData.append("placement", values.placement);
+        formData.append("link_type", bannerLinkTypes.product);
 
         if (image) {
           formData.append("image", image);
         }
-        const res = await axios.post(
-          `${baseUrl}/admin/categories-for-ads`,
-          formData
-        );
+        const res = await axios.post(`${baseUrl}/admin/banners`, formData);
         const successMsg = formatSuccessMessage(res);
         setImagePreview("");
         setImage(null);
         toast.success(successMsg);
         queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADS_CATEGORIES],
+          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_PRODUCT_BANNERS],
         });
         handleClose();
       } catch (error) {
         helpers.setSubmitting(false);
         let errMsg = formatErrorMessage(error);
-
         return toast.error(errMsg);
       }
     },
     validationSchema: yup.object().shape({
-      name: yup.string().required().label("Name"),
-      description: yup.string().min(6).required().label("Description"),
+      link_target: yup.string().required().label("Product"),
     }),
   });
 
@@ -137,7 +142,7 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
           }}
         >
           <Typography variant="h6" sx={{ color: "GrayText" }}>
-            Add Ads Category
+            Add Banner
           </Typography>
           <DialogCloseButtonWrapper>
             <IconButton onClick={handleClose} color="error">
@@ -150,17 +155,67 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
         <Box component={"form"} onSubmit={handleSubmit}>
           <Grid container spacing={1}>
             <Grid size={{ xs: 12 }}>
+              {isPending ? (
+                <Skeleton height={40} />
+              ) : isError ? (
+                <FormHelperText error>
+                  {formatErrorMessage(error)}
+                </FormHelperText>
+              ) : (
+                <FormControl size="small" fullWidth sx={{ my: 1 }}>
+                  <InputLabel>Select product</InputLabel>
+                  <Select
+                    label="Select product"
+                    name="link_target"
+                    value={values.link_target}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  >
+                    {data?.data?.map((item) => (
+                      <MenuItem value={item?.id}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 0.6,
+                            alignItems: "center",
+                          }}
+                        >
+                          <img
+                            src={item?.image}
+                            alt={item?.name}
+                            style={{
+                              objectFit: "contain",
+                              width: "40px",
+                              height: "30px",
+                            }}
+                          />
+                          <Typography variant="body2">{item?.name}</Typography>
+                        </Box>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.link_target && touched.link_target && (
+                    <FormHelperText error>{errors.link_target}</FormHelperText>
+                  )}
+                </FormControl>
+              )}
+            </Grid>
+            <Grid size={{ xs: 12 }}>
               <FormControl size="small" fullWidth sx={{ my: 1 }}>
-                <InputLabel>Enter category name</InputLabel>
-                <OutlinedInput
-                  label="Enter category name"
-                  name="name"
-                  value={values.name}
+                <InputLabel>Select banner placement</InputLabel>
+                <Select
+                  label="Select banner placement"
+                  name="placement"
+                  value={values.placement}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                />
-                {errors.name && touched.name && (
-                  <FormHelperText error>{errors.name}</FormHelperText>
+                >
+                  {bannerPlacementList.map((item) => (
+                    <MenuItem value={item?.value}>{item?.title}</MenuItem>
+                  ))}
+                </Select>
+                {errors.placement && touched.placement && (
+                  <FormHelperText error>{errors.placement}</FormHelperText>
                 )}
               </FormControl>
             </Grid>
@@ -202,23 +257,6 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
                     }}
                   />
                 </LocalizationProvider>
-              </FormControl>
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <FormControl fullWidth sx={{ my: 1 }}>
-                <InputLabel>Enter a description</InputLabel>
-                <OutlinedInput
-                  multiline
-                  rows={2}
-                  label="Enter a description"
-                  name="description"
-                  value={values.description}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.description && touched.description && (
-                  <FormHelperText error>{errors.description}</FormHelperText>
-                )}
               </FormControl>
             </Grid>
           </Grid>
@@ -300,4 +338,4 @@ function AddAdsCategoryDialog({ open, handleClose }: Props) {
   );
 }
 
-export default AddAdsCategoryDialog;
+export default AddProductBannerDialog;

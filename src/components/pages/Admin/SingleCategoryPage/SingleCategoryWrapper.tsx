@@ -139,7 +139,6 @@ const SingleCategoryWrapper = () => {
     return <HalfScreenLoader />;
   }
 
-  console.log("dddddddddddddd", data);
   return (
     <Box>
       {openPreview && selectedProduct && (

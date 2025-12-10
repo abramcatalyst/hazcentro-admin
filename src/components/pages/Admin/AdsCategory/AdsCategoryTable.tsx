@@ -171,7 +171,7 @@ function AdsCategoryTable() {
   if (isPending) {
     return <HalfScreenLoader />;
   }
-  console.log("55555555555555", data);
+
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openPreviewProfile && selected && (

@@ -51,7 +51,7 @@ export default function HeaderProfile() {
           display: "flex",
           alignItems: "center",
           textAlign: "center",
-          ml: { xs: "0px", sm: "auto" },
+          ml: { xs: "auto" },
           color: "black",
           gap: 1,
         }}

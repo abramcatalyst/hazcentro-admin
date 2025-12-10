@@ -63,6 +63,7 @@ function ProductsBanners() {
         error={error}
         isError={isError}
         isPending={isPending}
+        queryKey={TANSTACK_REQUEST_CACHE_TAGS.FETCH_PRODUCT_BANNERS}
       />
     </Box>
   );

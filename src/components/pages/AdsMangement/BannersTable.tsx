@@ -14,8 +14,12 @@ import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import dayjs from "dayjs";
 import {
+  baseUrl,
   formatErrorMessage,
+  formatSuccessMessage,
+  isAuthTokenExpired,
   rowsPerPageOptions,
+  setDefaultHeaders,
   sLimit,
   sPage,
   tableMenuStyles,
@@ -29,6 +33,10 @@ import { useSearchParams } from "react-router-dom";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { BannerType } from "src/types/banners";
 import BannerDetailsDialog from "./BannerDetailsDialog";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import GeneralConfirmDialog from "src/components/shared/GeneralConfirmDialog/GeneralConfirmDialog";
 
 dayjs.extend(advancedFormat);
 
@@ -60,7 +68,7 @@ type Props = {
         total: number;
       }
     | undefined;
-  queryKey?: string;
+  queryKey: string;
 };
 function EnhancedTableHead() {
   return (
@@ -74,8 +82,10 @@ function EnhancedTableHead() {
   );
 }
 
-function BannersTable({ data, isError, isPending, error }: Props) {
+function BannersTable({ data, isError, isPending, error, queryKey }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selected, setSelected] = useState<BannerType | null>(null);
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
@@ -83,7 +93,7 @@ function BannersTable({ data, isError, isPending, error }: Props) {
   });
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 0;
-
+  const queryClient = useQueryClient();
   const handleChangePage = (_event: unknown, newPage: number) => {
     setSearchParams(
       (params) => {
@@ -115,6 +125,38 @@ function BannersTable({ data, isError, isPending, error }: Props) {
     setOpenPreviewProfile(false);
     setSelected(null);
   };
+
+  const handleOpenDeleteDialog = (info: BannerType) => {
+    setSelected(info);
+    setOpenDeleteDialog(true);
+  };
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setSelected(null);
+  };
+  const handleSubmitDelete = async () => {
+    try {
+      setDefaultHeaders();
+      isAuthTokenExpired();
+      setIsSubmitting(true);
+
+      const res = await axios.delete(
+        `${baseUrl}/admin/banners/${selected?.id}`
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: [queryKey],
+      });
+      handleCloseDeleteDialog();
+      const successMsg = formatSuccessMessage(res?.data);
+      toast.success(successMsg);
+    } catch (error) {
+      const errorMsg = formatErrorMessage(error);
+      toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
@@ -129,6 +171,15 @@ function BannersTable({ data, isError, isPending, error }: Props) {
           open={openPreviewProfile}
           selected={selected}
           handleClose={handleClosePreviewProfile}
+        />
+      )}
+      {openDeleteDialog && selected && (
+        <GeneralConfirmDialog
+          open={openDeleteDialog}
+          isSubmitting={isSubmitting}
+          hint={`Kindly confirm to delete this banner`}
+          handleClose={handleClosePreviewProfile}
+          handleSubmit={handleSubmitDelete}
         />
       )}
 
@@ -214,16 +265,17 @@ function BannersTable({ data, isError, isPending, error }: Props) {
                                   }}
                                   sx={tableMenuStyles}
                                 >
-                                  Preview Banner
+                                  Preview banner
                                 </MenuItem>
-                                {/* <MenuItem
-                                onClick={() => {
-                                  popupState.close();
-                                }}
-                                sx={tableMenuStyles}
-                              >
-                                Activate
-                              </MenuItem> */}
+                                <MenuItem
+                                  onClick={() => {
+                                    handleOpenDeleteDialog(row);
+                                    popupState.close();
+                                  }}
+                                  sx={tableMenuStyles}
+                                >
+                                  Delete banner
+                                </MenuItem>
 
                                 {/* <MenuItem
                                 onClick={() => {

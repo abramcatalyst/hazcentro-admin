@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
-import Skeleton from "@mui/material/Skeleton";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
@@ -35,11 +35,10 @@ import {
   setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import useManageToken from "src/hooks/useManageToken";
 import dayjs, { Dayjs } from "dayjs";
-import { fetchProducts } from "src/services/products";
 
 const sizing = { xs: 12, sm: 6 };
 type Props = {
@@ -47,7 +46,7 @@ type Props = {
   handleClose: () => void;
 };
 
-function AddProductBannerDialog({ open, handleClose }: Props) {
+function AddExternalBannerDialog({ open, handleClose }: Props) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -58,11 +57,6 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const queryClient = useQueryClient();
   const { logOutUser } = useManageToken();
-
-  const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SELECT_PRODUCTS, {}],
-    queryFn: () => fetchProducts({ limit: 500, page: 1 }),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -87,7 +81,7 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
         formData.append("end_date", values.end_date);
         formData.append("is_active", values.is_active.toString());
         formData.append("placement", values.placement);
-        formData.append("link_type", bannerLinkTypes.product);
+        formData.append("link_type", bannerLinkTypes.external);
 
         if (image) {
           formData.append("image", image);
@@ -96,10 +90,10 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
         const successMsg = formatSuccessMessage(res);
         setImagePreview("");
         setImage(null);
-        toast.success(successMsg);
-        queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_PRODUCT_BANNERS],
+        await queryClient.invalidateQueries({
+          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_EXTERNAL_BANNERS],
         });
+        toast.success(successMsg);
         handleClose();
       } catch (error) {
         helpers.setSubmitting(false);
@@ -108,7 +102,7 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
       }
     },
     validationSchema: yup.object().shape({
-      link_target: yup.string().required().label("Product"),
+      link_target: yup.string().required().label("URL"),
     }),
   });
 
@@ -155,55 +149,24 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
         <Box component={"form"} onSubmit={handleSubmit}>
           <Grid container spacing={1}>
             <Grid size={{ xs: 12 }}>
-              {isPending ? (
-                <Skeleton height={40} />
-              ) : isError ? (
-                <FormHelperText error>
-                  {formatErrorMessage(error)}
-                </FormHelperText>
-              ) : (
-                <FormControl size="small" fullWidth sx={{ my: 1 }}>
-                  <InputLabel>Select product</InputLabel>
-                  <Select
-                    label="Select product"
-                    name="link_target"
-                    value={values.link_target}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  >
-                    {data?.data?.map((item) => (
-                      <MenuItem value={item?.id}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 0.6,
-                            alignItems: "center",
-                          }}
-                        >
-                          {item?.image && (
-                            <img
-                              src={item?.image}
-                              alt={item?.name}
-                              style={{
-                                objectFit: "contain",
-                                width: "40px",
-                                height: "30px",
-                              }}
-                            />
-                          )}
-                          <Typography variant="body2">{item?.name}</Typography>
-                        </Box>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {errors.link_target && touched.link_target && (
-                    <FormHelperText error>{errors.link_target}</FormHelperText>
-                  )}
-                </FormControl>
-              )}
+              <FormControl size="small" fullWidth>
+                <InputLabel>Enter URL</InputLabel>
+
+                <OutlinedInput
+                  label="Enter URL"
+                  name="link_target"
+                  value={values.link_target}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+
+                {errors.link_target && touched.link_target && (
+                  <FormHelperText error>{errors.link_target}</FormHelperText>
+                )}
+              </FormControl>
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <FormControl size="small" fullWidth sx={{ my: 1 }}>
+              <FormControl size="small" fullWidth>
                 <InputLabel>Select banner placement</InputLabel>
                 <Select
                   label="Select banner placement"
@@ -340,4 +303,4 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
   );
 }
 
-export default AddProductBannerDialog;
+export default AddExternalBannerDialog;

@@ -3,7 +3,9 @@ export type BannerType = {
   id: string;
   image_url: string;
   link_target: string;
-  link_type: "external";
+  start_date: string;
+  end_date: string;
+  link_type: string;
   order: number;
 };
 

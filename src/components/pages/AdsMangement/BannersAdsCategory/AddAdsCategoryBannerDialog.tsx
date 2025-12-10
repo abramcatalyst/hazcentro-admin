@@ -39,7 +39,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import useManageToken from "src/hooks/useManageToken";
 import dayjs, { Dayjs } from "dayjs";
-import { fetchProducts } from "src/services/products";
+import { fetchAdsCategories } from "src/services/banners";
 
 const sizing = { xs: 12, sm: 6 };
 type Props = {
@@ -47,7 +47,7 @@ type Props = {
   handleClose: () => void;
 };
 
-function AddProductBannerDialog({ open, handleClose }: Props) {
+function AddAdsCategoryBannerDialog({ open, handleClose }: Props) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -60,8 +60,8 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
   const { logOutUser } = useManageToken();
 
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SELECT_PRODUCTS, {}],
-    queryFn: () => fetchProducts({ limit: 500, page: 1 }),
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADS_CATEGORIES, {}],
+    queryFn: () => fetchAdsCategories({ limit: 500, page: 1 }),
   });
 
   const formik = useFormik({
@@ -87,7 +87,7 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
         formData.append("end_date", values.end_date);
         formData.append("is_active", values.is_active.toString());
         formData.append("placement", values.placement);
-        formData.append("link_type", bannerLinkTypes.product);
+        formData.append("link_type", bannerLinkTypes.ad_category);
 
         if (image) {
           formData.append("image", image);
@@ -98,7 +98,7 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
         setImage(null);
         toast.success(successMsg);
         queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_PRODUCT_BANNERS],
+          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADS_BANNERS],
         });
         handleClose();
       } catch (error) {
@@ -108,7 +108,7 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
       }
     },
     validationSchema: yup.object().shape({
-      link_target: yup.string().required().label("Product"),
+      link_target: yup.string().required().label("Category"),
     }),
   });
 
@@ -163,9 +163,9 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
                 </FormHelperText>
               ) : (
                 <FormControl size="small" fullWidth sx={{ my: 1 }}>
-                  <InputLabel>Select product</InputLabel>
+                  <InputLabel>Select ads category</InputLabel>
                   <Select
-                    label="Select product"
+                    label="Select ads category"
                     name="link_target"
                     value={values.link_target}
                     onChange={handleChange}
@@ -180,9 +180,9 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
                             alignItems: "center",
                           }}
                         >
-                          {item?.image && (
+                          {item?.image_url && (
                             <img
-                              src={item?.image}
+                              src={item?.image_url}
                               alt={item?.name}
                               style={{
                                 objectFit: "contain",
@@ -340,4 +340,4 @@ function AddProductBannerDialog({ open, handleClose }: Props) {
   );
 }
 
-export default AddProductBannerDialog;
+export default AddAdsCategoryBannerDialog;

@@ -1,12 +1,16 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import { bannerLinkTypes, rowsPerPageOptions, sLimit, sPage } from "src/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchBanners } from "src/services/banners";
 import BannersTable from "../BannersTable";
+import AddAdsCategoryBannerDialog from "./AddAdsCategoryBannerDialog";
 
 function BannersAdsCategory() {
+  const [openAddDialog, setOpenAddDialog] = useState(false);
   const [searchParams, _setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
@@ -22,14 +26,45 @@ function BannersAdsCategory() {
         type: bannerLinkTypes.ad_category,
       }),
   });
+  const handleOpenAddDialog = () => {
+    setOpenAddDialog(true);
+  };
+
+  const handleCloseAddDialog = () => {
+    setOpenAddDialog(false);
+  };
 
   return (
     <Box sx={{ width: "100%", my: 1 }}>
+      {openAddDialog && (
+        <AddAdsCategoryBannerDialog
+          open={openAddDialog}
+          handleClose={handleCloseAddDialog}
+        />
+      )}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Button
+          size="small"
+          variant="contained"
+          onClick={() => {
+            handleOpenAddDialog();
+          }}
+        >
+          Add Banner
+        </Button>
+      </Box>
       <BannersTable
         data={data}
         error={error}
         isError={isError}
         isPending={isPending}
+        queryKey={TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADS_BANNERS}
       />
     </Box>
   );

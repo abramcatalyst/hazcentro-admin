@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
+import Skeleton from "@mui/material/Skeleton";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
@@ -35,10 +35,11 @@ import {
   setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import useManageToken from "src/hooks/useManageToken";
 import dayjs, { Dayjs } from "dayjs";
+import { fetchProducts } from "src/services/products";
 import { BannerType } from "src/types/banners";
 
 const sizing = { xs: 12, sm: 6 };
@@ -48,7 +49,7 @@ type Props = {
   handleClose: () => void;
 };
 
-function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
+function EditProductBannerDialog({ open, selected, handleClose }: Props) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -60,6 +61,11 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
   const queryClient = useQueryClient();
   const { logOutUser } = useManageToken();
 
+  const { isPending, error, data, isError } = useQuery({
+    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SELECT_PRODUCTS, {}],
+    queryFn: () => fetchProducts({ limit: 500, page: 1 }),
+  });
+
   useEffect(() => {
     setStartDate(selected?.start_date ? dayjs(selected?.start_date) : null);
     setEndDate(selected?.end_date ? dayjs(selected?.end_date) : null);
@@ -69,7 +75,7 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
   const formik = useFormik({
     initialValues: {
       link_target: selected?.link_target || "",
-      is_active: selected?.is_active,
+      is_active: 1,
       start_date: selected?.start_date || "",
       end_date: selected?.end_date || "",
       order: selected?.order || "",
@@ -89,7 +95,7 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
         formData.append("end_date", values.end_date);
         formData.append("is_active", values.is_active.toString());
         formData.append("placement", values.placement);
-        formData.append("link_type", bannerLinkTypes.external);
+        formData.append("link_type", bannerLinkTypes.product);
 
         if (image) {
           formData.append("image", image);
@@ -101,10 +107,10 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
         const successMsg = formatSuccessMessage(res);
         setImagePreview("");
         setImage(null);
-        await queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_EXTERNAL_BANNERS],
-        });
         toast.success(successMsg);
+        queryClient.invalidateQueries({
+          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_PRODUCT_BANNERS],
+        });
         handleClose();
       } catch (error) {
         helpers.setSubmitting(false);
@@ -113,7 +119,7 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
       }
     },
     validationSchema: yup.object().shape({
-      link_target: yup.string().required().label("URL"),
+      link_target: yup.string().required().label("Product"),
     }),
   });
 
@@ -160,24 +166,55 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
         <Box component={"form"} onSubmit={handleSubmit}>
           <Grid container spacing={1}>
             <Grid size={{ xs: 12 }}>
-              <FormControl size="small" fullWidth>
-                <InputLabel>Enter URL</InputLabel>
-
-                <OutlinedInput
-                  label="Enter URL"
-                  name="link_target"
-                  value={values.link_target}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-
-                {errors.link_target && touched.link_target && (
-                  <FormHelperText error>{errors.link_target}</FormHelperText>
-                )}
-              </FormControl>
+              {isPending ? (
+                <Skeleton height={40} />
+              ) : isError ? (
+                <FormHelperText error>
+                  {formatErrorMessage(error)}
+                </FormHelperText>
+              ) : (
+                <FormControl size="small" fullWidth sx={{ my: 1 }}>
+                  <InputLabel>Select product</InputLabel>
+                  <Select
+                    label="Select product"
+                    name="link_target"
+                    value={values.link_target}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  >
+                    {data?.data?.map((item) => (
+                      <MenuItem value={item?.id}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 0.6,
+                            alignItems: "center",
+                          }}
+                        >
+                          {item?.image && (
+                            <img
+                              src={item?.image}
+                              alt={item?.name}
+                              style={{
+                                objectFit: "contain",
+                                width: "40px",
+                                height: "30px",
+                              }}
+                            />
+                          )}
+                          <Typography variant="body2">{item?.name}</Typography>
+                        </Box>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.link_target && touched.link_target && (
+                    <FormHelperText error>{errors.link_target}</FormHelperText>
+                  )}
+                </FormControl>
+              )}
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <FormControl size="small" fullWidth>
+              <FormControl size="small" fullWidth sx={{ my: 1 }}>
                 <InputLabel>Select banner placement</InputLabel>
                 <Select
                   label="Select banner placement"
@@ -339,4 +376,4 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
   );
 }
 
-export default UpdateExternalBannerDialog;
+export default EditProductBannerDialog;

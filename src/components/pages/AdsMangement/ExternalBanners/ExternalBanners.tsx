@@ -8,9 +8,13 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchBanners } from "src/services/banners";
 import BannersTable from "../BannersTable";
 import AddExternalBannerDialog from "./AddExternalBannerDialog";
+import UpdateExternalBannerDialog from "./UpdateExternalBannerDialog";
+import { BannerType } from "src/types/banners";
 
 function ExternalBanners() {
   const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [selected, setSelected] = useState<BannerType | null>(null);
   const [searchParams, _setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
@@ -36,13 +40,28 @@ function ExternalBanners() {
   const handleCloseAddDialog = () => {
     setOpenAddDialog(false);
   };
+  const handleOpenEditDialog = (val: BannerType) => {
+    setOpenEditDialog(true);
+    setSelected(val);
+  };
 
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+    setSelected(null);
+  };
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openAddDialog && (
         <AddExternalBannerDialog
           open={openAddDialog}
           handleClose={handleCloseAddDialog}
+        />
+      )}
+      {openEditDialog && selected && (
+        <UpdateExternalBannerDialog
+          open={openEditDialog}
+          selected={selected}
+          handleClose={handleCloseEditDialog}
         />
       )}
       <Box
@@ -68,6 +87,7 @@ function ExternalBanners() {
         isError={isError}
         isPending={isPending}
         queryKey={TANSTACK_REQUEST_CACHE_TAGS.FETCH_EXTERNAL_BANNERS}
+        handleOpenEditDialog={handleOpenEditDialog}
       />
     </Box>
   );

@@ -10,6 +10,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import { BannerType } from "src/types/banners";
+import { formatBannerType, FULL_DATE_FORMAT } from "src/utils";
+import dayjs from "dayjs";
 
 type Props = {
   open: boolean;
@@ -125,9 +127,44 @@ function BannerDetailsDialog({ open, selected, handleClose }: Props) {
               <Grid size={sizing}>
                 <InfoBox title="Type" value={selected?.link_type} />
               </Grid>
-
+              <Grid size={sizing}>
+                <InfoBox
+                  title="Placement"
+                  value={formatBannerType(selected?.placement)}
+                />
+              </Grid>
               <Grid size={sizing}>
                 <InfoBox title="Order" value={selected?.order.toString()} />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox
+                  title="Start Date"
+                  value={
+                    selected?.start_date
+                      ? dayjs(selected.start_date).format(FULL_DATE_FORMAT)
+                      : "N/A"
+                  }
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox
+                  title="End Date"
+                  value={
+                    selected?.end_date
+                      ? dayjs(selected.end_date).format(FULL_DATE_FORMAT)
+                      : "N/A"
+                  }
+                />
+              </Grid>
+              <Grid size={sizing}>
+                <InfoBox
+                  title="Date created"
+                  value={
+                    selected?.created_at
+                      ? dayjs(selected.created_at).format(FULL_DATE_FORMAT)
+                      : "N/A"
+                  }
+                />
               </Grid>
             </Grid>
           </Box>

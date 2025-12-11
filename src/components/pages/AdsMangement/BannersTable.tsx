@@ -69,6 +69,7 @@ type Props = {
       }
     | undefined;
   queryKey: string;
+  handleOpenEditDialog: (val: BannerType) => void;
 };
 function EnhancedTableHead() {
   return (
@@ -82,7 +83,14 @@ function EnhancedTableHead() {
   );
 }
 
-function BannersTable({ data, isError, isPending, error, queryKey }: Props) {
+function BannersTable({
+  data,
+  isError,
+  isPending,
+  error,
+  queryKey,
+  handleOpenEditDialog,
+}: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -269,6 +277,15 @@ function BannersTable({ data, isError, isPending, error, queryKey }: Props) {
                                 </MenuItem>
                                 <MenuItem
                                   onClick={() => {
+                                    handleOpenEditDialog(row);
+                                    popupState.close();
+                                  }}
+                                  sx={tableMenuStyles}
+                                >
+                                  Edit banner
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => {
                                     handleOpenDeleteDialog(row);
                                     popupState.close();
                                   }}
@@ -277,14 +294,6 @@ function BannersTable({ data, isError, isPending, error, queryKey }: Props) {
                                   Delete banner
                                 </MenuItem>
 
-                                {/* <MenuItem
-                                onClick={() => {
-                                  popupState.close();
-                                }}
-                                sx={tableMenuStyles}
-                              >
-                                Suspend
-                              </MenuItem> */}
                                 {/* <MenuItem
                                 onClick={() => {
                                   popupState.close();

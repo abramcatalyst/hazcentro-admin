@@ -6,6 +6,8 @@ export type BannerType = {
   start_date: string;
   end_date: string;
   link_type: string;
+  placement: string;
+  is_active: number;
   order: number;
 };
 

@@ -65,6 +65,14 @@ export const bannerPlacementList = [
     value: "listing_bottom",
   },
 ];
+
+export const formatBannerType = (val: string) => {
+  const found = bannerPlacementList.find((item) => item.value == val);
+  if (found) {
+    return found?.title;
+  }
+  return "N/A";
+};
 export const bannerLinkTypes = {
   external: "external",
   ad_category: "ad_category",
@@ -156,25 +164,7 @@ export const reportsIntervals = {
   WEEKLY: "weekly",
   MONTHLY: "monthly",
 };
-export const ticketWalletType = {
-  BONUS_WALLET: "bonusWallet",
-  MAIN_WALLET: "mainWallet",
-};
-export const bonusType = {
-  NORMAL_BONUS: "normal-bonus",
-  BUNDLE_BONUS: "bundle-bonus",
-};
-export const ticketStates = {
-  BLACKLISTED: "blacklisted",
-  WON: "won",
-  HELD: "held",
-  ONGOING: "ongoing",
-  CANCELED: "canceled",
-  PENDING: "pending",
-  LOST: "lost",
-  INACTIVE: "inactive",
-  REJECTED: "rejected",
-};
+
 export const daysOfTheWeekList = [
   { value: 0, title: "Sunday" },
   { value: 1, title: "Monday" },
@@ -198,57 +188,17 @@ export const imageBox = {
   display: "flex",
   justifyContent: "space-between",
 };
-export const bannerCategories = [
-  {
-    title: "Top-Desktop",
-    value: "top-desktop",
-  },
-  {
-    title: "Top-Mobile",
-    value: "top-mobile",
-  },
-  {
-    title: "Left-Desktop",
-    value: "left-desktop",
-  },
-  {
-    title: "Right-Desktop",
-    value: "right-desktop",
-  },
 
-  {
-    title: "Box-mobile",
-    value: "box-mobile",
-  },
-  {
-    title: "Slider",
-    value: "slider",
-  },
-];
 export const booleanFieldStatusData = [
   { title: "None", value: "" },
   { title: "Active", value: "true" },
   { title: "Not Active", value: "false" },
 ];
 
-export const formatBonusType = (bonus: string) => {
-  if (bonus === bonusType.NORMAL_BONUS) {
-    return "Normal Bonus";
-  }
-  return "Bundle Bonus";
-};
 export const dialogActionsStyles = {
   pr: { xs: 1, sm: 3, md: 4, lg: 5 },
 };
-export const formatTicketWalletType = (wallet: string) => {
-  if (wallet === ticketWalletType.BONUS_WALLET) {
-    return "Bonus Wallet";
-  }
-  if (wallet === ticketWalletType.MAIN_WALLET) {
-    return "Main Wallet";
-  }
-  return wallet;
-};
+
 // Set a Cookie
 export function setCookie(cName: string, cValue: string, expDays: number) {
   let date = new Date();
@@ -561,41 +511,6 @@ export const getSumFromObj = (data: any) => {
 
   return total;
 };
-
-export const getStakedAmountSum = (array: { totalStakedAmount: string }[]) => {
-  let initialValue = 0;
-
-  for (let index = 0; index < array.length; index++) {
-    let element: string | number = array[index].totalStakedAmount;
-    element = parseFloat(element);
-    initialValue += element;
-  }
-  return initialValue.toFixed(2);
-};
-export const getWinningAmountSum = (array: { totalWinAmount: string }[]) => {
-  let initialValue = 0;
-
-  for (let index = 0; index < array.length; index++) {
-    let element: string | number = array[index].totalWinAmount || 0;
-    element = parseFloat(element?.toString());
-    initialValue += element;
-  }
-  return initialValue.toFixed(2);
-};
-
-export function sumByKey<T>(arr: T[], key: keyof T): number {
-  return arr.reduce((sum, obj) => {
-    const value = obj[key];
-    return (
-      sum +
-      (typeof value === "number"
-        ? value
-        : typeof value === "string"
-        ? parseFloat(value)
-        : 0)
-    );
-  }, 0);
-}
 
 export const totalSumStyles = {
   fontWeight: 600,

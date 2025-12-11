@@ -8,9 +8,13 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchBanners } from "src/services/banners";
 import BannersTable from "../BannersTable";
 import AddAdsCategoryBannerDialog from "./AddAdsCategoryBannerDialog";
+import { BannerType } from "src/types/banners";
+import EditAdsCategoryBannerDialog from "./EditAdsCategoryBannerDialog";
 
 function BannersAdsCategory() {
   const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [selected, setSelected] = useState<BannerType | null>(null);
   const [searchParams, _setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
@@ -34,12 +38,29 @@ function BannersAdsCategory() {
     setOpenAddDialog(false);
   };
 
+  const handleOpenEditDialog = (val: BannerType) => {
+    setOpenEditDialog(true);
+    setSelected(val);
+  };
+
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+    setSelected(null);
+  };
+
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openAddDialog && (
         <AddAdsCategoryBannerDialog
           open={openAddDialog}
           handleClose={handleCloseAddDialog}
+        />
+      )}
+      {openEditDialog && selected && (
+        <EditAdsCategoryBannerDialog
+          open={openEditDialog}
+          selected={selected}
+          handleClose={handleCloseEditDialog}
         />
       )}
       <Box
@@ -65,6 +86,7 @@ function BannersAdsCategory() {
         isError={isError}
         isPending={isPending}
         queryKey={TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADS_BANNERS}
+        handleOpenEditDialog={handleOpenEditDialog}
       />
     </Box>
   );

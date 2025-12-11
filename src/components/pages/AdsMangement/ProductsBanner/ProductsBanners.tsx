@@ -8,9 +8,13 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchBanners } from "src/services/banners";
 import BannersTable from "../BannersTable";
 import AddProductBannerDialog from "./AddProductBannerDialog";
+import { BannerType } from "src/types/banners";
+import EditProductBannerDialog from "./EditProductBannerDialog";
 
 function ProductsBanners() {
   const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [selected, setSelected] = useState<BannerType | null>(null);
   const [searchParams, _setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
@@ -32,6 +36,15 @@ function ProductsBanners() {
   const handleCloseAddDialog = () => {
     setOpenAddDialog(false);
   };
+  const handleOpenEditDialog = (val: BannerType) => {
+    setOpenEditDialog(true);
+    setSelected(val);
+  };
+
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+    setSelected(null);
+  };
 
   return (
     <Box sx={{ width: "100%", my: 1 }}>
@@ -41,6 +54,14 @@ function ProductsBanners() {
           handleClose={handleCloseAddDialog}
         />
       )}
+      {openEditDialog && selected && (
+        <EditProductBannerDialog
+          open={openEditDialog}
+          selected={selected}
+          handleClose={handleCloseEditDialog}
+        />
+      )}
+
       <Box
         sx={{
           display: "flex",
@@ -64,6 +85,7 @@ function ProductsBanners() {
         isError={isError}
         isPending={isPending}
         queryKey={TANSTACK_REQUEST_CACHE_TAGS.FETCH_PRODUCT_BANNERS}
+        handleOpenEditDialog={handleOpenEditDialog}
       />
     </Box>
   );

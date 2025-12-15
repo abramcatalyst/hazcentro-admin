@@ -12,6 +12,8 @@ import { fetchSingleUser } from "src/services/users";
 import { formatErrorMessage } from "src/utils";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { UserType } from "src/types/users";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 export type UserDetailsPageProps = {
   data: UserType;
@@ -41,11 +43,19 @@ const AdminUserDetailsPage = () => {
   return (
     <div>
       <MetaDecorator title=" User's Profile" />
-      {data?.role === "user" && <UserDetailsPageWrapper data={data} />}
-      {data?.role === "vendor" && <DistributorDetailsPageWrapper data={data} />}
-      {data?.role === "worker" && (
-        <SkilledWorkerDetailsPageWrapper data={data} />
-      )}
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        {data?.role === "user" && <UserDetailsPageWrapper data={data} />}
+      </ErrorBoundary>
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        {data?.role === "vendor" && (
+          <DistributorDetailsPageWrapper data={data} />
+        )}
+      </ErrorBoundary>
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        {data?.role === "worker" && (
+          <SkilledWorkerDetailsPageWrapper data={data} />
+        )}
+      </ErrorBoundary>
 
       {/* <SkilledWorkProviderWrapper /> */}
     </div>

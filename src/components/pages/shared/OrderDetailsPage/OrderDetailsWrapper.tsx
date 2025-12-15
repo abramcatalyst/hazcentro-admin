@@ -19,6 +19,8 @@ import PaymentInformationSection from "src/components/pages/Admin/OrderManagemen
 import OrderStages from "src/components/pages/Admin/OrderManagement/OrderPreviewDialog/OrderStages";
 import MetaDecorator from "src/components/shared/MetaDecorator/MetaDecorator";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 
 function OrderDetailsWrapper() {
   const { id } = useParams();
@@ -68,17 +70,25 @@ function OrderDetailsWrapper() {
       <MetaDecorator title=" Order details" />
       <AppHeader text="Order Details" />
 
-      <TopSection selectedOrder={data} />
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <TopSection selectedOrder={data} />
+      </ErrorBoundary>
       <Box>
         <Grid container spacing={1} columns={6}>
           <Grid size={{ xs: 6, sm: 4 }}>
-            <ProductInformation selectedOrder={data} />
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              <ProductInformation selectedOrder={data} />
+            </ErrorBoundary>
           </Grid>
           <Grid size={{ xs: 6, sm: 2 }}>
-            <PaymentInformationSection selectedOrder={data} />
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              <PaymentInformationSection selectedOrder={data} />
+            </ErrorBoundary>
           </Grid>
         </Grid>
-        <OrderStages selectedOrder={data} refetch={refetch} />
+        <ErrorBoundary FallbackComponent={ErrorFallBack}>
+          <OrderStages selectedOrder={data} refetch={refetch} />
+        </ErrorBoundary>
       </Box>
     </Box>
   );

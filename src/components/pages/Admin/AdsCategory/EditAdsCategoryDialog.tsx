@@ -91,8 +91,8 @@ function EditAdsCategoryDialog({ open, selected, handleClose }: Props) {
         if (image) {
           formData.append("image", image);
         }
-        const res = await axios.patch(
-          `${baseUrl}/admin/categories-for-ads/${selected?.id}`,
+        const res = await axios.post(
+          `${baseUrl}/admin/categories-for-ads/${selected?.id}/partial-update`,
           formData
         );
         const successMsg = formatSuccessMessage(res);
@@ -146,7 +146,7 @@ function EditAdsCategoryDialog({ open, selected, handleClose }: Props) {
           }}
         >
           <Typography variant="h6" sx={{ color: "GrayText" }}>
-            Add Ads Category
+            Update Ads Category
           </Typography>
           <DialogCloseButtonWrapper>
             <IconButton onClick={handleClose} color="error">

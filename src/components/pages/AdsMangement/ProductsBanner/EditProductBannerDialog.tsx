@@ -100,8 +100,8 @@ function EditProductBannerDialog({ open, selected, handleClose }: Props) {
         if (image) {
           formData.append("image", image);
         }
-        const res = await axios.patch(
-          `${baseUrl}/admin/banners/${selected?.id}`,
+        const res = await axios.post(
+          `${baseUrl}/admin/banners/${selected?.id}/partial-update`,
           formData
         );
         const successMsg = formatSuccessMessage(res);

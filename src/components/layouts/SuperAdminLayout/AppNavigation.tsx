@@ -141,7 +141,7 @@ function AppNavigation({
                       {
                         minHeight: 40,
                         px: 2.5,
-                        mb: 0.5,
+                        mb: 0.3,
                         borderLeft:
                           row?.url && isLinkActive(row?.url)
                             ? `4px solid ${GLOBAL_COLORS.GREEN_MAIN}`
@@ -176,7 +176,7 @@ function AppNavigation({
                     </ListItemIcon>
                     <ListItemText
                       primary={row?.title}
-                      primaryTypographyProps={primarySubTypographyStyles}
+                      slotProps={{ primary: primarySubTypographyStyles }}
                       sx={{
                         opacity: 1,
                       }}
@@ -193,7 +193,7 @@ function AppNavigation({
               {
                 minHeight: 40,
                 px: 2.5,
-                mb: 0.5,
+                mb: 0.3,
                 borderLeft: "default",
                 color: "default",
                 borderRadius: "0px",
@@ -216,7 +216,7 @@ function AppNavigation({
             </ListItemIcon>
             <ListItemText
               primary={"Logout"}
-              primaryTypographyProps={primarySubTypographyStyles}
+              slotProps={{ primary: primarySubTypographyStyles }}
               sx={{
                 opacity: 1,
               }}

@@ -69,7 +69,7 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
   const formik = useFormik({
     initialValues: {
       link_target: selected?.link_target || "",
-      is_active: selected?.is_active,
+      is_active: selected?.is_active ? 1 : 0,
       start_date: selected?.start_date || "",
       end_date: selected?.end_date || "",
       order: selected?.order || "",
@@ -94,8 +94,8 @@ function UpdateExternalBannerDialog({ open, selected, handleClose }: Props) {
         if (image) {
           formData.append("image", image);
         }
-        const res = await axios.patch(
-          `${baseUrl}/admin/banners/${selected?.id}`,
+        const res = await axios.post(
+          `${baseUrl}/admin/banners/${selected?.id}/partial-update`,
           formData
         );
         const successMsg = formatSuccessMessage(res);

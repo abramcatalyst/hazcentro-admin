@@ -183,7 +183,7 @@ export default function AppNavigation({
                     </ListItemIcon>
                     <ListItemText
                       primary={row?.title}
-                      primaryTypographyProps={primarySubTypographyStyles}
+                      slotProps={{ primary: primarySubTypographyStyles }}
                       sx={{
                         opacity: open ? 1 : 0,
                       }}
@@ -223,7 +223,7 @@ export default function AppNavigation({
             </ListItemIcon>
             <ListItemText
               primary={"Logout"}
-              primaryTypographyProps={primarySubTypographyStyles}
+              slotProps={{ primary: primarySubTypographyStyles }}
               sx={{
                 opacity: open ? 1 : 0,
               }}

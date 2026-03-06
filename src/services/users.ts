@@ -5,11 +5,18 @@ import { EscrowResType } from "src/types/escrow";
 import { FeedType } from "src/types/feeds";
 import { QueryFilterType } from "src/types/filters";
 import { FollowerType, VendorFullFollowerType } from "src/types/followers";
+import { PaginationMetaType } from "src/types/pagination";
 import { RateType } from "src/types/rates";
 import { SubscriptionResType } from "src/types/subscription";
 import { UserType } from "src/types/users";
 import { VendorOverviewType } from "src/types/vendor";
-import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
+import { JobRequestType, WorkerOverviewType } from "src/types/workers";
+import {
+  baseUrl,
+  isAuthTokenExpired,
+  rowsPerPageOptions,
+  setDefaultHeaders,
+} from "src/utils";
 
 export const fetchUsers = async ({
   page,
@@ -48,7 +55,7 @@ export const fetchUsers = async ({
       lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
     }${status ? `&status=${status === "true" ? true : false}` : ""}${
       search ? `&search=${search}` : ""
-    }`
+    }`,
   );
 
   return data?.users;
@@ -92,7 +99,7 @@ export const fetchUserFollowers = async ({
   const { data } = await axios.get(
     `${baseUrl}/admin/users/${id}/vendors-following?limit=${limit}${
       page ? `&page=${page}` : ""
-    }${search ? `&search=${search}` : ""}`
+    }${search ? `&search=${search}` : ""}`,
   );
   return data?.data?.following;
 };
@@ -103,7 +110,7 @@ export const fetchVendorOverviewData = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/admin/vendors/${id}/dashboard-overview`
+    `${baseUrl}/admin/vendors/${id}/dashboard-overview`,
   );
   return data?.data;
 };
@@ -126,7 +133,7 @@ export const fetchVendorSubscriptionsData = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/admin/vendors/${id}/subscriptions`
+    `${baseUrl}/admin/vendors/${id}/subscriptions`,
   );
   return data;
 };
@@ -162,7 +169,7 @@ export const fetchVendorRatesAndReviewsData = async ({
         url: string | null;
         label: "Next &raquo;";
         active: boolean;
-      }
+      },
     ];
     path: string;
     per_page: number;
@@ -175,7 +182,7 @@ export const fetchVendorRatesAndReviewsData = async ({
   const { data } = await axios.get(
     `${baseUrl}/admin/vendors/${id}/reviews?limit=${limit}${
       page ? `&page=${page}` : ""
-    }`
+    }`,
   );
   return data;
 };
@@ -213,7 +220,7 @@ export const fetchVendorFeedsAndFollowersData = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/admin/vendors/${id}/feeds-followers?limit=${limit}`
+    `${baseUrl}/admin/vendors/${id}/feeds-followers?limit=${limit}`,
   );
   return data;
 };
@@ -229,20 +236,25 @@ export const fetchVendorEscrowData = async ({
 
 export const fetchWorkerOverviewData = async ({
   id,
-}: QueryFilterType): Promise<EscrowResType> => {
+}: QueryFilterType): Promise<WorkerOverviewType> => {
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(`${baseUrl}/admin/workers/${id}/overview`);
-  return data;
+  return data?.data;
 };
 
 export const fetchWorkerJobRequestData = async ({
   id,
-}: QueryFilterType): Promise<EscrowResType> => {
+  limit = rowsPerPageOptions[0],
+  page,
+}: QueryFilterType): Promise<{
+  data: JobRequestType[];
+  meta: PaginationMetaType;
+}> => {
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/admin/workers/${id}/job-requests`
+    `${baseUrl}/admin/workers/${id}/job-requests?limit=${limit}${page ? `&page=${page}` : ""}`,
   );
   return data;
 };

@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.tsconig.json
+*.tsconig.app.json
+*.tsconig.node.json

@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import UserHeader from "../UserHeader";
-import ActiveOrders from "../Overview/VisitedCategories";
+// import Portfolios from "../Overview/Portfolios";
 import Followers from "../Overview/RecentClose";
 import FollowersTable from "./FollowersTable";
 import { UserType } from "src/types/users";
@@ -18,7 +18,7 @@ const FollowingsWrapper = ({ data }: Props) => {
           <FollowersTable />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <ActiveOrders />
+          {/* <Portfolios /> */}
           <Followers />
         </Grid>
       </Grid>

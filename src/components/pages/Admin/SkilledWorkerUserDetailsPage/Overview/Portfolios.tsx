@@ -1,24 +1,17 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Chip from "@mui/material/Chip";
-// import MachineImg from "src/assets/tempimages/machine1.jpg";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { WorkerRecentActivityType } from "src/types/workers";
+// import Button from "@mui/material/Button";
+import PlaceholderImg from "src/assets/images/placeholder.png";
+import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
+import { WorkerPortfolioType } from "src/types/workers";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
-dayjs.extend(relativeTime);
-
 type CategoryInfoBoxProps = {
-  data: WorkerRecentActivityType;
+  data: WorkerPortfolioType;
   direction?: "row" | "column";
 };
-const CategoryInfoBox = ({
-  data,
-
-  direction = "row",
-}: CategoryInfoBoxProps) => {
+const CategoryInfoBox = ({ data, direction = "row" }: CategoryInfoBoxProps) => {
   return (
     <Box
       sx={{
@@ -28,28 +21,26 @@ const CategoryInfoBox = ({
         alignItems: direction === "column" ? "flex-start" : "center",
       }}
     >
-      {/* <Box>
+      <Box>
         <img
-          src={}
+          src={data?.images[0] ?? PlaceholderImg}
           alt="product"
           style={{
-            width: direction === "column" ? "42px" : "56px",
-            height: direction === "column" ? "42px" : "56px",
+            width: direction === "column" ? "40px" : "50px",
+            height: direction === "column" ? "40px" : "50px",
             objectFit: "cover",
             borderRadius: "50%",
             marginTop: "2px",
           }}
         />
-      </Box> */}
+      </Box>
       <Box>
         <Typography
           sx={{
-            fontWeight: 500,
-            fontSize: "15px",
+            // fontWeight: 500,
+            fontSize: "12px",
           }}
-        >
-          {data?.user_name}
-        </Typography>
+        ></Typography>
         <Typography
           sx={{
             color: "GrayText",
@@ -57,44 +48,25 @@ const CategoryInfoBox = ({
             display: "-webkit-box",
             textOverflow: "ellipsis",
             WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 4,
 
             overflow: "hidden",
           }}
         >
           {data?.description}
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 1,
-            my: 0.5,
-          }}
-        >
-          <Chip size="small" variant="filled" label={data?.status} />
-          <Chip
-            size="small"
-            variant="filled"
-            color="info"
-            label={data?.skill_requested}
-            sx={{ background: "#47B48E0D", color: "#47B48E" }}
-          />
-        </Box>
       </Box>
     </Box>
   );
 };
-
 type Props = {
-  recent_activities: WorkerRecentActivityType[];
+  portfolios: WorkerPortfolioType[];
 };
-const RecentActivities = ({ recent_activities }: Props) => {
+const Portfolios = ({ portfolios }: Props) => {
   return (
     <Box
       component={Paper}
-      sx={{ mb: 1, p: 1, borderRadius: "20px" }}
+      sx={{ mb: 1, p: 1, borderRadius: "12px" }}
       elevation={0}
     >
       <Box
@@ -106,13 +78,10 @@ const RecentActivities = ({ recent_activities }: Props) => {
           mb: 1,
         }}
       >
-        <Typography sx={{ fontWeight: 500, fontSize: "16px" }}>
-          Recent Activities
-        </Typography>
+        <ProfileTitle text="Portfolio" />
       </Box>
-
-      {recent_activities?.length > 0 ? (
-        recent_activities?.map((item) => {
+      {portfolios?.length > 0 ? (
+        portfolios?.map((item) => {
           return (
             <Box
               key={item?.id}
@@ -121,22 +90,33 @@ const RecentActivities = ({ recent_activities }: Props) => {
                 gap: 1,
                 alignItems: "center",
                 justifyContent: "space-between",
+                my: 0.4,
+                borderBottom: `1px solid`,
+                pb: 0.3,
+                borderBottomColor: "divider",
               }}
             >
               <CategoryInfoBox data={item} />
-              <Chip
+              {/* <Button
                 size="small"
-                color="default"
-                label={dayjs(item?.created_at).fromNow()}
-              />
+                color="success"
+                sx={{
+                  color: "#47B48E",
+                  background: "#01AA890D",
+                  borderRadius: "25px",
+                  fontSize: "12px",
+                }}
+              >
+                View
+              </Button> */}
             </Box>
           );
         })
       ) : (
-        <EmptyTable subText="No recent activities" />
+        <EmptyTable subText="No data found" />
       )}
     </Box>
   );
 };
 
-export default RecentActivities;
+export default Portfolios;

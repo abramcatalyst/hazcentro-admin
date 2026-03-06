@@ -2,9 +2,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import UserHeader from "../UserHeader";
 import RecentActivities from "./RecentActivities";
-import VisitedCategories from "./VisitedCategories";
+import Portfolios from "./Portfolios";
 import RecentCoveredAreas from "./RecentCoveredAreas";
-import RecentClose from "./RecentClose";
+// import RecentClose from "./RecentClose";
 import { UserType } from "src/types/users";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -35,18 +35,18 @@ const OverviewWrapper = ({ userData }: Props) => {
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
-  console.log("gggggggggggg", data);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
           <UserHeader data={userData} />
           <RecentCoveredAreas />
-          <RecentActivities />
+          <RecentActivities recent_activities={data?.recent_activities} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <VisitedCategories />
-          <RecentClose />
+          <Portfolios portfolios={data?.portfolios} />
+          {/* <RecentClose /> */}
         </Grid>
       </Grid>
     </Box>

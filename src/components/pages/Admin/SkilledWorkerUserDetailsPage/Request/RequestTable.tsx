@@ -1,21 +1,30 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import MachineImg from "src/assets/tempimages/user1.png";
+import TablePagination from "@mui/material/TablePagination";
+import PlaceholderImg from "src/assets/images/placeholder.png";
 import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
+import { fetchWorkerJobRequestData } from "src/services/users";
+import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import {
+  formatErrorMessage,
+  rowsPerPageOptions,
+  sLimit,
+  sPage,
+} from "src/utils";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import { JobRequestType } from "src/types/workers";
+import { ChangeEvent } from "react";
 
 type RequestInfoBoxProps = {
-  image: string;
-  title: string;
-  caption1: string;
+  info: JobRequestType;
   direction?: "row" | "column";
 };
-const RequestInfoBox = ({
-  image,
-  title,
-  caption1,
-  direction = "row",
-}: RequestInfoBoxProps) => {
+const RequestInfoBox = ({ info, direction = "row" }: RequestInfoBoxProps) => {
   return (
     <Box
       sx={{
@@ -27,11 +36,11 @@ const RequestInfoBox = ({
     >
       <Box>
         <img
-          src={image}
+          src={info?.user?.profile_picture_url ?? PlaceholderImg}
           alt="product"
           style={{
-            width: direction === "column" ? "42px" : "56px",
-            height: direction === "column" ? "42px" : "56px",
+            width: direction === "column" ? "40px" : "50px",
+            height: direction === "column" ? "40px" : "50px",
             objectFit: "cover",
             borderRadius: "50%",
             marginTop: "2px",
@@ -45,7 +54,7 @@ const RequestInfoBox = ({
             fontSize: "15px",
           }}
         >
-          {title}
+          {info?.user?.name}
         </Typography>
         <Typography
           sx={{
@@ -54,13 +63,12 @@ const RequestInfoBox = ({
             display: "-webkit-box",
             textOverflow: "ellipsis",
             WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 3,
 
             overflow: "hidden",
           }}
         >
-          {caption1} Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-          Saepe laudantium mollitia amet!
+          {info?.description}
         </Typography>
       </Box>
     </Box>
@@ -68,7 +76,7 @@ const RequestInfoBox = ({
 };
 
 type StatusBoxProps = {
-  status: boolean;
+  status: string;
 };
 const StatusBox = ({ status }: StatusBoxProps) => {
   return (
@@ -88,52 +96,112 @@ const StatusBox = ({ status }: StatusBoxProps) => {
           textAlign: "center",
         }}
       >
-        {status ? "Successful" : "Not Successful"}
+        {status}
       </Typography>
     </Box>
   );
 };
 const SavedWorkersSection = () => {
+  const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams({
+    limit: rowsPerPageOptions[0].toString(),
+    page: "1",
+  });
+  const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
+  const page = Number(searchParams.get(sPage)) || 1;
+
+  const { error, data, isError, isPending } = useQuery({
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_WORKER_JOB_REQUESTS,
+      { id, page, limit },
+    ],
+    queryFn: () => fetchWorkerJobRequestData({ id: id, page, limit }),
+  });
+
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setSearchParams(
+      (params) => {
+        params.set(sPage, `${newPage + 1}`);
+        return params;
+      },
+      { replace: true },
+    );
+  };
+
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchParams(
+      (params) => {
+        params.set(sLimit, event.target.value.toString());
+        params.set(sPage, "1");
+        return params;
+      },
+      { replace: true },
+    );
+  };
+
+  if (isPending) {
+    return <HalfScreenLoader />;
+  }
+
+  if (isError) {
+    return <HalfScreenError text={formatErrorMessage(error)} />;
+  }
+
   return (
-    <Box
-      component={Paper}
-      sx={{
-        p: 1,
-        mb: 1,
-        width: "100%",
-      }}
-      elevation={0}
-    >
-      <Box sx={{ my: 1 }}>
-        <ProfileTitle text="Requests" />
-      </Box>
-
-      {[1, 2, 3].map((item, idx) => (
-        <Box
-          key={item}
-          sx={{
-            display: "flex",
-            gap: 1,
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: { xs: "column", md: "row" },
-            background: "#F7F7F980",
-            py: 2,
-            px: 1,
-            borderRadius: "20px",
-            mb: 1,
-          }}
-        >
-          <RequestInfoBox
-            image={MachineImg}
-            title="Olayinka Adebanjo"
-            caption1={`Plumbers Experience`}
-          />
-
-          <StatusBox status={idx % 2 === 0 ? true : false} />
+    <>
+      <Box
+        component={Paper}
+        sx={{
+          p: 1,
+          mb: 1,
+          width: "100%",
+        }}
+        elevation={0}
+      >
+        <Box sx={{ my: 1 }}>
+          <ProfileTitle text="Requests" />
         </Box>
-      ))}
-    </Box>
+
+        {data?.meta?.total > 0 ? (
+          <Box>
+            {data?.data.map((item) => (
+              <Box
+                key={item?.id}
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexDirection: { xs: "column", md: "row" },
+                  background: "#F7F7F980",
+                  py: 2,
+                  px: 1,
+                  borderRadius: "20px",
+                  mb: 1,
+                }}
+              >
+                <RequestInfoBox info={item} />
+
+                <StatusBox status={item?.status} />
+              </Box>
+            ))}{" "}
+          </Box>
+        ) : (
+          <EmptyTable subText="No request found" />
+        )}
+      </Box>
+      <Box sx={{ my: 1 }}>
+        <TablePagination
+          rowsPerPageOptions={rowsPerPageOptions}
+          component="div"
+          count={data?.meta?.total || 0}
+          rowsPerPage={limit || rowsPerPageOptions[0]}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
+    </>
   );
 };
 

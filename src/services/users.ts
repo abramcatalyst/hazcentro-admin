@@ -10,7 +10,12 @@ import { RateType } from "src/types/rates";
 import { SubscriptionResType } from "src/types/subscription";
 import { UserType } from "src/types/users";
 import { VendorOverviewType } from "src/types/vendor";
-import { JobRequestType, WorkerOverviewType } from "src/types/workers";
+import {
+  JobRequestType,
+  WorkerDocumentType,
+  WorkerOverviewType,
+  WorkerPortfolioType,
+} from "src/types/workers";
 import {
   baseUrl,
   isAuthTokenExpired,
@@ -258,3 +263,46 @@ export const fetchWorkerJobRequestData = async ({
   );
   return data;
 };
+
+export const fetchWorkerDocuments = async ({
+  id,
+}: QueryFilterType): Promise<{
+  data: WorkerDocumentType[];
+  meta: PaginationMetaType;
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(`${baseUrl}/admin/workers/${id}/documents`);
+  return data?.data;
+};
+
+export const fetchWorkerSubscriptions = async ({
+  id,
+  limit = rowsPerPageOptions[0],
+  page,
+}: QueryFilterType): Promise<SubscriptionResType> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/workers/${id}/subscriptions?limit=${limit}${page ? `&page=${page}` : ""}`,
+  );
+  return data;
+};
+
+export const fetchWorkerPortfolio = async ({
+  id,
+  limit = rowsPerPageOptions[0],
+  page,
+}: QueryFilterType): Promise<{
+  data: WorkerPortfolioType[];
+  meta: PaginationMetaType;
+}> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.get(
+    `${baseUrl}/admin/workers/${id}/portfolios?limit=${limit}${page ? `&page=${page}` : ""}`,
+  );
+  return data;
+};
+
+// ## DELETE /api/v1/admin/workers/{id}/portfolios/{portfolioId}

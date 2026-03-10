@@ -4,11 +4,12 @@ import Grid from "@mui/material/Grid2";
 import SideNav from "./SideNav";
 import OverviewWrapper from "./Overview/OverviewWrapper";
 import ProfileWrapper from "./Profile/ProfileWrapper";
-import SavedWrapper from "./Saved/SavedWrapper";
 import RequestWrapper from "./Request/RequestWrapper";
 import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
+import SubscriptionWrapper from "./Subscriptions/SubscriptionWrapper";
+// import FullPortfoliosWrapper from "./FullPortfolios/FullPortfoliosWrapper";
 // import FollowingsWrapper from "./Followings/FollowingsWrapper";
 // import OrdersWrapper from "./Orders/OrdersWrapper";
 
@@ -17,6 +18,8 @@ export const usersPageTabOptionsObj = {
   PROFILE: "PROFILE",
   SAVED: "SAVED",
   REQUEST: "REQUEST",
+  SUBSCRIPTION: "SUBSCRIPTION",
+  PORTFOLIOS: "PORTFOLIOS",
 };
 export const profileTabOptions = [
   {
@@ -27,13 +30,17 @@ export const profileTabOptions = [
     title: "Profile",
     value: usersPageTabOptionsObj.PROFILE,
   },
-  {
-    title: "Saved",
-    value: usersPageTabOptionsObj.SAVED,
-  },
+  // {
+  //   title: "Portfolios",
+  //   value: usersPageTabOptionsObj.PORTFOLIOS,
+  // },
   {
     title: "Request",
     value: usersPageTabOptionsObj.REQUEST,
+  },
+  {
+    title: "Subscription",
+    value: usersPageTabOptionsObj.SUBSCRIPTION,
   },
 ];
 
@@ -60,16 +67,21 @@ const SkilledWorkerUserDetailsPage = ({ data }: UserDetailsPageProps) => {
                 <ProfileWrapper data={data} />
               ) : null}
             </ErrorBoundary>
-
+            {/* 
             <ErrorBoundary FallbackComponent={ErrorFallBack}>
-              {selectedTab === usersPageTabOptionsObj.SAVED ? (
-                <SavedWrapper data={data} />
+              {selectedTab === usersPageTabOptionsObj.PORTFOLIOS ? (
+                <FullPortfoliosWrapper userData={data} />
               ) : null}
-            </ErrorBoundary>
+            </ErrorBoundary> */}
 
             <ErrorBoundary FallbackComponent={ErrorFallBack}>
               {selectedTab === usersPageTabOptionsObj.REQUEST ? (
                 <RequestWrapper userData={data} />
+              ) : null}
+            </ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallBack}>
+              {selectedTab === usersPageTabOptionsObj.SUBSCRIPTION ? (
+                <SubscriptionWrapper userData={data} />
               ) : null}
             </ErrorBoundary>
           </Grid>

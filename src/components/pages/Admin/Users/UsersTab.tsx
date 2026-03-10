@@ -6,12 +6,9 @@ import CustomTab from "src/components/shared/CustomTab/CustomTab";
 type Props = {
   selectedTab: string;
   selectedUsers: Set<number | string>;
-  setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
+  handleChangeTab: (val: string) => void;
 };
-const UsersTab = ({ selectedTab, setSelectedTab, selectedUsers }: Props) => {
-  const handleClick = (value: string) => {
-    setSelectedTab(value);
-  };
+const UsersTab = ({ selectedTab, handleChangeTab, selectedUsers }: Props) => {
   return (
     <Box
       sx={{
@@ -25,7 +22,7 @@ const UsersTab = ({ selectedTab, setSelectedTab, selectedUsers }: Props) => {
           return (
             <CustomTab
               key={item.value}
-              handleClick={handleClick}
+              handleClick={handleChangeTab}
               value={item.value}
               title={item.title}
               active={item.value === selectedTab}

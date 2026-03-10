@@ -48,8 +48,8 @@ function SubscriptionTable() {
         {data?.history?.total === 0 ? (
           <EmptyTable isSmall subText="No history found" />
         ) : (
-          data?.history?.data.map((row) => {
-            return <SubscriptionItem key={row?.id} data={row} />;
+          data?.history?.data?.map((row) => {
+            return <SubscriptionItem data={row} key={row?.id} />;
           })
         )}
       </Box>

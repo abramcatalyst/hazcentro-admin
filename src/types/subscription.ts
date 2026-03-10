@@ -1,8 +1,13 @@
+export type SubscriptionType = {
+  id: string;
+  plan: { id: string; name: string; price: string; type: string };
+  expires_at: string;
+};
 export type SubscriptionResType = {
   active_subscription: null;
   history: {
     current_page: 1;
-    data: [];
+    data: SubscriptionType[];
     first_page_url: string;
     from: null;
     last_page: 1;
@@ -22,7 +27,7 @@ export type SubscriptionResType = {
         url: null;
         label: "Next &raquo;";
         active: false;
-      }
+      },
     ];
     next_page_url: null;
     path: string;

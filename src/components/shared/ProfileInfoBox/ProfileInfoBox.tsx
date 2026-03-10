@@ -14,6 +14,7 @@ type ProfileInfoBoxProps = {
   enablePreview?: boolean;
   enableDownload?: boolean;
   fullValueLength?: boolean;
+  valueTextColor?: string;
 };
 const ProfileInfoBox = ({
   value,
@@ -21,6 +22,7 @@ const ProfileInfoBox = ({
   enableDownload,
   enablePreview,
   fullValueLength,
+  valueTextColor,
 }: ProfileInfoBoxProps) => {
   const [openPreview, setOpenPreview] = useState(false);
 
@@ -58,7 +60,7 @@ const ProfileInfoBox = ({
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.2 }}>
           <Typography
             sx={{
-              color: "GrayText",
+              color: valueTextColor ?? "GrayText",
               fontSize: "14px",
               fontWeight: 600,
             }}

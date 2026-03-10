@@ -66,3 +66,17 @@ export type JobRequestType = {
   created_at: string;
   updated_at: string;
 };
+
+export type WorkerDocumentType = {
+  id: string;
+  user_id: string;
+  document_type: string; // CAC
+  document_id_number: string | null;
+  is_kyc: boolean;
+  status: "approved" | "declined";
+  verified_by: string;
+  media_id: number;
+  media_url: string;
+  created_at: string;
+  updated_at: string;
+};

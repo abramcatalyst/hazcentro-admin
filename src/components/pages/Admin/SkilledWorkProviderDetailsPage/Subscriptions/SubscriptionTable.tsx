@@ -1,21 +1,15 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import { currencyFormater } from "src/utils";
 import Logo from "src/assets/images/logo2.png";
 import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
+import { SubscriptionType } from "src/types/subscription";
 
-const headCells = [
-  "Order ID",
-  "Order Name",
-  "Amount",
-  "Date Created",
-  "Buyer Name",
-  "Merchant Name",
-];
-
-export const SubscriptionItem = () => {
+type Props = {
+  data: SubscriptionType;
+};
+export const SubscriptionItem = ({ data }: Props) => {
   return (
     <Box
       sx={{
@@ -37,23 +31,20 @@ export const SubscriptionItem = () => {
         />{" "}
         <Box>
           <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-            Charge Renewal
+            {data?.plan?.name}
           </Typography>
           <Typography sx={{ color: "GrayText", fontSize: "12px" }}>
-            {dayjs().format("MMM Do, YYYY")}
+            Expires at {dayjs(data?.expires_at).format("MMM Do, YYYY")}
           </Typography>{" "}
         </Box>
       </Box>
       <Box
         sx={{ display: "flex", gap: 1, alignItems: "center", flexWrap: "wrap" }}
       >
-        <Typography sx={{ fontSize: "14px" }}>Payment via card</Typography>
+        <Typography sx={{ fontSize: "14px" }}>{data?.plan?.type}</Typography>
         <Typography sx={{ fontSize: "14px" }}>
-          &#8358;{currencyFormater(40000)}
+          &#8358;{currencyFormater(data?.plan?.price, 2)}
         </Typography>
-        <Button size="small" color="success">
-          Download Reciept
-        </Button>
       </Box>
     </Box>
   );
@@ -76,9 +67,9 @@ function SubscriptionTable() {
       </Box>
 
       <Box>
-        {headCells.map((row) => {
+        {/* {headCells.map((row) => {
           return <SubscriptionItem key={row} />;
-        })}
+        })} */}
       </Box>
     </Box>
   );

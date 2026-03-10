@@ -38,6 +38,7 @@ export const sPage = "page";
 export const sLastLoginDate = "lastLoginDate";
 export const sUserName = "userName";
 export const sCategory = "category";
+export const sSelected = "selected";
 
 export const FILTER_DATE_FORMAT = "DD/MM/YYYY";
 export const FULL_TIME_FORMAT = "HH:mm:ss";
@@ -337,7 +338,7 @@ export const isAuthTokenExpired = (): boolean => {
 
 export function currencyFormater(
   x: string | number | undefined | null,
-  dp = 0
+  dp = 0,
 ): string {
   if (!x) {
     return "0";

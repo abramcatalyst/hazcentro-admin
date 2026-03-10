@@ -51,6 +51,7 @@ const ProfileWrapper = () => {
             setSelectedTab={setSelectedTab}
           />
           {selectedTab === tabOptionsObj.PROFILE && <ProfileDetailsSection />}
+
           {selectedTab === tabOptionsObj.SKILLS && <SkillsSection />}
           {selectedTab === tabOptionsObj.WORKS_PORTFOLIO && <WorksTable />}
           {selectedTab === tabOptionsObj.DOCUMENT && <DocumentSection />}

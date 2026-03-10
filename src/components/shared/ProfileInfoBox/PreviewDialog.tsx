@@ -55,6 +55,7 @@ function PreviewDialog({ open, value, handleClose }: Props) {
             width: "100%",
             background: "grey",
             borderRadius: "12px",
+            overflow: "hidden",
           }}
         >
           <img

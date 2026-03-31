@@ -1,8 +1,27 @@
 export type SubscriptionType = {
   id: string;
-  plan: { id: string; name: string; price: string; type: string };
   expires_at: string;
+  user_id: string;
+  subscription_id: string;
+  payment_status: string;
+  created_at: string;
+  updated_at: string;
+  payment_reference: string | null;
+  app_subscription_id: string;
+  source: string;
+  subscription: {
+    id: string;
+    name: string;
+    description: string;
+    type: string;
+    user_type: string;
+    status: string;
+    price: string;
+    created_at: string;
+    updated_at: string;
+  };
 };
+
 export type SubscriptionResType = {
   active_subscription: null;
   history: {

@@ -3,11 +3,11 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
 import { useTheme } from "@mui/material/styles";
-import MaleAvatar from "src/assets/tempimages/user1.png";
 import ProfileInfoBox from "src/components/shared/ProfileInfoBox/ProfileInfoBox";
 // import QuickActions from "./QuickActions";
 import ProfileTitle from "src/components/shared/ProfileTitle/ProfileTitle";
 import { UserType } from "src/types/users";
+import renderUserProfileImage from "src/utils/renderUserProfileImage";
 
 type Props = {
   data: UserType;
@@ -15,7 +15,10 @@ type Props = {
 const sizing = { xs: 12, sm: 6, md: 4 };
 const ProfileDetailsSection = ({ data }: Props) => {
   const theme = useTheme();
-
+  const userImage = renderUserProfileImage({
+    remoteImageUrl: data?.profile_picture_url || "",
+    gender: data?.gender,
+  });
   return (
     <Box
       component={Paper}
@@ -42,13 +45,20 @@ const ProfileDetailsSection = ({ data }: Props) => {
           borderRadius: "20px",
         }}
       >
-        <Box sx={{ borderRadius: "50%", width: "104px", height: "104px" }}>
+        <Box sx={{}}>
           <img
             alt="user"
-            src={MaleAvatar}
-            style={{ objectFit: "cover", borderRadius: "50%" }}
+            src={userImage}
+            style={{
+              objectFit: "cover",
+              borderRadius: "50%",
+
+              width: "104px",
+              height: "104px",
+            }}
           />
         </Box>
+
         <Box sx={{}}>
           <Typography
             sx={{

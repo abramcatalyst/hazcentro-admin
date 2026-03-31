@@ -89,12 +89,12 @@ function BuyersTable({ selectedUsers }: Props) {
         params.set(sPage, `${newPage + 1}`);
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchParams(
       (params) => {
@@ -102,7 +102,7 @@ function BuyersTable({ selectedUsers }: Props) {
         params.set(sPage, "1");
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -129,12 +129,6 @@ function BuyersTable({ selectedUsers }: Props) {
           handleClose={handleClosePreviewProfile}
         />
       )}
-      {/* {openPreviewProfile && (
-        <DistributorProfileDialog
-          open={openPreviewProfile}
-          handleClose={handleClosePreviewProfile}
-        />
-      )} */}
 
       <TableContainer>
         {data?.total > 0 ? (

@@ -13,6 +13,7 @@ export type UserType = {
   phone_number: string;
   status: string;
   push_notification_status: string;
+  profile_picture_url: string;
   longitude: string;
   latitude: string;
   kyc_status: string;

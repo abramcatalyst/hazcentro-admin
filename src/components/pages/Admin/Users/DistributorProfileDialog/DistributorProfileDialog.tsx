@@ -11,8 +11,6 @@ import DialogContent from "@mui/material/DialogContent";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import AvatarFemaleImg from "src/assets/images/avatar-female.png";
-import AvatarMaleImg from "src/assets/images/avatar-male.png";
 import { formatErrorMessage } from "src/utils";
 import QuickActions from "./QuickActions";
 import ActiveOrders from "./ActiveOrders";
@@ -30,6 +28,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"; // ES 2015
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
+import renderUserProfileImage from "src/utils/renderUserProfileImage";
 
 dayjs.extend(relativeTime);
 
@@ -73,15 +72,12 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
       </DialogContent>
     );
   }
-  let userImage = AvatarMaleImg;
-  if (selectedUser?.gender?.toLowerCase()?.includes("female")) {
-    userImage = AvatarFemaleImg;
-  }
+  let userImage = renderUserProfileImage({
+    remoteImageUrl: selectedUser?.profile_picture_url,
+    gender: selectedUser?.gender,
+  });
 
   if (data) {
-    if (data?.profile?.profile_picture_url) {
-      userImage = data?.profile?.profile_picture_url;
-    }
     content = (
       <DialogContent>
         <Box
@@ -212,7 +208,7 @@ function DistributorProfileDialog({ open, selectedUser, handleClose }: Props) {
             }}
             onClick={() => {
               navigate(
-                `${ADMIN_ROUTE_LINKS.ADMIN_USER_PROFILE}/${selectedUser?.id}`
+                `${ADMIN_ROUTE_LINKS.ADMIN_USER_PROFILE}/${selectedUser?.id}`,
               );
             }}
           >

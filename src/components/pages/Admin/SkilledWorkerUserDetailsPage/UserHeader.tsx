@@ -4,9 +4,9 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import { useTheme } from "@mui/material/styles";
-import MaleAvatar from "src/assets/images/avatar-male.png";
 import { UserType } from "src/types/users";
 import { useNavigate } from "react-router-dom";
+import renderUserProfileImage from "src/utils/renderUserProfileImage";
 
 type Props = {
   data: UserType;
@@ -14,6 +14,10 @@ type Props = {
 const UserHeader = ({ data }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const userImage = renderUserProfileImage({
+    remoteImageUrl: data?.profile_picture_url || "",
+    gender: data?.gender,
+  });
   return (
     <Box
       component={Paper}
@@ -49,7 +53,17 @@ const UserHeader = ({ data }: Props) => {
         }}
       >
         <Box sx={{ borderRadius: "50%", width: "45px", height: "45px" }}>
-          <img alt="user" src={MaleAvatar} style={{ objectFit: "cover" }} />
+          <img
+            alt="user"
+            src={userImage}
+            style={{
+              objectFit: "cover",
+              overflow: "hidden",
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+            }}
+          />
         </Box>
         <Box sx={{ my: 2 }}>
           <Typography

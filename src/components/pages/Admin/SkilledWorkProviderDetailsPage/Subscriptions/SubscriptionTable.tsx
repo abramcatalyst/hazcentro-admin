@@ -30,20 +30,22 @@ export const SubscriptionItem = ({ data }: Props) => {
           alt="logo"
         />{" "}
         <Box>
-          <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-            {data?.plan?.name}
+          <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
+            {data?.subscription?.name}
           </Typography>
           <Typography sx={{ color: "GrayText", fontSize: "12px" }}>
             Expires at {dayjs(data?.expires_at).format("MMM Do, YYYY")}
           </Typography>{" "}
         </Box>
       </Box>
-      <Box
-        sx={{ display: "flex", gap: 1, alignItems: "center", flexWrap: "wrap" }}
-      >
-        <Typography sx={{ fontSize: "14px" }}>{data?.plan?.type}</Typography>
-        <Typography sx={{ fontSize: "14px" }}>
-          &#8358;{currencyFormater(data?.plan?.price, 2)}
+      <Box sx={{}}>
+        <Typography sx={{ fontSize: "13.7px", fontWeight: 600 }}>
+          {data?.subscription?.type} | &#8358;
+          {currencyFormater(data?.subscription?.price, 2)}
+        </Typography>
+        <Typography sx={{ fontSize: "14px" }}></Typography>
+        <Typography sx={{ fontSize: "12px", fontStyle: "italic" }}>
+          Source: {data?.source} | Status: {data?.subscription?.status}
         </Typography>
       </Box>
     </Box>

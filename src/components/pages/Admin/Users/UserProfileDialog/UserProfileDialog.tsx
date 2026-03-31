@@ -10,8 +10,6 @@ import DialogContent from "@mui/material/DialogContent";
 import Paper from "@mui/material/Paper";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import AvatarFemale from "src/assets/images/avatar-female.png";
-import AvatarMale from "src/assets/images/avatar-male.png";
 import { formatErrorMessage, userRoles } from "src/utils";
 import QuickActions from "../DistributorProfileDialog/QuickActions";
 import ActiveOrders from "./ActiveOrders";
@@ -25,6 +23,7 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchSingleUser } from "src/services/users";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
+import renderUserProfileImage from "src/utils/renderUserProfileImage";
 
 type Props = {
   open: boolean;
@@ -80,6 +79,10 @@ function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
       </DialogContent>
     );
   }
+  const userImage = renderUserProfileImage({
+    remoteImageUrl: data?.profile_picture_url || "",
+    gender: data?.gender,
+  });
   if (data) {
     content = (
       <DialogContent>
@@ -106,17 +109,17 @@ function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
               sx={{
                 width: { xs: "46px", sm: "76px" },
                 height: { xs: "46px", sm: "76px" },
-                borderRadius: "50%",
               }}
             >
               <img
-                src={
-                  selectedUser?.gender?.toLowerCase()?.includes("female")
-                    ? AvatarFemale
-                    : AvatarMale
-                }
+                src={userImage}
                 alt="user"
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                style={{
+                  objectFit: "cover",
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "50%",
+                }}
               />
             </Box>
             <Box>
@@ -225,7 +228,7 @@ function UserProfileDialog({ open, selectedUser, handleClose }: Props) {
             }}
             onClick={() => {
               navigate(
-                `${ADMIN_ROUTE_LINKS.ADMIN_USER_PROFILE}/${selectedUser?.id}`
+                `${ADMIN_ROUTE_LINKS.ADMIN_USER_PROFILE}/${selectedUser?.id}`,
               );
             }}
           >

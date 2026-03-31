@@ -28,7 +28,7 @@ function SubscriptionTable() {
   if (isError) {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
-  console.log("vvvvvvvvvvvvvvvvvvvvvvv", data);
+
   return (
     <Box
       sx={{

@@ -46,6 +46,7 @@ export const profileTabOptions = [
 
 const SkilledWorkerUserDetailsPage = ({ data }: UserDetailsPageProps) => {
   const [selectedTab, setSelectedTab] = useState(profileTabOptions[0].value);
+
   return (
     <Box>
       <Box>

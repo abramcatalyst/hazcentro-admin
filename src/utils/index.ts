@@ -7,7 +7,7 @@ import rolesPermissions, { adminRoles } from "./roles-permission";
 import { SxProps } from "@mui/material/styles";
 
 // export const baseUrl = "https://reevaluateme.online/api";
-export const baseUrl = "https://haz.reevaluateme.online/api/v1";
+export const baseUrl = import.meta.env.VITE_BASE_URL || "";
 export const PERSIST_LOGIN = "PERSIST_LOGIN";
 export const TOKEN_NAME = "HAZCENTRO_AUTH_TOKEN";
 export const PROFILE_KEY = "H_PROFILE_KEY";

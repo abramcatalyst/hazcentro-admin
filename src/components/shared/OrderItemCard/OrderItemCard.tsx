@@ -46,8 +46,9 @@ function OrderItemCard({ data }: Props) {
         >
           <img
             src={
-              data?.order_items[0]?.product?.media[0]?.original_url ??
-              PlaceholderImage
+              data?.order_items && data?.order_items[0]?.product?.media
+                ? data?.order_items[0]?.product?.media[0]?.original_url
+                : PlaceholderImage
             }
             alt={"Item"}
             style={{
@@ -60,10 +61,10 @@ function OrderItemCard({ data }: Props) {
         </Box>
         <Box>
           <Typography sx={{ fontSize: "15px" }}>
-            {data?.order_items[0]?.product?.name}
+            {data?.order_items ? data?.order_items[0]?.product?.name : ""}
           </Typography>
           <Typography sx={{ fontSize: "13px", color: "GrayText" }}>
-            SKU:{data?.order_items[0]?.product?.sku || ""}
+            SKU:{data?.order_items ? data?.order_items[0]?.product?.sku : ""}
           </Typography>
         </Box>
       </Box>

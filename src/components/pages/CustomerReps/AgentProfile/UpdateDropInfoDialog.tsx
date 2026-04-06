@@ -65,14 +65,13 @@ function UpdateDropInfoDialog({ open, selected, handleClose }: Props) {
         values.is_default = Boolean(values.is_default);
         const { data } = await axios.put(
           `${baseUrl}/agents/drop-information/${selected?.id}`,
-          values
+          values,
         );
         await queryClient.invalidateQueries({
           queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENT_DROP_INFORMATION],
         });
         toast.success(formatSuccessMessage(data));
         handleClose();
-        // console.log("xxxxxxxxxxxxxxxxxxxxxxx", res?.data?.access_token);
       } catch (error) {
         helpers.setSubmitting(false);
         let errMsg = formatErrorMessage(error);
@@ -101,7 +100,7 @@ function UpdateDropInfoDialog({ open, selected, handleClose }: Props) {
 
   const renderLGAs = () => {
     const found = nigeriaStates.find(
-      (item) => item.states.name === values.state
+      (item) => item.states.name === values.state,
     );
 
     if (!values.state || !found) {

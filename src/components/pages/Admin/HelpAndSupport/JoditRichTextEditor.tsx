@@ -59,9 +59,9 @@ const JoditRichTextEditor = ({
       initialContent: initialContent,
       content: initialContent,
     }),
-    [placeholder]
+    [placeholder],
   );
-  console.log("");
+
   return (
     <div>
       <JoditEditor

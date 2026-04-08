@@ -42,9 +42,11 @@ jobs:
             fi
 
             cd "$DEPLOY_PATH"
+            echo "📂 Working in: $(pwd)"
 
-            # Fix ownership (important to prevent dubious ownership errors)
-            sudo chown -R $USER:$USER .
+            # Fix ownership WITHOUT sudo (run as current user)
+            echo "Fixing ownership..."
+            chown -R $USER:$USER .
 
             # Update code and build
             git fetch origin
@@ -59,6 +61,3 @@ jobs:
 
             echo "✅ Build completed - dist/ folder ready"
             echo "dist size: $(du -sh dist/)"
-
-            # Optional but recommended: Restart Nginx so new files are served
-            # sudo systemctl restart nginx || echo "Nginx restart skipped"

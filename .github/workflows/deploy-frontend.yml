@@ -1,4 +1,4 @@
-name: Deploy Hazcentro Frontend
+name: Deploy Hazcentro Frontend - Catalyst 2026
 
 on:
   push:

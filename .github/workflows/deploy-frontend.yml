@@ -27,7 +27,8 @@ jobs:
               sudo chown -R $USER:$USER .
 
               git fetch origin
-              git reset --hard origin/main
+              git checkout main
+              git pull origin main
 
               npm ci
               npm run build
@@ -41,7 +42,8 @@ jobs:
               sudo chown -R $USER:$USER .
 
               git fetch origin
-              git reset --hard origin/prod
+              git checkout prod
+              git pull origin prod
 
               npm ci
               npm run build

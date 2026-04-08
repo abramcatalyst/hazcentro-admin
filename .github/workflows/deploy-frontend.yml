@@ -1,4 +1,4 @@
-name: Deploy Hazcentro Frontend - Catalyst 2026#
+name: Deploy Hazcentro Frontend - Catalyst 2026
 
 on:
   push:
@@ -43,16 +43,22 @@ jobs:
 
             cd "$DEPLOY_PATH"
 
-            # Update & Build
+            # Fix ownership (important to prevent dubious ownership errors)
+            sudo chown -R $USER:$USER .
+
+            # Update code and build
             git fetch origin
             git checkout "$BRANCH"
             git reset --hard "origin/$BRANCH"
             git clean -fd
 
-            echo "Updated to: $(git rev-parse --short HEAD)"
+            echo "✅ Updated to commit: $(git rev-parse --short HEAD)"
 
             npm ci
             npm run build
 
             echo "✅ Build completed - dist/ folder ready"
-            echo "dist size: $(du -sh dist/ 2>/dev/null || echo 'not found')"
+            echo "dist size: $(du -sh dist/)"
+
+            # Optional but recommended: Restart Nginx so new files are served
+            # sudo systemctl restart nginx || echo "Nginx restart skipped"

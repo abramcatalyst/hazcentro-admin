@@ -1,4 +1,4 @@
-name: Deploy Hazcentro Frontend - Catalyst 2026
+name: Deploy Hazcentro Frontend
 
 on:
   push:
@@ -19,34 +19,42 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
+            echo "=== Starting deployment for ${{ github.ref_name }} ==="
 
-            if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
-              echo "🚀 Deploying DEV frontend"
-              cd ${{ secrets.DEV_PATH }}
+            if [[ "${{ github.ref_name }}" == "main" ]]; then
+              echo "🚀 Deploying to DEV environment"
+              DEPLOY_PATH="${{ secrets.DEV_PATH }}"
+              BRANCH="main"
 
-              sudo chown -R $USER:$USER .
+            elif [[ "${{ github.ref_name }}" == "prod" ]]; then
+              echo "🚀 Deploying to PROD environment"
+              DEPLOY_PATH="${{ secrets.PROD_PATH }}"
+              BRANCH="prod"
 
-              git fetch origin
-              git checkout main
-              git pull origin main
-
-              npm ci
-              npm run build
-
-              echo "✅ DEV deployment done"
-
-            elif [ "${GITHUB_REF}" = "refs/heads/prod" ]; then
-              echo "🚀 Deploying PROD frontend"
-              cd ${{ secrets.PROD_PATH }}
-
-              sudo chown -R $USER:$USER .
-
-              git fetch origin
-              git checkout prod
-              git pull origin prod
-
-              npm ci
-              npm run build
-
-              echo "✅ PROD deployment done"
+            else
+              echo "❌ Unknown branch"
+              exit 1
             fi
+
+            cd "$DEPLOY_PATH"
+
+            echo "Current directory: $(pwd)"
+            echo "Current branch before update: $(git branch --show-current)"
+
+            # Force clean update
+            git fetch origin
+            git checkout "$BRANCH"
+            git reset --hard "origin/$BRANCH"
+            git clean -fd   # Remove any untracked files
+
+            echo "Updated to commit: $(git rev-parse --short HEAD)"
+
+            # Install dependencies and build
+            echo "Running npm ci..."
+            npm ci
+
+            echo "Running build..."
+            npm run build
+
+            echo "✅ Deployment completed successfully for $BRANCH"
+            echo "Build folder size: $(du -sh build/ 2>/dev/null || echo 'build/ not found')"

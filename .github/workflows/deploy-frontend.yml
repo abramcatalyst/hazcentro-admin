@@ -29,13 +29,15 @@ jobs:
             echo "Node: $(node --version) | npm: $(npm --version)"
 
             if [[ "${{ github.ref_name }}" == "main" ]]; then
-              echo "🚀 Deploying DEV"
+              echo "🚀 Deploying DEV (dashboard-dev)"
               DEPLOY_PATH="${{ secrets.DEV_PATH }}"
               BRANCH="main"
+              BUILD_CMD="npm run build:staging"
             elif [[ "${{ github.ref_name }}" == "prod" ]]; then
-              echo "🚀 Deploying PROD"
+              echo "🚀 Deploying PROD (dashboard)"
               DEPLOY_PATH="${{ secrets.PROD_PATH }}"
               BRANCH="prod"
+              BUILD_CMD="npm run build:production"
             else
               echo "❌ Unknown branch"
               exit 1
@@ -57,7 +59,7 @@ jobs:
             echo "✅ Updated to commit: $(git rev-parse --short HEAD)"
 
             npm ci
-            npm run build
+            $BUILD_CMD
 
             echo "✅ Build completed - dist/ folder ready"
             echo "dist size: $(du -sh dist/)"

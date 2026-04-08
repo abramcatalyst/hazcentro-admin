@@ -18,11 +18,11 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            set -e  # Exit immediately if any command fails
+            set -e
 
             echo "=== Starting deployment for branch: ${{ github.ref_name }} ==="
 
-            # Load NVM (critical for non-interactive SSH)
+            # Load NVM
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
@@ -30,7 +30,6 @@ jobs:
             echo "✅ Node version: $(node --version)"
             echo "✅ npm version:  $(npm --version)"
 
-            # Determine environment
             if [[ "${{ github.ref_name }}" == "main" ]]; then
               echo "🚀 Deploying to **DEV** environment"
               DEPLOY_PATH="${{ secrets.DEV_PATH }}"
@@ -47,7 +46,7 @@ jobs:
             cd "$DEPLOY_PATH"
             echo "📂 Working directory: $(pwd)"
 
-            # === Update code from GitHub ===
+            # Update code
             echo "🔄 Updating code..."
             git fetch origin
             git checkout "$BRANCH"
@@ -56,20 +55,19 @@ jobs:
 
             echo "✅ Updated to commit: $(git rev-parse --short HEAD)"
 
-            # === Install dependencies and build ===
+            # Build the app
             echo "📦 Running npm ci..."
             npm ci
 
             echo "🏗️  Running npm run build..."
             npm run build
 
-            # === Verify build succeeded ===
-            if [ -f "build/index.html" ]; then
-              echo "✅ Build successful! build/index.html exists"
-              echo "Build folder size: $(du -sh build/)"
+            # Verify build (Vite uses 'dist' folder)
+            if [ -f "dist/index.html" ]; then
+              echo "✅ Build successful! dist/index.html exists"
+              echo "Build folder size: $(du -sh dist/)"
             else
-              echo "❌ ERROR: build/index.html not found after npm run build!"
-              echo "Contents of current directory:"
+              echo "❌ ERROR: dist/index.html not found!"
               ls -la
               exit 1
             fi

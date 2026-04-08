@@ -1,0 +1,50 @@
+name: Deploy Hazcentro Frontend
+
+on:
+  push:
+    branches:
+      - main
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+
+            if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+              echo "🚀 Deploying DEV frontend"
+              cd ${{ secrets.DEV_PATH }}
+
+              sudo chown -R $USER:$USER .
+
+              git fetch origin
+              git reset --hard origin/main
+
+              npm ci
+              npm run build
+
+              echo "✅ DEV deployment done"
+
+            elif [ "${GITHUB_REF}" = "refs/heads/prod" ]; then
+              echo "🚀 Deploying PROD frontend"
+              cd ${{ secrets.PROD_PATH }}
+
+              sudo chown -R $USER:$USER .
+
+              git fetch origin
+              git reset --hard origin/prod
+
+              npm ci
+              npm run build
+
+              echo "✅ PROD deployment done"
+            fi

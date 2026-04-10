@@ -56,7 +56,11 @@ const CategoryCard = ({
       >
         <Box>
           <img
-            src={data?.media[0]?.original_url || Logo}
+            src={
+              data?.media && data?.media?.length > 0
+                ? data?.media[0]?.original_url
+                : Logo
+            }
             alt={data?.name}
             style={{
               width: "46px",
@@ -118,7 +122,7 @@ const CategoriesTable = ({ data }: Props) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditCategoryDialog, setOpenEditCategoryDialog] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
-    null
+    null,
   );
 
   const handleOpenDeleteDialog = (value: CategoryType) => {

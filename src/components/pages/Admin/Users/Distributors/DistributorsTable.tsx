@@ -1,4 +1,10 @@
-import { Dispatch, Fragment, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useCallback,
+  useState,
+} from "react";
 import Box from "@mui/material/Box";
 import TablePagination from "@mui/material/TablePagination";
 import Table from "@mui/material/Table";
@@ -36,6 +42,8 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { UserType } from "src/types/users";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
+import useDebounce from "src/hooks/useDebounce";
+import CustomTableFilter from "src/components/shared/CustomTableFilter/CustomTableFilter";
 
 dayjs.extend(advancedFormat);
 
@@ -76,33 +84,52 @@ function EnhancedTableHead() {
 function DistributorsTable({ selectedUsers }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
-
+  const [search, setSearch] = useState("");
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
   });
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 0;
+  const debouncedSearch = useDebounce(search);
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_E_COMMERCE_DISTRIBUTORS,
-      { limit, page },
+      { limit, page, debouncedSearch },
     ],
-    queryFn: () => fetchUsers({ limit: limit, page: page, role: "vendor" }),
+    queryFn: () =>
+      fetchUsers({
+        limit: limit,
+        page: page,
+        role: "vendor",
+        search: debouncedSearch,
+      }),
   });
+  const handleChangeSearch = useCallback(
+    (val: string) => {
+      setSearch(val);
+    },
+    [search, setSearch],
+  );
 
+  const handleDeleteSearch = useCallback(() => {
+    setSearch("");
+  }, []);
+  const handleClearFilters = useCallback(() => {
+    setSearch("");
+  }, []);
   const handleChangePage = (_event: unknown, newPage: number) => {
     setSearchParams(
       (params) => {
         params.set(sPage, `${newPage + 1}`);
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchParams(
       (params) => {
@@ -110,7 +137,7 @@ function DistributorsTable({ selectedUsers }: Props) {
         params.set(sPage, "1");
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -123,12 +150,7 @@ function DistributorsTable({ selectedUsers }: Props) {
     setSelectedUser(null);
     setOpenPreviewProfile(false);
   };
-  if (isError) {
-    return <HalfScreenError text={formatErrorMessage(error)} />;
-  }
-  if (isPending) {
-    return <HalfScreenLoader />;
-  }
+
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       {openPreviewProfile && selectedUser && (
@@ -138,34 +160,48 @@ function DistributorsTable({ selectedUsers }: Props) {
           handleClose={handleClosePreviewProfile}
         />
       )}
+      <Box>
+        <CustomTableFilter
+          search={search}
+          handleChangeSearch={handleChangeSearch}
+          handleDeleteSearch={handleDeleteSearch}
+          showDownloadButton={false}
+          hideFilter
+          handleClearFilters={handleClearFilters}
+        />
+      </Box>
+      {isError ? (
+        <HalfScreenError text={formatErrorMessage(error)} />
+      ) : isPending ? (
+        <HalfScreenLoader />
+      ) : (
+        <TableContainer>
+          {data?.total > 0 ? (
+            <Box>
+              <Table sx={{ minWidth: 700 }} size={"small"}>
+                <EnhancedTableHead
 
-      <TableContainer>
-        {data?.total > 0 ? (
-          <Box>
-            <Table sx={{ minWidth: 700 }} size={"small"}>
-              <EnhancedTableHead
-
-              //   onSelectAllClick={handleSelectAllClick}
-              />
-              <TableBody>
-                {data?.data?.map((row, index) => {
-                  const isItemSelected = selectedUsers.has(index);
-                  return (
-                    <StyledTableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row?.id}
-                      selected={isItemSelected}
-                      sx={{
-                        cursor: "pointer",
-                        background: isItemSelected
-                          ? GLOBAL_COLORS.YELLOW_500
-                          : "default",
-                      }}
-                    >
-                      {/* <StyledTableCell padding="checkbox">
+                //   onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {data?.data?.map((row, index) => {
+                    const isItemSelected = selectedUsers.has(index);
+                    return (
+                      <StyledTableRow
+                        hover
+                        // onClick={(event) => handleClick(event, row.id)}
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row?.id}
+                        selected={isItemSelected}
+                        sx={{
+                          cursor: "pointer",
+                          background: isItemSelected
+                            ? GLOBAL_COLORS.YELLOW_500
+                            : "default",
+                        }}
+                      >
+                        {/* <StyledTableCell padding="checkbox">
                         <Checkbox
                           color="warning"
                           size="small"
@@ -188,60 +224,61 @@ function DistributorsTable({ selectedUsers }: Props) {
                           }}
                         />
                       </StyledTableCell> */}
-                      <StyledTableCell>{row?.unique_user_id}</StyledTableCell>
-                      <StyledTableCell>{row?.name}</StyledTableCell>
-                      <StyledTableCell>
-                        {renderStatus(row?.status)}
-                      </StyledTableCell>
-                      <StyledTableCell>{`${row?.state}, ${row?.country}`}</StyledTableCell>
-                      <StyledTableCell>
-                        {dayjs(row?.created_at).format("MMM Do YYYY")}
-                      </StyledTableCell>
-                      <StyledTableCell>{row?.email}</StyledTableCell>
-                      <StyledTableCell>{row?.phone_number}</StyledTableCell>
-                      <StyledTableCell>
-                        <PopupState variant="popover">
-                          {(popupState) => (
-                            <Fragment>
-                              <IconButton {...bindTrigger(popupState)}>
-                                <MoreHorizRoundedIcon />
-                              </IconButton>
-                              <Menu {...bindMenu(popupState)}>
-                                <MenuItem
-                                  onClick={() => {
-                                    handleOpenPreviewProfile(row);
-                                    popupState.close();
-                                  }}
-                                  sx={tableMenuStyles}
-                                >
-                                  Preview Profile
-                                </MenuItem>
-                              </Menu>
-                            </Fragment>
-                          )}
-                        </PopupState>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-            <Box sx={{ my: 1 }}>
-              <TablePagination
-                rowsPerPageOptions={rowsPerPageOptions}
-                component="div"
-                count={data?.total || 0}
-                rowsPerPage={limit || rowsPerPageOptions[0]}
-                page={page - 1}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+                        <StyledTableCell>{row?.unique_user_id}</StyledTableCell>
+                        <StyledTableCell>{row?.name}</StyledTableCell>
+                        <StyledTableCell>
+                          {renderStatus(row?.status)}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${row?.state}, ${row?.country}`}</StyledTableCell>
+                        <StyledTableCell>
+                          {dayjs(row?.created_at).format("MMM Do YYYY")}
+                        </StyledTableCell>
+                        <StyledTableCell>{row?.email}</StyledTableCell>
+                        <StyledTableCell>{row?.phone_number}</StyledTableCell>
+                        <StyledTableCell>
+                          <PopupState variant="popover">
+                            {(popupState) => (
+                              <Fragment>
+                                <IconButton {...bindTrigger(popupState)}>
+                                  <MoreHorizRoundedIcon />
+                                </IconButton>
+                                <Menu {...bindMenu(popupState)}>
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleOpenPreviewProfile(row);
+                                      popupState.close();
+                                    }}
+                                    sx={tableMenuStyles}
+                                  >
+                                    Preview Profile
+                                  </MenuItem>
+                                </Menu>
+                              </Fragment>
+                            )}
+                          </PopupState>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+              <Box sx={{ my: 1 }}>
+                <TablePagination
+                  rowsPerPageOptions={rowsPerPageOptions}
+                  component="div"
+                  count={data?.total || 0}
+                  rowsPerPage={limit || rowsPerPageOptions[0]}
+                  page={page - 1}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </Box>
             </Box>
-          </Box>
-        ) : (
-          <EmptyTable isSmall subText="No user found" />
-        )}
-      </TableContainer>
+          ) : (
+            <EmptyTable isSmall subText="No user found" />
+          )}
+        </TableContainer>
+      )}
     </Box>
   );
 }

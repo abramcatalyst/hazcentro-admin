@@ -10,17 +10,16 @@ import {
   sPage,
 } from "src/utils";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
-import CategoriesTab from "./CategoriesTab";
 import CategoriesTable from "./CategoriesTable";
 import AddCategoryDialog from "./AddCategoryDialog";
 import { useQuery } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
-import { fetchCategories } from "src/services/categories";
+import { fetchSkilledUsersCategories } from "src/services/categories";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
 import { useSearchParams } from "react-router-dom";
 
-const CategoriesWrapper = () => {
+const SkilledUsersCategoryWrapper = () => {
   const [openAddAgentDialog, setOpenAddAgentDialog] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams({
@@ -30,8 +29,11 @@ const CategoriesWrapper = () => {
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 1;
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CATEGORIES, { limit, page }],
-    queryFn: () => fetchCategories({ limit: limit, page }),
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_SKILLED_USERS_CATEGORIES,
+      { limit, page },
+    ],
+    queryFn: () => fetchSkilledUsersCategories({ limit: limit, page }),
   });
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -70,7 +72,7 @@ const CategoriesWrapper = () => {
   const handleOpenAddAgentDialog = () => {
     setOpenAddAgentDialog(true);
   };
-  console.log("pagination", data);
+  console.log("data", data);
   return (
     <Box>
       {openAddAgentDialog && (
@@ -89,7 +91,7 @@ const CategoriesWrapper = () => {
           mb: 2,
         }}
       >
-        <AppHeader text="Category Management" />
+        <AppHeader text="Skills Category" />
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Button
             color="secondary"
@@ -106,21 +108,9 @@ const CategoriesWrapper = () => {
           >
             Add Category
           </Button>
-          <Button
-            size="large"
-            color="inherit"
-            sx={{
-              borderRadius: "12px",
-              MozOutlineRadius: "12px",
-              background: `${GLOBAL_COLORS.GREY_50}`,
-              px: 2,
-            }}
-          >
-            Manage
-          </Button>
         </Box>
       </Box>
-      <CategoriesTab />
+
       <CategoriesTable data={data?.data} />
       <Box sx={{ my: 1 }}>
         <TablePagination
@@ -137,4 +127,4 @@ const CategoriesWrapper = () => {
   );
 };
 
-export default CategoriesWrapper;
+export default SkilledUsersCategoryWrapper;

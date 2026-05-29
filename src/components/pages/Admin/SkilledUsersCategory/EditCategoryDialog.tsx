@@ -8,10 +8,6 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
-import FormLabel from "@mui/material/FormLabel";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DialogActions from "@mui/material/DialogActions";
@@ -19,7 +15,6 @@ import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
-
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -32,16 +27,18 @@ import {
   setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
+import { SkillsCategoryType } from "src/types/categories";
 import { useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import useManageToken from "src/hooks/useManageToken";
 
 type Props = {
   open: boolean;
+  selectedCategory: SkillsCategoryType;
   handleClose: () => void;
 };
 
-function AddCategoryDialog({ open, handleClose }: Props) {
+function EditCategoryDialog({ open, selectedCategory, handleClose }: Props) {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
   const theme = useTheme();
@@ -49,11 +46,11 @@ function AddCategoryDialog({ open, handleClose }: Props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const queryClient = useQueryClient();
   const { logOutUser } = useManageToken();
+  console.log(image);
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
-      is_featured: "0",
+      name: selectedCategory?.name || "",
+      description: selectedCategory?.description || "",
     },
     enableReinitialize: true,
     onSubmit: async (values, helpers) => {
@@ -62,21 +59,25 @@ function AddCategoryDialog({ open, handleClose }: Props) {
       }
       setDefaultHeaders();
       try {
-        const formData = new FormData();
-        formData.append("name", values.name);
-        formData.append("description", values.description);
-        formData.append("is_featured", values.is_featured.toString());
+        // const formData = new FormData();
+        // formData.append("name", values.name);
+        // formData.append("description", values.description);
 
-        if (image) {
-          formData.append("icon", image);
-        }
-        const res = await axios.post(`${baseUrl}/admin/categories`, formData);
+        // if (image) {
+        //   formData.append("icon", image);
+        // }
+        const res = await axios.put(
+          `${baseUrl}/admin/skill-categories/${selectedCategory.id}`,
+          values,
+        );
         const successMsg = formatSuccessMessage(res);
         setImagePreview("");
         setImage(null);
         toast.success(successMsg);
         queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CATEGORIES],
+          queryKey: [
+            TANSTACK_REQUEST_CACHE_TAGS.FETCH_SKILLED_USERS_CATEGORIES,
+          ],
         });
         handleClose();
       } catch (error) {
@@ -121,7 +122,7 @@ function AddCategoryDialog({ open, handleClose }: Props) {
           }}
         >
           <Typography variant="h6" sx={{ color: "GrayText" }}>
-            Add Category
+            Edit Category
           </Typography>
           <DialogCloseButtonWrapper>
             <IconButton onClick={handleClose} color="error">
@@ -161,19 +162,8 @@ function AddCategoryDialog({ open, handleClose }: Props) {
                 <FormHelperText error>{errors.description}</FormHelperText>
               )}
             </FormControl>
-            <FormControl>
-              <FormLabel>Is Featured</FormLabel>
-              <RadioGroup
-                row
-                name="is_featured"
-                value={values.is_featured}
-                onChange={handleChange}
-              >
-                <FormControlLabel value="0" control={<Radio />} label="No" />
-                <FormControlLabel value="1" control={<Radio />} label="Yes" />
-              </RadioGroup>
-            </FormControl>
           </Box>
+
           <Box
             sx={{
               mt: 1,
@@ -197,11 +187,11 @@ function AddCategoryDialog({ open, handleClose }: Props) {
                 }}
               />
             </FormControl>
-            <Typography gutterBottom variant="body2">
+            {/* <Typography gutterBottom variant="body2">
               Customizations
-            </Typography>
+            </Typography> */}
             <Box
-              sx={{ display: "flex", flexWrap: "wrap", gap: 1, py: 1, px: 0.5 }}
+              sx={{ display: "none", flexWrap: "wrap", gap: 1, py: 1, px: 0.5 }}
             >
               <IconButton
                 onClick={() => {
@@ -229,12 +219,39 @@ function AddCategoryDialog({ open, handleClose }: Props) {
                       width: "100%",
                       height: "100%",
                       borderRadius: "50%",
-                      objectFit: "cover",
+                      objectFit: "contain",
                     }}
                   />
                 </Box>
               )}
             </Box>
+            {!imagePreview && selectedCategory?.image_url && (
+              <Box sx={{}}>
+                <Typography sx={{ fontSize: "11px", mb: 0.6 }}>
+                  Current uploaded image
+                </Typography>
+                <Box
+                  sx={{
+                    width: { xs: "40px", sm: "46px" },
+                    height: { xs: "40px", sm: "46px" },
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    border: `1.5px solid ${theme.palette.primary.main}`,
+                  }}
+                >
+                  <img
+                    src={selectedCategory?.image_url}
+                    alt="custom"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "50%",
+                      objectFit: "contain",
+                    }}
+                  />
+                </Box>
+              </Box>
+            )}
           </Box>
           <br />
           <Divider />
@@ -259,5 +276,4 @@ function AddCategoryDialog({ open, handleClose }: Props) {
     </StyledDialog>
   );
 }
-
-export default AddCategoryDialog;
+export default EditCategoryDialog;

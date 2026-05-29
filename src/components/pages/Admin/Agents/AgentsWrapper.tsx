@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { GLOBAL_COLORS } from "src/utils";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
-import AgentsTab from "./AgentsTab";
 import AgentsTable from "./AgentsTable";
 import AddAgentDialog from "./AddAgentDialog";
 import { ErrorBoundary } from "react-error-boundary";
@@ -93,7 +92,7 @@ const AgentsWrapper = () => {
           ))} */}
         </Box>
       </Box>
-      <AgentsTab />
+
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
         <AgentsTable />
       </ErrorBoundary>

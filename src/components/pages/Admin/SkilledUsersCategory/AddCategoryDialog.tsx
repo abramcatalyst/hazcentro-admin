@@ -8,10 +8,6 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
-import FormLabel from "@mui/material/FormLabel";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DialogActions from "@mui/material/DialogActions";
@@ -19,7 +15,6 @@ import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
-
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -65,18 +60,22 @@ function AddCategoryDialog({ open, handleClose }: Props) {
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("description", values.description);
-        formData.append("is_featured", values.is_featured.toString());
 
         if (image) {
           formData.append("icon", image);
         }
-        const res = await axios.post(`${baseUrl}/admin/categories`, formData);
+        const res = await axios.post(
+          `${baseUrl}/admin/skill-categories`,
+          formData,
+        );
         const successMsg = formatSuccessMessage(res);
         setImagePreview("");
         setImage(null);
         toast.success(successMsg);
         queryClient.invalidateQueries({
-          queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CATEGORIES],
+          queryKey: [
+            TANSTACK_REQUEST_CACHE_TAGS.FETCH_SKILLED_USERS_CATEGORIES,
+          ],
         });
         handleClose();
       } catch (error) {
@@ -134,9 +133,9 @@ function AddCategoryDialog({ open, handleClose }: Props) {
         <Box component={"form"} onSubmit={handleSubmit}>
           <Box>
             <FormControl fullWidth sx={{ my: 1 }}>
-              <InputLabel>Enter a name for the catalog</InputLabel>
+              <InputLabel>Enter a name for the category</InputLabel>
               <OutlinedInput
-                label="Enter a name for the catalog"
+                label="Enter a name for the category"
                 name="name"
                 value={values.name}
                 onChange={handleChange}
@@ -161,19 +160,8 @@ function AddCategoryDialog({ open, handleClose }: Props) {
                 <FormHelperText error>{errors.description}</FormHelperText>
               )}
             </FormControl>
-            <FormControl>
-              <FormLabel>Is Featured</FormLabel>
-              <RadioGroup
-                row
-                name="is_featured"
-                value={values.is_featured}
-                onChange={handleChange}
-              >
-                <FormControlLabel value="0" control={<Radio />} label="No" />
-                <FormControlLabel value="1" control={<Radio />} label="Yes" />
-              </RadioGroup>
-            </FormControl>
           </Box>
+
           <Box
             sx={{
               mt: 1,

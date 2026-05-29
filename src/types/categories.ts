@@ -79,3 +79,14 @@ export type VendorProductCategoryType = {
   change_percent: string;
   category_icon: string;
 };
+
+export type SkillsCategoryType = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  image_url: string;
+  total_workers: number;
+};

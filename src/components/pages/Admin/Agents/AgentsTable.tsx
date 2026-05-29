@@ -8,7 +8,7 @@ import MaleAvatar from "src/assets/images/avatar-male.png";
 import FemaleAvatar from "src/assets/images/avatar-female.png";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import DeleteAgentDialog from "./DeleteAgentDialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
@@ -27,6 +27,8 @@ import { AgentType } from "src/types/agents";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import EditAgentDialog from "./EditAgentDialog";
+import CustomTableFilter from "src/components/shared/CustomTableFilter/CustomTableFilter";
+import useDebounce from "src/hooks/useDebounce";
 
 type AgentCardProps = {
   data: AgentType;
@@ -121,6 +123,7 @@ const AgentCard = ({
   );
 };
 const AgentsTable = () => {
+  const [search, setSearch] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<AgentType | null>(null);
@@ -128,25 +131,43 @@ const AgentsTable = () => {
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
   });
+  const debouncedSearch = useDebounce(search);
+
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 1;
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENTS, { limit, page }],
-    queryFn: () => fetchAgents({ limit: limit, page }),
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENTS,
+      { limit, page, debouncedSearch },
+    ],
+    queryFn: () => fetchAgents({ limit: limit, page, search: debouncedSearch }),
   });
 
+  const handleChangeSearch = useCallback(
+    (val: string) => {
+      setSearch(val);
+    },
+    [search, setSearch],
+  );
+
+  const handleDeleteSearch = useCallback(() => {
+    setSearch("");
+  }, []);
+  const handleClearFilters = useCallback(() => {
+    setSearch("");
+  }, []);
   const handleChangePage = (_event: unknown, newPage: number) => {
     setSearchParams(
       (params) => {
         params.set(sPage, `${newPage + 1}`);
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchParams(
       (params) => {
@@ -154,16 +175,10 @@ const AgentsTable = () => {
         params.set(sPage, "0");
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
-  if (isError) {
-    return <HalfScreenError text={formatErrorMessage(error)} />;
-  }
-  if (isPending) {
-    return <HalfScreenLoader />;
-  }
   const handleOpenDeleteDialog = (info: AgentType) => {
     setSelectedAgent(info);
     setOpenDeleteDialog(true);
@@ -198,19 +213,40 @@ const AgentsTable = () => {
             handleClose={handleCloseEditDialog}
           />
         )}
-        {data?.total <= 0 && <EmptyTable subText="No agent found" />}
-        <Grid container spacing={1}>
-          {data?.total > 0 &&
-            data?.data?.map((row) => (
-              <Grid size={sizing}>
-                <AgentCard
-                  data={row}
-                  handleOpenDeleteDialog={handleOpenDeleteDialog}
-                  handleOpenEditDialog={handleOpenEditDialog}
-                />
+        <Box>
+          <CustomTableFilter
+            search={search}
+            handleChangeSearch={handleChangeSearch}
+            handleDeleteSearch={handleDeleteSearch}
+            showDownloadButton={false}
+            hideFilter
+            handleClearFilters={handleClearFilters}
+          />
+        </Box>
+        {isError ? (
+          <HalfScreenError text={formatErrorMessage(error)} />
+        ) : isPending ? (
+          <HalfScreenLoader />
+        ) : (
+          <>
+            {data && data?.total > 0 ? (
+              <Grid container spacing={1}>
+                {data?.total > 0 &&
+                  data?.data?.map((row) => (
+                    <Grid size={sizing}>
+                      <AgentCard
+                        data={row}
+                        handleOpenDeleteDialog={handleOpenDeleteDialog}
+                        handleOpenEditDialog={handleOpenEditDialog}
+                      />
+                    </Grid>
+                  ))}
               </Grid>
-            ))}
-        </Grid>
+            ) : (
+              <EmptyTable subText="No agent found" />
+            )}
+          </>
+        )}
       </Box>
       <TablePagination
         component="div"

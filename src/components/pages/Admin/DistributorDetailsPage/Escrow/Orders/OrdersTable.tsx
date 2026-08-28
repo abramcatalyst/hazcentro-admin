@@ -13,7 +13,7 @@ import { VendorEscrowOrderType } from "src/types/orders";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 
 const headCells = [
-  "Order ID",
+  "Tracking ID",
   "Order Name",
   "Amount",
   "Date Created",

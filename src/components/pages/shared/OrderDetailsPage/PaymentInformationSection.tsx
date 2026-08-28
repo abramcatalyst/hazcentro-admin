@@ -58,7 +58,7 @@ const InfoBox = ({
 const Payment = ({ selectedOrder }: Props) => {
   return (
     <Box>
-      <InfoBox title="Order Number" value={selectedOrder?.id} />
+      <InfoBox title="Tracking ID" value={selectedOrder?.tracking_id} addBoldness />
       <InfoBox
         title="Order Date"
         value={dayjs(selectedOrder?.created_at).format("HH:MMa, DD MMM YYYY")}
@@ -73,7 +73,6 @@ const Payment = ({ selectedOrder }: Props) => {
         value={selectedOrder?.payment_status}
         addBoldness
       />
-      <InfoBox title="Tracking ID" value={selectedOrder?.tracking_id} />
     </Box>
   );
 };

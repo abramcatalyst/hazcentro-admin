@@ -27,6 +27,7 @@ export type LoginRoleType = {
 };
 export type LoginResponseProfileType = {
   id: string;
+  unique_user_id: string;
   name: string;
   email: string;
   gender: string;

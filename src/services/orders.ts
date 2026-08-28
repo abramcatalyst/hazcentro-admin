@@ -3,6 +3,20 @@ import { QueryFilterType } from "src/types/filters";
 import { OrderType } from "src/types/orders";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
+export const assignAgentToOrder = async (
+  orderId: string,
+  agentId: string
+): Promise<{ status: boolean; message: string; data: OrderType }> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.post(
+    `${baseUrl}/admin/orders/${orderId}/assign-agent`,
+    { agent_id: agentId }
+  );
+
+  return data;
+};
+
 export const fetchOrders = async ({
   page,
   limit,

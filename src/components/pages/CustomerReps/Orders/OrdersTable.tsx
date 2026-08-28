@@ -38,9 +38,7 @@ const headCells = [
   "Number of Items",
   "Amount",
   "Date Created",
-  "Buyer Name",
-  // "Merchant Name",
-  // "Category",
+  "Handoff Status",
   "Status",
   "Action",
 ];
@@ -117,13 +115,9 @@ function OrdersTable({ selectedUsers, data }: Props) {
                   <StyledTableCell>
                     {dayjs(row?.created_at).format(FULL_DATE_FORMAT)}
                   </StyledTableCell>
-                  <StyledTableCell>{row?.buyer?.name}</StyledTableCell>
-
-                  {/* <StyledTableCell>{row?.user?.name}</StyledTableCell> */}
-
-                  {/* <StyledTableCell>
-                    <Chip size="small" label="Electronic" />
-                  </StyledTableCell> */}
+                  <StyledTableCell>
+                    {renderStatus(row?.handoff_status)}
+                  </StyledTableCell>
                   <StyledTableCell>{renderStatus(row?.status)}</StyledTableCell>
                   <StyledTableCell>
                     <PopupState variant="popover">

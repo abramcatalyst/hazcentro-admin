@@ -5,6 +5,7 @@ import SingleCategoryTab from "./SingleCategoryTab";
 import ProductsTable from "./ProductsTable";
 import {
   formatErrorMessage,
+  formatSuccessMessage,
   getSelectedPageView,
   rowsPerPageOptions,
   setSelectedPageView,
@@ -17,7 +18,10 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 import HalfScreenError from "src/components/shared/HalfScreenError/HalfScreenError";
 import HalfScreenLoader from "src/components/shared/HalfScreenLoader/HalfScreenLoader";
+import GeneralConfirmDialog from "src/components/shared/GeneralConfirmDialog/GeneralConfirmDialog";
+import toast from "react-hot-toast";
 import { fetchSingleCategory } from "src/services/categories";
+import { deleteAdminProduct } from "src/services/products";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -51,6 +55,7 @@ export const usersViewTabOptions = [
 export type ProductTableProps = {
   data: SingleCategoryType;
   handleOpenPreview: (info: ProductFromCategoryType) => void;
+  handleOpenDelete: (info: ProductFromCategoryType) => void;
 };
 const SingleCategoryWrapper = () => {
   const [view, setView] = useState(usersViewTabOptions[0].value);
@@ -59,6 +64,10 @@ const SingleCategoryWrapper = () => {
   const [openPreview, setOpenPreview] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<ProductFromCategoryType | null>(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [productToDelete, setProductToDelete] =
+    useState<ProductFromCategoryType | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleOpenPreview = (info: ProductFromCategoryType) => {
     setOpenPreview(true);
@@ -67,6 +76,15 @@ const SingleCategoryWrapper = () => {
   const handleClosePreview = () => {
     setOpenPreview(false);
     setSelectedProduct(null);
+  };
+
+  const handleOpenDelete = (info: ProductFromCategoryType) => {
+    setProductToDelete(info);
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setProductToDelete(null);
   };
 
   const [searchParams, setSearchParams] = useSearchParams({
@@ -93,6 +111,31 @@ const SingleCategoryWrapper = () => {
       });
     };
   }, [params?.id]);
+
+  const handleSubmitDelete = async () => {
+    if (!productToDelete?.id) {
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+      const res = await deleteAdminProduct(productToDelete.id);
+      toast.success(formatSuccessMessage(res));
+
+      await queryClient.invalidateQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_SINGLE_CATEGORY],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_CATEGORIES],
+      });
+
+      handleCloseDelete();
+    } catch (error) {
+      toast.error(formatErrorMessage(error));
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setSearchParams(
@@ -141,6 +184,15 @@ const SingleCategoryWrapper = () => {
 
   return (
     <Box>
+      {openDelete && productToDelete && (
+        <GeneralConfirmDialog
+          open={openDelete}
+          hint={`Confirm to delete "${productToDelete.name}". This will remove the product from the catalog.`}
+          isSubmitting={isDeleting}
+          handleSubmit={handleSubmitDelete}
+          handleClose={handleCloseDelete}
+        />
+      )}
       {openPreview && selectedProduct && (
         <ProductDetailsDialog
           open={openPreview}
@@ -168,7 +220,11 @@ const SingleCategoryWrapper = () => {
       />
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
         {view === pageViewTabOptionsObj.TABLE && (
-          <ProductsTable data={data} handleOpenPreview={handleOpenPreview} />
+          <ProductsTable
+            data={data}
+            handleOpenPreview={handleOpenPreview}
+            handleOpenDelete={handleOpenDelete}
+          />
         )}
       </ErrorBoundary>
       <ErrorBoundary FallbackComponent={ErrorFallBack}>
@@ -176,6 +232,7 @@ const SingleCategoryWrapper = () => {
           <ProductsGridTable
             data={data}
             handleOpenPreview={handleOpenPreview}
+            handleOpenDelete={handleOpenDelete}
           />
         )}
       </ErrorBoundary>

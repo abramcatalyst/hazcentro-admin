@@ -44,7 +44,9 @@ const FollowersItem = ({ data }: { data: VendorFullFollowerType }) => {
             <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
               {data?.follower_details?.name}
             </Typography>
-            <Typography sx={{ fontSize: "14px" }}>{data?.user_id}</Typography>
+            <Typography sx={{ fontSize: "14px" }}>
+              User ID: {data?.follower_details?.unique_user_id ?? "N/A"}
+            </Typography>
           </Box>
         </Box>
       </Box>

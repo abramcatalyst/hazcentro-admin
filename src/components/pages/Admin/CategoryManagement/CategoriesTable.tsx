@@ -56,11 +56,7 @@ const CategoryCard = ({
       >
         <Box>
           <img
-            src={
-              data?.media && data?.media?.length > 0
-                ? data?.media[0]?.original_url
-                : Logo
-            }
+            src={data?.image_url || Logo}
             alt={data?.name}
             style={{
               width: "46px",

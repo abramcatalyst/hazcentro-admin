@@ -11,6 +11,7 @@ import Logo from "src/assets/images/logo.png";
 import Typography from "@mui/material/Typography";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import { OrderType } from "src/types/orders";
+import VendorContactPopover from "src/components/pages/CustomerReps/Orders/OrderPreviewDialog/VendorContactPopover";
 
 type Props = {
   selectedOrder: OrderType;
@@ -19,7 +20,7 @@ type Props = {
 const headCells = [
   "S/N",
   "Image",
-  "Title",
+  "Item",
   "Price",
   "Discount Price",
   "Warranty",
@@ -118,7 +119,7 @@ function ProductInformation({ selectedOrder }: Props) {
                     {row?.product?.warranty}
                   </TableCell>
                   <TableCell sx={tableCellStyles}>
-                    {row?.product?.vendor?.business_name}
+                    <VendorContactPopover vendor={row?.product?.vendor} />
                   </TableCell>
                 </TableRow>
               ))}

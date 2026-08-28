@@ -17,3 +17,16 @@ export type AdminDashboardStatsType = {
   };
   active_escrow_balance: number;
 };
+
+export type SalesInsightBrandType = {
+  id: string;
+  name: string;
+  total_revenue: string | number;
+};
+
+export type SalesInsightVendorType = {
+  vendor_id: string;
+  name: string;
+  unique_user_id: string;
+  total_revenue: string | number;
+};

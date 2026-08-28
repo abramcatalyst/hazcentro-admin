@@ -2,7 +2,6 @@ import { jwtDecode } from "jwt-decode";
 
 import { IToken } from "./types";
 import axios from "axios";
-import toast from "react-hot-toast";
 import rolesPermissions, { adminRoles } from "./roles-permission";
 import { SxProps } from "@mui/material/styles";
 
@@ -11,6 +10,8 @@ export const baseUrl = import.meta.env.VITE_BASE_URL || "";
 export const PERSIST_LOGIN = "PERSIST_LOGIN";
 export const TOKEN_NAME = "HAZCENTRO_AUTH_TOKEN";
 export const PROFILE_KEY = "H_PROFILE_KEY";
+/** Match backend JWT_TTL (30 days). */
+export const AUTH_STORAGE_DAYS = 30;
 export const PREV_PATH = "prevPath";
 export const rowsPerPageOptions = [20, 50, 100];
 export const FULL_DATE_FORMAT = "MMM Do YYYY, HH:mm";
@@ -202,10 +203,16 @@ export const dialogActionsStyles = {
 
 // Set a Cookie
 export function setCookie(cName: string, cValue: string, expDays: number) {
-  let date = new Date();
+  const date = new Date();
   date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
   const expires = "expires=" + date.toUTCString();
-  document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
+  document.cookie =
+    cName +
+    "=" +
+    encodeURIComponent(cValue) +
+    "; " +
+    expires +
+    "; path=/; SameSite=Lax";
 }
 
 export const deleteCookie = (cName: string) => {
@@ -222,7 +229,7 @@ export const getCookie = (cName: string): string | undefined => {
   return res;
 };
 export const saveProfileToStorage = (profile: string) => {
-  setCookie(PROFILE_KEY, profile, 1);
+  setCookie(PROFILE_KEY, profile, AUTH_STORAGE_DAYS);
 };
 export const getAuthToken = (): string | null => {
   const res = getCookie(TOKEN_NAME);
@@ -244,7 +251,7 @@ export const removeTokenFromStorage = () => {
   deleteCookie(PROFILE_KEY);
 };
 export const saveTokenToStorage = (token: string) => {
-  setCookie(TOKEN_NAME, token, 1);
+  setCookie(TOKEN_NAME, token, AUTH_STORAGE_DAYS);
 };
 
 export const formatErrorMessage = (errObj: any) => {
@@ -298,6 +305,8 @@ export const setDefaultHeaders = () => {
   const token = getAuthToken();
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers.common["Authorization"];
   }
 };
 
@@ -306,32 +315,19 @@ export const setAxiosDefaultHeaders = () => {
 };
 
 export const isAuthTokenExpired = (): boolean => {
-  try {
-    const token = getAuthToken();
-    let decodedToken: IToken | null = null;
+  const token = getAuthToken();
+  if (!token) {
+    return true;
+  }
 
-    if (!token) {
+  try {
+    const decodedToken = jwtDecode<IToken>(token);
+    if (decodedToken?.exp === undefined) {
       return true;
     }
-    if (token) {
-      decodedToken = jwtDecode(token);
-      // console.log(decodedToken);
-      if (decodedToken && decodedToken?.exp !== undefined) {
-        let tokenExpired = decodedToken?.exp < new Date().getTime() / 1000;
-        if (tokenExpired) {
-          toast.error("Your Login Session Have Expired");
-          removeTokenFromStorage();
 
-          return true;
-        }
-      }
-    }
-
-    return false;
-  } catch (error) {
-    console.log("err", error);
-    // removeTokenFromStorage();
-
+    return decodedToken.exp < Date.now() / 1000;
+  } catch {
     return true;
   }
 };

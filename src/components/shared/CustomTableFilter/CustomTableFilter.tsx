@@ -172,7 +172,7 @@ const CustomTableFilter = ({
   const newMinAmountLabel = minAmountLabel || "Min amount";
   const newMaxAmountLabel = maxAmountLabel || "Max amount";
   const newSearchLabel = searchLabel || "Search";
-  const newSearchIdLabel = searchIdLabel || "Search ID";
+  const newSearchIdLabel = searchIdLabel || "User ID";
   const newStartDateLabel = startDateLabel || "Start Date";
   const newEndDateLabel = endDateLabel || "End Date";
 
@@ -184,7 +184,15 @@ const CustomTableFilter = ({
         p: { sm: 0.3, md: 1 },
       }}
     >
-      <Box sx={{ mr: "auto" }}>
+      <Box
+        sx={{
+          mr: "auto",
+          display: "flex",
+          gap: 1,
+          flexWrap: "wrap",
+          alignItems: "center",
+        }}
+      >
         <FormControl
           color="info"
           size="small"
@@ -205,6 +213,21 @@ const CustomTableFilter = ({
             endAdornment={<SearchOutlinedIcon />}
           />
         </FormControl>
+        {handleChangeSearchId ? (
+          <FormControl
+            color="info"
+            size="small"
+            sx={{ width: { xs: 200, sm: "220px" } }}
+          >
+            <OutlinedInput
+              placeholder={newSearchIdLabel}
+              fullWidth
+              value={searchId}
+              onChange={(e) => handleChangeSearchId(e.target.value)}
+              endAdornment={<SearchOutlinedIcon />}
+            />
+          </FormControl>
+        ) : null}
       </Box>
       <Box
         sx={{

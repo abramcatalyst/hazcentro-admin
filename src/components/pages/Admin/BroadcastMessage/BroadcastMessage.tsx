@@ -23,8 +23,19 @@ import toast from "react-hot-toast";
 
 const audienceOptions = [
   { title: "All", value: "all" },
-  { title: "Users only", value: "users_only" },
-];
+  {
+    title: "Logged-in users",
+    value: "users_only",
+    description: "Any registered account (customers, workers, vendors, admins)",
+  },
+  { title: "Workers", value: "workers_only" },
+  { title: "Vendors", value: "vendors_only" },
+  {
+    title: "Customers",
+    value: "customers_only",
+    description: "Shoppers with the customer role only",
+  },
+] as const;
 function BroadcastMessageForm() {
   let initialValues = {
     title: "",
@@ -57,6 +68,11 @@ function BroadcastMessageForm() {
     validationSchema: yup.object().shape({
       title: yup.string().required().label("Title"),
       body: yup.string().required().label("Message"),
+      audience: yup
+        .string()
+        .oneOf(audienceOptions.map((option) => option.value))
+        .required()
+        .label("Target audience"),
     }),
   });
 
@@ -105,18 +121,30 @@ function BroadcastMessageForm() {
             <FormLabel>Target audience</FormLabel>
             <RadioGroup
               row
+              sx={{ flexWrap: "wrap", columnGap: 2, rowGap: 0.5 }}
               name="audience"
               value={values.audience}
               onChange={handleChange}
             >
               {audienceOptions.map((item) => (
                 <FormControlLabel
+                  key={item.value}
                   value={item.value}
                   control={<Radio />}
                   label={item.title}
                 />
               ))}
             </RadioGroup>
+            {audienceOptions.find((option) => option.value === values.audience)
+              ?.description && (
+              <FormHelperText>
+                {
+                  audienceOptions.find(
+                    (option) => option.value === values.audience
+                  )?.description
+                }
+              </FormHelperText>
+            )}
           </FormControl>
         </Box>
 

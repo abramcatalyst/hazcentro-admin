@@ -22,8 +22,9 @@ export type CategoryType = {
   name: string;
   description: string;
   parent_id: string | null;
-  user_id: string;
-  icon: string | null;
+  user_id?: string;
+  icon?: string | null;
+  image_url: string | null;
   is_featured: boolean;
   sort_order: string | null;
   depth: number;
@@ -31,8 +32,8 @@ export type CategoryType = {
   created_at: string;
   updated_at: string;
   total_products: number;
-  subcategories: SubCategoryType[];
-  media: MediaType[];
+  subcategories?: SubCategoryType[];
+  media?: MediaType[];
 };
 
 export type SingleCategoryType = {

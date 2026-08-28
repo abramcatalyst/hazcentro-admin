@@ -51,6 +51,7 @@ import AdminAdsCategoryDetails from "./pages/admin/AdminAdsCategoryDetails";
 import AdminAddProductsToAdsCategory from "./pages/admin/AdminAddProductsToAdsCategory";
 import BroadcastMessage from "./pages/admin/BroadcastMessage";
 import AdminSkilledUsersCategories from "./pages/admin/AdminSkilledUsersCategories";
+import AuthBootstrap from "./components/auth/AuthBootstrap";
 
 function App() {
   const CustomerCareRoutes = () => (
@@ -195,6 +196,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <>
           <BrowserRouter>
+            <AuthBootstrap />
             <Routes>
               <Route path="/" element={<Root />} />
               <Route path="admin/*" element={<AdminRoutes />} />

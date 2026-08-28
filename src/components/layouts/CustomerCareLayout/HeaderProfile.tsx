@@ -8,7 +8,6 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import PersonAdd from "@mui/icons-material/PersonAdd";
-import KeyboardArrowDownAdd from "@mui/icons-material/KeyboardArrowDown";
 import Logout from "@mui/icons-material/Logout";
 import DefaultUserImage from "src/assets/images/default-user.png";
 import useAuthStore from "src/store/authStore";
@@ -100,7 +99,6 @@ export default function HeaderProfile() {
               src={renderAdminImage()}
             ></Avatar>
           </IconButton>
-          <KeyboardArrowDownAdd />
         </Box>
       </Box>
       <Menu

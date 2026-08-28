@@ -4,6 +4,8 @@ export type PayoutType = {
   type: string;
   amount: string;
   user: string;
+  unique_user_id?: string;
+  order_tracking_id?: string | null;
   label: string;
   timestamp: string;
   status: string;

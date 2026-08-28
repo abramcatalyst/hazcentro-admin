@@ -59,7 +59,9 @@ const ProfileInformation = () => {
               {profile?.name}
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography variant="body2">{profile?.id}</Typography>
+              <Typography variant="body2">
+                User ID: {profile?.unique_user_id ?? "N/A"}
+              </Typography>
             </Box>
           </Box>
         </Box>

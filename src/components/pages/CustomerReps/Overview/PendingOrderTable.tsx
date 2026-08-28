@@ -22,7 +22,7 @@ import TableSkeletonLoader from "src/components/shared/TableSkeletonLoader/Table
 dayjs.extend(advancedFormat);
 
 const headCells = [
-  "Order ID",
+  "Tracking ID",
   "Amount",
   "Date Created",
   "Buyer Name",

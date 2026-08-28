@@ -28,6 +28,7 @@ export type WorkerOverviewType = {
   user_details: {};
   portfolios: WorkerPortfolioType[];
   recent_activities: WorkerRecentActivityType[];
+  recent_covered_areas: string[];
   job_requests_summary: {
     total: number;
     pending: number;

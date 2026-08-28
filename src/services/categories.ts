@@ -38,7 +38,7 @@ export const fetchCategories = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/global/categories?limit=${limit}${page ? `&page=${page}` : ""}${
+    `${baseUrl}/admin/categories?limit=${limit}${page ? `&page=${page}` : ""}${
       startDate ? `&minCreateDate=${startDate}` : ""
     }${endDate ? `&maxCreateDate=${endDate}` : ""}${
       lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
@@ -47,7 +47,7 @@ export const fetchCategories = async ({
     }`,
   );
 
-  return data;
+  return data?.data;
 };
 
 export const fetchSingleCategory = async ({
@@ -58,10 +58,10 @@ export const fetchSingleCategory = async ({
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(
-    `${baseUrl}/global/categories/${id}?limit=${limit}&page=${page}`,
+    `${baseUrl}/admin/categories/${id}?limit=${limit}&page=${page}`,
   );
 
-  return data;
+  return data?.data;
 };
 
 export const fetchSkilledUsersCategories = async ({

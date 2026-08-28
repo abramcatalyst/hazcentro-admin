@@ -48,6 +48,13 @@ function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
     };
   }, []);
 
+  const handleAgentAssigned = async () => {
+    await refetch();
+    await queryClient.invalidateQueries({
+      queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ORDERS],
+    });
+  };
+
   let content = (
     <DialogContent>
       <HalfScreenLoader />
@@ -64,7 +71,7 @@ function OrderPreviewDialog({ open, selectedOrder, handleClose }: Props) {
   if (data) {
     content = (
       <DialogContent>
-        <TopSection selectedOrder={data} />
+        <TopSection selectedOrder={data} onAgentAssigned={handleAgentAssigned} />
         <Box>
           <Grid container spacing={1} columns={6}>
             <Grid size={{ xs: 6, sm: 4 }}>

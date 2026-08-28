@@ -305,4 +305,17 @@ export const fetchWorkerPortfolio = async ({
   return data;
 };
 
-// ## DELETE /api/v1/admin/workers/{id}/portfolios/{portfolioId}
+export const deleteWorkerPortfolio = async ({
+  userId,
+  portfolioId,
+}: {
+  userId: string;
+  portfolioId: string;
+}): Promise<{ message: string }> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.delete(
+    `${baseUrl}/admin/workers/${userId}/portfolios/${portfolioId}`,
+  );
+  return data;
+};

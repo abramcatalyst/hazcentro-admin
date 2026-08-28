@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "src/store/authStore";
+import VendorContactPopover from "./VendorContactPopover";
 
 type Props = {
   selectedOrder: OrderType;
@@ -38,7 +39,7 @@ type Props = {
 const headCells = [
   "S/N",
   "Image",
-  "Title",
+  "Item",
   "Price",
   "Discount Price",
   "Dropped Status",
@@ -178,7 +179,7 @@ function ProductInformation({ selectedOrder }: Props) {
                     </Box>
                   </TableCell>
                   <TableCell sx={tableCellStyles}>
-                    {row?.product?.vendor?.business_name}
+                    <VendorContactPopover vendor={row?.product?.vendor} />
                   </TableCell>
                 </TableRow>
               ))}

@@ -114,7 +114,10 @@ const DisputeOverview = ({ data }: Props) => {
         <ProfileTitle text="Dispute Overview" />
       </Box>
       <Box>
-        <DisputeInfoBox title="Dispute ID:" value={data?.id} />
+        <DisputeInfoBox
+          title="Order Tracking ID:"
+          value={data?.order?.tracking_id ?? "N/A"}
+        />
         <DisputeInfoBox
           title="Date & Time:"
           value={dayjs(data?.created_at).format("MMM DD, YYYY, HH:MMA")}
@@ -133,23 +136,29 @@ const DisputeOverview = ({ data }: Props) => {
         </Box>
         <DisputeInfoBox title="Summary of Dispute:" value={data?.message} />
 
-        <DisputeInfoBox title="Item Name:" value={data?.product?.name} />
-        <DisputeInfoBox title="Quantity:" value="1" />
+        <DisputeInfoBox title="Item Name:" value={data?.product?.name ?? "N/A"} />
+        <DisputeInfoBox
+          title="Quantity:"
+          value={String(data?.order?.total_quantity ?? "N/A")}
+        />
         <DisputeInfoBox title="Reported Issues:" value="Damaged Item" />
       </Box>
       <Divider />
       <Box sx={{ mt: 3, mb: 2 }}>
-        <DisputeInfoBox title="Buyer:" value="John Doe" />
+        <DisputeInfoBox title="Buyer:" value={data?.user?.name ?? "N/A"} />
 
         <DisputeInfoBox
           title="Buyer Phone Number:"
-          value="23487945678"
+          value={data?.user?.phone_number ?? "N/A"}
           applyColor
         />
-        <DisputeInfoBox title="Merchant:" value={data?.product?.vendor?.name} />
+        <DisputeInfoBox
+          title="Merchant:"
+          value={data?.product?.vendor?.name ?? "N/A"}
+        />
         <DisputeInfoBox
           title="Merchant Phone Number:"
-          value="23487945678"
+          value={data?.product?.vendor?.phone_number ?? "N/A"}
           applyColor
         />
       </Box>

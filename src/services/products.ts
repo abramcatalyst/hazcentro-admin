@@ -77,3 +77,13 @@ export const fetchSingleProduct = async (
 
   return data;
 };
+
+export const deleteAdminProduct = async (
+  productId: string
+): Promise<{ status: boolean; message: string }> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.delete(`${baseUrl}/admin/products/${productId}`);
+
+  return data;
+};

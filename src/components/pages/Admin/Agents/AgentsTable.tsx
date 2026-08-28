@@ -8,7 +8,7 @@ import MaleAvatar from "src/assets/images/avatar-male.png";
 import FemaleAvatar from "src/assets/images/avatar-female.png";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import DeleteAgentDialog from "./DeleteAgentDialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
@@ -28,7 +28,7 @@ import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import EditAgentDialog from "./EditAgentDialog";
 import CustomTableFilter from "src/components/shared/CustomTableFilter/CustomTableFilter";
-import useDebounce from "src/hooks/useDebounce";
+import useUserListSearch from "src/hooks/useUserListSearch";
 
 type AgentCardProps = {
   data: AgentType;
@@ -79,6 +79,9 @@ const AgentCard = ({
         >
           {name}
         </Typography>
+        <Typography sx={{ fontSize: "11px", color: "GrayText" }}>
+          User ID: {data.unique_user_id}
+        </Typography>
         <Box sx={{ display: "none" }}>
           <Chip size="small" label={state} />
         </Box>
@@ -123,7 +126,17 @@ const AgentCard = ({
   );
 };
 const AgentsTable = () => {
-  const [search, setSearch] = useState("");
+  const {
+    search,
+    searchId,
+    effectiveSearch,
+    debouncedSearchId,
+    handleChangeSearch,
+    handleChangeSearchId,
+    handleDeleteSearch,
+    handleDeleteSearchId,
+    handleClearFilters,
+  } = useUserListSearch();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<AgentType | null>(null);
@@ -131,31 +144,17 @@ const AgentsTable = () => {
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
   });
-  const debouncedSearch = useDebounce(search);
-
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 1;
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENTS,
-      { limit, page, debouncedSearch },
+      { limit, page, effectiveSearch, debouncedSearchId },
     ],
-    queryFn: () => fetchAgents({ limit: limit, page, search: debouncedSearch }),
+    queryFn: () =>
+      fetchAgents({ limit: limit, page, search: effectiveSearch }),
   });
 
-  const handleChangeSearch = useCallback(
-    (val: string) => {
-      setSearch(val);
-    },
-    [search, setSearch],
-  );
-
-  const handleDeleteSearch = useCallback(() => {
-    setSearch("");
-  }, []);
-  const handleClearFilters = useCallback(() => {
-    setSearch("");
-  }, []);
   const handleChangePage = (_event: unknown, newPage: number) => {
     setSearchParams(
       (params) => {
@@ -216,11 +215,15 @@ const AgentsTable = () => {
         <Box>
           <CustomTableFilter
             search={search}
+            searchId={searchId}
             handleChangeSearch={handleChangeSearch}
+            handleChangeSearchId={handleChangeSearchId}
             handleDeleteSearch={handleDeleteSearch}
+            handleDeleteSearchId={handleDeleteSearchId}
             showDownloadButton={false}
             hideFilter
             handleClearFilters={handleClearFilters}
+            searchLabel="Search name or email"
           />
         </Box>
         {isError ? (

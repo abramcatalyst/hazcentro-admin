@@ -2,7 +2,6 @@ import {
   Dispatch,
   Fragment,
   SetStateAction,
-  useCallback,
   useState,
 } from "react";
 import Box from "@mui/material/Box";
@@ -42,7 +41,7 @@ import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { UserType } from "src/types/users";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
-import useDebounce from "src/hooks/useDebounce";
+import useUserListSearch from "src/hooks/useUserListSearch";
 import CustomTableFilter from "src/components/shared/CustomTableFilter/CustomTableFilter";
 
 dayjs.extend(advancedFormat);
@@ -84,40 +83,36 @@ function EnhancedTableHead() {
 function DistributorsTable({ selectedUsers }: Props) {
   const [openPreviewProfile, setOpenPreviewProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
-  const [search, setSearch] = useState("");
+  const {
+    search,
+    searchId,
+    effectiveSearch,
+    debouncedSearchId,
+    handleChangeSearch,
+    handleChangeSearchId,
+    handleDeleteSearch,
+    handleDeleteSearchId,
+    handleClearFilters,
+  } = useUserListSearch();
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
     page: "1",
   });
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 0;
-  const debouncedSearch = useDebounce(search);
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_E_COMMERCE_DISTRIBUTORS,
-      { limit, page, debouncedSearch },
+      { limit, page, effectiveSearch, debouncedSearchId },
     ],
     queryFn: () =>
       fetchUsers({
         limit: limit,
         page: page,
         role: "vendor",
-        search: debouncedSearch,
+        search: effectiveSearch,
       }),
   });
-  const handleChangeSearch = useCallback(
-    (val: string) => {
-      setSearch(val);
-    },
-    [search, setSearch],
-  );
-
-  const handleDeleteSearch = useCallback(() => {
-    setSearch("");
-  }, []);
-  const handleClearFilters = useCallback(() => {
-    setSearch("");
-  }, []);
   const handleChangePage = (_event: unknown, newPage: number) => {
     setSearchParams(
       (params) => {
@@ -163,11 +158,15 @@ function DistributorsTable({ selectedUsers }: Props) {
       <Box>
         <CustomTableFilter
           search={search}
+          searchId={searchId}
           handleChangeSearch={handleChangeSearch}
+          handleChangeSearchId={handleChangeSearchId}
           handleDeleteSearch={handleDeleteSearch}
+          handleDeleteSearchId={handleDeleteSearchId}
           showDownloadButton={false}
           hideFilter
           handleClearFilters={handleClearFilters}
+          searchLabel="Search name or email"
         />
       </Box>
       {isError ? (

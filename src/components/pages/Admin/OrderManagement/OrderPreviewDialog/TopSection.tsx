@@ -18,7 +18,7 @@ const sizing = { xs: 12, sm: 4, md: 3 };
 
 type Props = {
   selectedOrder: OrderType;
-  onAgentAssigned: () => void;
+  onAgentAssigned?: () => void;
 };
 
 function getInitials(name?: string): string {

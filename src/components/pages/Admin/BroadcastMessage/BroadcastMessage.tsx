@@ -21,7 +21,11 @@ import {
 } from "src/utils";
 import toast from "react-hot-toast";
 
-const audienceOptions = [
+const audienceOptions: Array<{
+  title: string;
+  value: string;
+  description?: string;
+}> = [
   { title: "All", value: "all" },
   {
     title: "Logged-in users",
@@ -35,7 +39,7 @@ const audienceOptions = [
     value: "customers_only",
     description: "Shoppers with the customer role only",
   },
-] as const;
+];
 function BroadcastMessageForm() {
   let initialValues = {
     title: "",
@@ -85,6 +89,10 @@ function BroadcastMessageForm() {
     handleSubmit,
     isSubmitting,
   } = formik;
+  const selectedAudience = audienceOptions.find(
+    (option) => option.value === values.audience
+  );
+
   return (
     <Container maxWidth="md">
       <Box component={"form"} onSubmit={handleSubmit}>
@@ -135,15 +143,8 @@ function BroadcastMessageForm() {
                 />
               ))}
             </RadioGroup>
-            {audienceOptions.find((option) => option.value === values.audience)
-              ?.description && (
-              <FormHelperText>
-                {
-                  audienceOptions.find(
-                    (option) => option.value === values.audience
-                  )?.description
-                }
-              </FormHelperText>
+            {selectedAudience?.description && (
+              <FormHelperText>{selectedAudience.description}</FormHelperText>
             )}
           </FormControl>
         </Box>

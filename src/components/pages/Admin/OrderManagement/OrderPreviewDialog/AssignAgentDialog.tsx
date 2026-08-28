@@ -36,7 +36,7 @@ type Props = {
   open: boolean;
   order: OrderType;
   handleClose: () => void;
-  onAssigned: () => void;
+  onAssigned?: () => void;
 };
 
 type AgentOptionType = Pick<AgentType, "id" | "name" | "email" | "phone_number">;
@@ -210,7 +210,7 @@ function AssignAgentDialog({ open, order, handleClose, onAssigned }: Props) {
       const res = await assignAgentToOrder(order.id, selectedAgentId);
       toast.success(formatSuccessMessage(res));
       setSelectedAgentId("");
-      onAssigned();
+      onAssigned?.();
       handleClose();
     } catch (submitError) {
       toast.error(formatErrorMessage(submitError));

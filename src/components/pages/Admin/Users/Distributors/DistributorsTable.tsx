@@ -85,13 +85,9 @@ function DistributorsTable({ selectedUsers }: Props) {
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const {
     search,
-    searchId,
     effectiveSearch,
-    debouncedSearchId,
     handleChangeSearch,
-    handleChangeSearchId,
     handleDeleteSearch,
-    handleDeleteSearchId,
     handleClearFilters,
   } = useUserListSearch();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -103,7 +99,7 @@ function DistributorsTable({ selectedUsers }: Props) {
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_E_COMMERCE_DISTRIBUTORS,
-      { limit, page, effectiveSearch, debouncedSearchId },
+      { limit, page, effectiveSearch },
     ],
     queryFn: () =>
       fetchUsers({
@@ -158,11 +154,8 @@ function DistributorsTable({ selectedUsers }: Props) {
       <Box>
         <CustomTableFilter
           search={search}
-          searchId={searchId}
           handleChangeSearch={handleChangeSearch}
-          handleChangeSearchId={handleChangeSearchId}
           handleDeleteSearch={handleDeleteSearch}
-          handleDeleteSearchId={handleDeleteSearchId}
           showDownloadButton={false}
           hideFilter
           handleClearFilters={handleClearFilters}

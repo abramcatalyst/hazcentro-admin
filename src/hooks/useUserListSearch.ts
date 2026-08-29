@@ -3,7 +3,8 @@ import useDebounce from "./useDebounce";
 
 /**
  * Shared search state for admin user/agent list tables.
- * User ID search takes precedence over the general name/email search when set.
+ * The admin users page only needs the general name/email search;
+ * the user-id field is kept as an optional compatibility path for other admin screens.
  */
 export function useUserListSearch() {
   const [search, setSearch] = useState("");

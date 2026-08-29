@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TablePagination from "@mui/material/TablePagination";
 import AppHeader from "src/components/shared/AppHeader/AppHeader";
@@ -18,6 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchOrders } from "src/services/orders";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
+import CustomTableFilter from "src/components/shared/CustomTableFilter/CustomTableFilter";
 
 export const usersViewTabOptionsObj = {
   E_COMMERCE: "E_COMMERCE",
@@ -71,6 +72,8 @@ const OrderManagementWrapper = () => {
   //   const [view, setView] = useState(usersViewTabOptions[0].value);
   const [selectedTab, setSelectedTab] = useState(tabOptions[0].value);
   const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams({
     limit: rowsPerPageOptions[0].toString(),
@@ -80,12 +83,27 @@ const OrderManagementWrapper = () => {
   const page = Number(searchParams.get(sPage)) || 1;
   const status = searchParams.get(sStatus) || "";
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 450);
+
+    return () => clearTimeout(timeoutId);
+  }, [search]);
+
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_ORDERS,
-      { limit, page, status },
+      { limit, page, status, tracking_id: debouncedSearch },
     ],
-    queryFn: () => fetchOrders({ limit, page, status }),
+    queryFn: () =>
+      fetchOrders({
+        limit,
+        page,
+        status,
+        tracking_id: debouncedSearch,
+      }),
+    placeholderData: (previousData) => previousData,
   });
 
   if (isError) {
@@ -127,6 +145,29 @@ const OrderManagementWrapper = () => {
     );
   };
 
+  const handleChangeSearch = (value: string) => {
+    setSearch(value);
+    setSearchParams(
+      (params) => {
+        params.set(sPage, "1");
+        return params;
+      },
+      { replace: true }
+    );
+  };
+
+  const handleClearFilters = () => {
+    setSearch("");
+    setDebouncedSearch("");
+    setSearchParams(
+      (params) => {
+        params.set(sPage, "1");
+        return params;
+      },
+      { replace: true }
+    );
+  };
+
   return (
     <Box>
       <Box
@@ -140,6 +181,20 @@ const OrderManagementWrapper = () => {
         }}
       >
         <AppHeader text="Order Management" />
+      </Box>
+      <Box sx={{ mb: 2 }}>
+        <CustomTableFilter
+          search={search}
+          handleChangeSearch={handleChangeSearch}
+          handleDeleteSearch={() => {
+            setSearch("");
+            setDebouncedSearch("");
+          }}
+          showDownloadButton={false}
+          hideFilter
+          handleClearFilters={handleClearFilters}
+          searchLabel="Search tracking ID"
+        />
       </Box>
       <OrdersTab
         selectedTab={selectedTab}

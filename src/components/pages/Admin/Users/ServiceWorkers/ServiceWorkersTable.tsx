@@ -78,13 +78,9 @@ function ServiceWorkersTable({ selectedUsers }: Props) {
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const {
     search,
-    searchId,
     effectiveSearch,
-    debouncedSearchId,
     handleChangeSearch,
-    handleChangeSearchId,
     handleDeleteSearch,
-    handleDeleteSearchId,
     handleClearFilters,
   } = useUserListSearch();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -96,7 +92,7 @@ function ServiceWorkersTable({ selectedUsers }: Props) {
   const { isPending, error, data, isError } = useQuery({
     queryKey: [
       TANSTACK_REQUEST_CACHE_TAGS.FETCH_ALL_WORKERS,
-      { limit, page, effectiveSearch, debouncedSearchId },
+      { limit, page, effectiveSearch },
     ],
     queryFn: () =>
       fetchUsers({
@@ -150,11 +146,8 @@ function ServiceWorkersTable({ selectedUsers }: Props) {
       <Box>
         <CustomTableFilter
           search={search}
-          searchId={searchId}
           handleChangeSearch={handleChangeSearch}
-          handleChangeSearchId={handleChangeSearchId}
           handleDeleteSearch={handleDeleteSearch}
-          handleDeleteSearchId={handleDeleteSearchId}
           showDownloadButton={false}
           hideFilter
           handleClearFilters={handleClearFilters}

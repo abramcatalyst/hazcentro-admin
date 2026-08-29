@@ -11,6 +11,21 @@ import useAuthStore from "src/store/authStore";
 type Props = {
   data: OrderType;
 };
+
+const getFirstProductImageUrl = (data?: OrderType | null) => {
+  const firstItem = data?.order_items?.[0];
+  const productAny = firstItem?.product as any;
+  const media = Array.isArray(productAny?.media) ? productAny.media : [];
+  const images = Array.isArray(productAny?.images) ? productAny.images : [];
+
+  return (
+    media[0]?.original_url ||
+    images[0]?.url ||
+    images[0]?.original_url ||
+    PlaceholderImage
+  );
+};
+
 function OrderItemCard({ data }: Props) {
   const theme = useTheme();
   const { profile } = useAuthStore((state) => state);
@@ -45,11 +60,7 @@ function OrderItemCard({ data }: Props) {
           }}
         >
           <img
-            src={
-              data?.order_items && data?.order_items[0]?.product?.media
-                ? data?.order_items[0]?.product?.media[0]?.original_url
-                : PlaceholderImage
-            }
+            src={getFirstProductImageUrl(data)}
             alt={"Item"}
             style={{
               width: "100%",
@@ -61,10 +72,10 @@ function OrderItemCard({ data }: Props) {
         </Box>
         <Box>
           <Typography sx={{ fontSize: "15px" }}>
-            {data?.order_items ? data?.order_items[0]?.product?.name : ""}
+            {data?.order_items?.[0]?.product?.name ?? ""}
           </Typography>
           <Typography sx={{ fontSize: "13px", color: "GrayText" }}>
-            SKU:{data?.order_items ? data?.order_items[0]?.product?.sku : ""}
+            SKU:{data?.order_items?.[0]?.product?.sku ?? ""}
           </Typography>
         </Box>
       </Box>

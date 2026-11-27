@@ -46,9 +46,9 @@ jobs:
             cd "$DEPLOY_PATH"
             echo "📂 Working in: $(pwd)"
 
-            # Fix ownership WITHOUT sudo (run as current user)
+            # A root-owned file makes chown exit 1. Do not abort the deploy for that.
             echo "Fixing ownership..."
-            chown -R $USER:$USER .
+            chown -R "$USER:$USER" . || echo "Skipped files not owned by $USER"
 
             # Update code and build
             git fetch origin

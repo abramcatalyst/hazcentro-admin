@@ -59,6 +59,7 @@ function EnhancedTableHead() {
 const PendingPayoutsTable = () => {
   const [openPreview, setOpenPreview] = useState(false);
   const [openApprove, setOpenApprove] = useState(false);
+  const [openReject, setOpenReject] = useState(false);
   const [selected, setSelected] = useState<PendingPayoutType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -76,6 +77,14 @@ const PendingPayoutsTable = () => {
   };
   const handleCloseApprove = () => {
     setOpenApprove(false);
+    setSelected(null);
+  };
+  const handleOpenReject = (item: PendingPayoutType) => {
+    setSelected(item);
+    setOpenReject(true);
+  };
+  const handleCloseReject = () => {
+    setOpenReject(false);
     setSelected(null);
   };
 
@@ -123,18 +132,14 @@ const PendingPayoutsTable = () => {
     );
   };
 
-  const handleSubmit = async () => {
+  const submitWithdrawal = async (action: "approve" | "reject") => {
     try {
       setDefaultHeaders();
       isAuthTokenExpired();
       setIsSubmitting(true);
 
-      const payload = {
-        is_active: true,
-      };
       const res = await axios.post(
-        `${baseUrl}/admin/wallets/withdrawals/${selected?.id}/approve`,
-        payload
+        `${baseUrl}/admin/wallets/withdrawals/${selected?.id}/${action}`
       );
       const successMsg = formatSuccessMessage(res?.data);
       toast.success(successMsg);
@@ -142,7 +147,11 @@ const PendingPayoutsTable = () => {
       await queryClient.invalidateQueries({
         queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_ADMIN_PENDING_PAYOUTS],
       });
-      handleCloseApprove();
+      if (action === "approve") {
+        handleCloseApprove();
+      } else {
+        handleCloseReject();
+      }
     } catch (error) {
       const errorMsg = formatErrorMessage(error);
       toast.error(errorMsg);
@@ -173,7 +182,18 @@ const PendingPayoutsTable = () => {
           } of amount NGN${currencyFormater(selected?.amount)}`}
           isSubmitting={isSubmitting}
           handleClose={handleCloseApprove}
-          handleSubmit={handleSubmit}
+          handleSubmit={() => submitWithdrawal("approve")}
+        />
+      ) : null}
+      {openReject && selected ? (
+        <GeneralConfirmDialog
+          open={openReject}
+          hint={`Reject this payout for ${
+            selected?.wallet?.user?.name
+          } of amount NGN${currencyFormater(selected?.amount)}. The amount goes back to their wallet.`}
+          isSubmitting={isSubmitting}
+          handleClose={handleCloseReject}
+          handleSubmit={() => submitWithdrawal("reject")}
         />
       ) : null}
       <Typography variant="h6" sx={{ pl: 1, fontWeight: 600, mb: 1 }}>
@@ -230,6 +250,17 @@ const PendingPayoutsTable = () => {
                               >
                                 Approve payout
                               </MenuItem>
+                              {row?.status === "pending" ? (
+                                <MenuItem
+                                  onClick={() => {
+                                    handleOpenReject(row);
+                                    popupState.close();
+                                  }}
+                                  sx={tableMenuStyles}
+                                >
+                                  Reject payout
+                                </MenuItem>
+                              ) : null}
                             </Menu>
                           </Fragment>
                         )}

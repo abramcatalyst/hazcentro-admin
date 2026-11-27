@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AdminDashboardStatsType } from "src/types/admin";
+import { AdminDashboardStatsType, SalesInsightBrandType, SalesInsightVendorType } from "src/types/admin";
 import { QueryFilterType } from "src/types/filters";
 import { TrendingProductType } from "src/types/products";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
@@ -44,7 +44,9 @@ export const fetchAdminDashboardOverviewData =
 
 export const fetchAdminDashboardSalesInsights = async ({
   type,
-}: QueryFilterType): Promise<AdminDashboardStatsType> => {
+}: QueryFilterType): Promise<
+  SalesInsightBrandType[] | SalesInsightVendorType[]
+> => {
   setDefaultHeaders();
   isAuthTokenExpired();
   const { data } = await axios.get(

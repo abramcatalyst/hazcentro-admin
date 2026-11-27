@@ -1,26 +1,16 @@
-import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-// import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import navigation from "./navigation";
-// import RequireAuth from "src/components/auth/RequireAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
-import {
-  GLOBAL_COLORS,
-  removeTokenFromStorage,
-  getAuthToken,
-  getProfileFromStorage,
-  isAuthTokenExpired,
-} from "src/utils";
+import { GLOBAL_COLORS, removeTokenFromStorage } from "src/utils";
 import { FiLogOut } from "react-icons/fi";
 import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
@@ -32,24 +22,9 @@ function AppNavigation({
   handleDrawerClose: () => void;
 }) {
   const { isAuthorized } = useIsUserAuthorized();
-  const { profile, handleLogout, handleLogin } = useAuthStore();
+  const { profile, handleLogout } = useAuthStore();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    const token = getAuthToken();
-
-    if (!token || isAuthTokenExpired()) {
-      removeTokenFromStorage();
-      navigate(`${GLOBAL_ROUTE_LINKS.LOGIN}?prevPath=${pathname}`);
-    }
-    if (token && !isAuthTokenExpired()) {
-      const fetchedProfile = getProfileFromStorage();
-      if (fetchedProfile) {
-        handleLogin({ userProfile: JSON.parse(fetchedProfile) });
-      }
-    }
-  }, [isAuthTokenExpired]);
 
   const isLinkActive = (link: string): boolean => {
     const count = pathname?.split("/")?.length;
@@ -92,18 +67,19 @@ function AppNavigation({
       sx={{
         background: GLOBAL_COLORS.GREY_50,
         height: "100%",
-        overflow: "hidden",
+        overflowX: "hidden",
+        overflowY: "auto",
       }}
     >
       <Box
         sx={{
-          pl: 3,
-          py: 0.5,
+          pl: 0.5,
+          pt: 0.5,
           background: GLOBAL_COLORS.GREY_50,
         }}
       >
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <Avatar src="AD" sx={{ width: "34px", height: "34px" }} />
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <Avatar src="AD" sx={{ width: "31px", height: "31px" }} />
           <Box sx={{ width: `calc(100% - 38px)` }}>
             <Typography sx={{ fontSize: "15px", fontWeight: 600 }}>
               {profile?.name || ""}
@@ -122,7 +98,7 @@ function AppNavigation({
         )}
       </IconButton> */}
       </Box>
-      <List sx={{ px: 0.5, height: "99%" }}>
+      <List sx={{ pl: 0.1, height: "99%" }}>
         {navigation.map((row) => (
           <ListItem key={row?.id} disablePadding sx={{ display: "block" }}>
             {row?.kind === "divider" ? (
@@ -139,9 +115,9 @@ function AppNavigation({
                   <ListItemButton
                     sx={[
                       {
-                        minHeight: 40,
-                        px: 2.5,
-                        mb: 0.3,
+                        minHeight: 35,
+                        px: 1,
+                        mb: 0.2,
                         borderLeft:
                           row?.url && isLinkActive(row?.url)
                             ? `4px solid ${GLOBAL_COLORS.GREEN_MAIN}`
@@ -191,7 +167,7 @@ function AppNavigation({
           <ListItemButton
             sx={[
               {
-                minHeight: 40,
+                minHeight: 35,
                 px: 2.5,
                 mb: 0.3,
                 borderLeft: "default",

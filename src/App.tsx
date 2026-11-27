@@ -49,6 +49,9 @@ import AdminAdsManagement from "./pages/admin/AdminAdsManagement";
 import AdminAdsCategory from "./pages/admin/AdminAdsCategory";
 import AdminAdsCategoryDetails from "./pages/admin/AdminAdsCategoryDetails";
 import AdminAddProductsToAdsCategory from "./pages/admin/AdminAddProductsToAdsCategory";
+import BroadcastMessage from "./pages/admin/BroadcastMessage";
+import AdminSkilledUsersCategories from "./pages/admin/AdminSkilledUsersCategories";
+import AuthBootstrap from "./components/auth/AuthBootstrap";
 
 function App() {
   const CustomerCareRoutes = () => (
@@ -154,6 +157,14 @@ function App() {
           element={<AdminEscrowDashboard />}
         />
         <Route
+          path={ADMIN_ROUTE_SUB_LINKS.broadcast_message}
+          element={<BroadcastMessage />}
+        />
+        <Route
+          path={ADMIN_ROUTE_SUB_LINKS.skill_categories}
+          element={<AdminSkilledUsersCategories />}
+        />
+        <Route
           path={ADMIN_ROUTE_SUB_LINKS.NOTIFICATIONS}
           element={<AdminNotifications />}
         />
@@ -185,6 +196,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <>
           <BrowserRouter>
+            <AuthBootstrap />
             <Routes>
               <Route path="/" element={<Root />} />
               <Route path="admin/*" element={<AdminRoutes />} />

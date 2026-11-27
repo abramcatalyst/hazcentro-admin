@@ -11,15 +11,29 @@ import Logo from "src/assets/images/logo.png";
 import Typography from "@mui/material/Typography";
 import { currencyFormater, GLOBAL_COLORS } from "src/utils";
 import { OrderType } from "src/types/orders";
+import VendorContactPopover from "src/components/pages/CustomerReps/Orders/OrderPreviewDialog/VendorContactPopover";
 
 type Props = {
   selectedOrder: OrderType;
 };
 
+const getProductImageUrl = (product?: OrderType["order_items"][number]["product"] | null) => {
+  const productAny = product as any;
+  const media = Array.isArray(productAny?.media) ? productAny.media : [];
+  const images = Array.isArray(productAny?.images) ? productAny.images : [];
+
+  return (
+    media[0]?.original_url ||
+    images[0]?.url ||
+    images[0]?.original_url ||
+    Logo
+  );
+};
+
 const headCells = [
   "S/N",
   "Image",
-  "Title",
+  "Item",
   "Price",
   "Discount Price",
   "Warranty",
@@ -93,7 +107,7 @@ function ProductInformation({ selectedOrder }: Props) {
                   <TableCell>
                     <Box>
                       <img
-                        src={row?.product?.media[0]?.original_url || Logo}
+                        src={getProductImageUrl(row?.product)}
                         alt={"Product"}
                         style={{
                           width: "42px",
@@ -118,7 +132,7 @@ function ProductInformation({ selectedOrder }: Props) {
                     {row?.product?.warranty}
                   </TableCell>
                   <TableCell sx={tableCellStyles}>
-                    {row?.product?.vendor?.business_name}
+                    <VendorContactPopover vendor={row?.product?.vendor} />
                   </TableCell>
                 </TableRow>
               ))}

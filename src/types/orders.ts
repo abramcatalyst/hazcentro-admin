@@ -51,7 +51,15 @@ export type OrderItemType = {
     media: MediaType[];
     vendor: {
       id: string;
+      name?: string;
       business_name: string;
+      business_phone_number?: string | null;
+      warehouse_location?: string | null;
+      user?: {
+        email?: string;
+        phone_number?: string;
+        address?: string | null;
+      };
     };
     categories: OrderItemCategoryType[];
   };
@@ -123,9 +131,11 @@ export type OrderType = {
   agent: {
     id: string;
     name: string;
-    role: string;
-    roles: RoleType[];
-  };
+    email?: string;
+    phone_number?: string;
+    role?: string;
+    roles?: RoleType[];
+  } | null;
 };
 
 export type VendorEscrowOrderType = {

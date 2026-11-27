@@ -1,5 +1,6 @@
 import { RiHomeFill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
+import { MdOutlineMessage } from "react-icons/md";
 import { PiGraduationCapFill, PiNotebook, PiUser } from "react-icons/pi";
 import { TbTie } from "react-icons/tb";
 import { HiOutlineLightBulb } from "react-icons/hi";
@@ -10,12 +11,12 @@ import { NavigationType } from "src/utils/types";
 import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
 
 const navigation: NavigationType[] = [
-  {
-    id: 0,
-    kind: "header",
-    title: "Menu",
-    permission: "",
-  },
+  // {
+  //   id: 0,
+  //   kind: "header",
+  //   title: "Menu",
+  //   permission: "",
+  // },
   {
     id: 1,
     kind: "page",
@@ -85,17 +86,33 @@ const navigation: NavigationType[] = [
     permission: "",
   },
   {
-    id: 8,
-    kind: "gap",
+    id: 15,
+    kind: "page",
+    icon: <MdOutlineCategory />,
+    title: "Skills Category",
+    url: ADMIN_ROUTE_LINKS.admin_skill_categories,
     permission: "",
   },
-
   {
-    id: 9,
-    kind: "header",
-    title: "Settings",
+    id: 16,
+    kind: "page",
+    icon: <MdOutlineMessage />,
+    title: "Broadcast Message",
+    url: ADMIN_ROUTE_LINKS.admin_broadcast_message,
     permission: "",
   },
+  // {
+  //   id: 8,
+  //   kind: "gap",
+  //   permission: "",
+  // },
+
+  // {
+  //   id: 9,
+  //   kind: "header",
+  //   title: "Settings",
+  //   permission: "",
+  // },
   {
     id: 10,
     kind: "page",

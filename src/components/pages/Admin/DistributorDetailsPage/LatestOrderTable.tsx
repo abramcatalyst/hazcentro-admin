@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
 
-const headCells = ["Order ID", "Item", "Amount", "Date", "Status", ""];
+const headCells = ["Tracking ID", "Item", "Amount", "Date", "Status", ""];
 
 function EnhancedTableHead() {
   return (

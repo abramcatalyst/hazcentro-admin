@@ -25,6 +25,7 @@ export type VendorFullFollowerType = {
   followed_at: string;
   follower_details: {
     id: string;
+    unique_user_id: string;
     email: string;
     profile_picture: string | null;
     name: string;

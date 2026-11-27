@@ -9,19 +9,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import HeaderProfile from "./HeaderProfile";
-// import RequireAuth from "src/components/auth/RequireAuth";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import {
-  GLOBAL_COLORS,
-  removeTokenFromStorage,
-  getAuthToken,
-  getProfileFromStorage,
-  isAuthTokenExpired,
-} from "src/utils";
+import { Outlet, useNavigate } from "react-router-dom";
+import { GLOBAL_COLORS } from "src/utils";
 import HeaderProfileLeft from "./HeaderProfileLeft";
-import { CUSTOMER_ROUTE_LINKS, GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
+import { CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
+import useRestoreAuthSession from "src/hooks/useRestoreAuthSession";
 import AppNavigation from "./AppNavigation";
+import CircularProgress from "@mui/material/CircularProgress";
 const drawerWidth = 212;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -109,33 +104,22 @@ const Drawer = styled(MuiDrawer, {
 
 export default function SuperAdminLayout() {
   const [open, setOpen] = useState(true);
-  const { handleLogin } = useAuthStore();
+  const { profile } = useAuthStore();
   const theme = useTheme();
   const matchesLow = useMediaQuery(theme.breakpoints.down("sm"));
 
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { isReady } = useRestoreAuthSession();
 
   useEffect(() => {
-    const token = getAuthToken();
+    if (!isReady || !profile?.role) {
+      return;
+    }
 
-    if (!token || isAuthTokenExpired()) {
-      removeTokenFromStorage();
-      navigate(`${GLOBAL_ROUTE_LINKS.LOGIN}?prevPath=${pathname}`);
+    if (profile.role !== "admin") {
+      navigate(CUSTOMER_ROUTE_LINKS.CUSTOMER_OVERVIEW, { replace: true });
     }
-    if (token && !isAuthTokenExpired()) {
-      const fetchedProfile = getProfileFromStorage();
-      if (fetchedProfile) {
-        const parsedData = JSON.parse(fetchedProfile);
-        if (fetchedProfile) {
-          handleLogin({ userProfile: parsedData });
-        }
-        if (parsedData?.role && parsedData?.role === "agent") {
-          navigate(CUSTOMER_ROUTE_LINKS.CUSTOMER_OVERVIEW);
-        }
-      }
-    }
-  }, [isAuthTokenExpired]);
+  }, [isReady, navigate, profile?.role]);
   // useEffect(() => {
   //   if (!profile?.id) {
   //     navigate(GLOBAL_ROUTE_LINKS.LOGIN);
@@ -147,6 +131,21 @@ export default function SuperAdminLayout() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  if (!isReady) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          minHeight: "100vh",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: "flex" }}>

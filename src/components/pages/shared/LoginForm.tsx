@@ -14,6 +14,7 @@ import {
   formatErrorMessage,
   saveProfileToStorage,
   saveTokenToStorage,
+  setDefaultHeaders,
 } from "src/utils";
 import toast from "react-hot-toast";
 import StyledOutlinedInput from "src/components/shared/StyledOutlinedInput/StyledOutlinedInput";
@@ -45,6 +46,7 @@ const LoginForm = () => {
         const user = res?.data?.data?.user;
 
         saveProfileToStorage(JSON.stringify(user));
+        setDefaultHeaders();
         handleLogin({ userProfile: user });
         if (prevPath) {
           return await navigate(prevPath);

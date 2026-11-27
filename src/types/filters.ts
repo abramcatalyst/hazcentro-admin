@@ -20,3 +20,8 @@ export type QueryFilterType = {
   id?: string;
   role?: string;
 };
+
+export type FilterSelectOptionsTypes = {
+  value: string;
+  title: string;
+};

@@ -52,16 +52,9 @@ const InfoBox = ({
 const Details = () => {
   return (
     <Box>
-      <InfoBox title="Order Number" value={"F164926629462002"} />
-      <InfoBox title="Order Date" value={dayjs().format("DD mmm YYYY")} />
-      <InfoBox
-        title="Sold By"
-        value={"Runtown Mart"}
-        addBoldness
-        addUnderline
-      />
-      <InfoBox title="Tracking ID" value={"F164926629462002"} />
-      <InfoBox title="Delivery Fee" value={"3500"} addCurrency />
+      <InfoBox title="Tracking ID" value="N/A" />
+      <InfoBox title="Order Date" value={dayjs().format("DD MMM YYYY")} />
+      <InfoBox title="Delivery Fee" value="3500" addCurrency />
     </Box>
   );
 };

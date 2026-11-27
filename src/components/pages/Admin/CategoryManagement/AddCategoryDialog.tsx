@@ -19,7 +19,6 @@ import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
-import CreateItemNotification from "src/components/shared/CreateItemNotification/CreateItemNotification";
 
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import * as yup from "yup";
@@ -175,7 +174,6 @@ function AddCategoryDialog({ open, handleClose }: Props) {
               </RadioGroup>
             </FormControl>
           </Box>
-          <CreateItemNotification />
           <Box
             sx={{
               mt: 1,

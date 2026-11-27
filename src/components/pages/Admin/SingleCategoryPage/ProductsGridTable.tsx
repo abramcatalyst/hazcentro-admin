@@ -11,7 +11,6 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 
 import dayjs from "dayjs";
 import { currencyFormater, GLOBAL_COLORS, tableMenuStyles } from "src/utils";
-import ProductImg from "src/assets/images/logo.png";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
 import { useTheme } from "@mui/material/styles";
@@ -21,7 +20,11 @@ dayjs.extend(advancedFormat);
 
 const sizing = { xs: 6, sm: 4, md: 3, lg: 2 };
 
-function ProductsGridTable({ data, handleOpenPreview }: ProductTableProps) {
+function ProductsGridTable({
+  data,
+  handleOpenPreview,
+  handleOpenDelete,
+}: ProductTableProps) {
   const theme = useTheme();
 
   return (
@@ -65,7 +68,7 @@ function ProductsGridTable({ data, handleOpenPreview }: ProductTableProps) {
                     </Box>
                     {row?.media && row?.media[0]?.original_url ? (
                       <img
-                        src={row?.media[0]?.original_url || ProductImg}
+                        src={row?.media[0]?.original_url}
                         alt="product"
                         style={{
                           width: "100%",
@@ -113,6 +116,7 @@ function ProductsGridTable({ data, handleOpenPreview }: ProductTableProps) {
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
+                                handleOpenDelete(row);
                                 popupState.close();
                               }}
                               sx={{

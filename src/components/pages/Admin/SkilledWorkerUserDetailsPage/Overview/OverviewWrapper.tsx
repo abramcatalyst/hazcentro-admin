@@ -41,11 +41,11 @@ const OverviewWrapper = ({ userData }: Props) => {
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 8 }}>
           <UserHeader data={userData} />
-          <RecentCoveredAreas />
+          <RecentCoveredAreas areas={data?.recent_covered_areas} />
           <RecentActivities recent_activities={data?.recent_activities} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Portfolios portfolios={data?.portfolios} />
+          <Portfolios portfolios={data?.portfolios} compact />
           {/* <RecentClose /> */}
         </Grid>
       </Grid>

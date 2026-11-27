@@ -93,6 +93,7 @@ export type SingleDisputeType = {
   updated_at: string;
   user: {
     id: string;
+    unique_user_id?: string;
     name: string;
     email: string;
     phone_number: string;
@@ -109,6 +110,7 @@ export type SingleDisputeType = {
     vendor: {
       id: string;
       name: string;
+      phone_number?: string;
     };
   };
   order: {

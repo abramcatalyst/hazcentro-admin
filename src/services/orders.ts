@@ -3,15 +3,30 @@ import { QueryFilterType } from "src/types/filters";
 import { OrderType } from "src/types/orders";
 import { baseUrl, isAuthTokenExpired, setDefaultHeaders } from "src/utils";
 
+export const assignAgentToOrder = async (
+  orderId: string,
+  agentId: string
+): Promise<{ status: boolean; message: string; data: OrderType }> => {
+  setDefaultHeaders();
+  isAuthTokenExpired();
+  const { data } = await axios.post(
+    `${baseUrl}/admin/orders/${orderId}/assign-agent`,
+    { agent_id: agentId }
+  );
+
+  return data;
+};
+
 export const fetchOrders = async ({
   page,
   limit,
   search,
+  tracking_id,
   status,
   startDate,
   endDate,
   lastLoginDate,
-}: QueryFilterType): Promise<{
+}: QueryFilterType & { tracking_id?: string }): Promise<{
   data: OrderType[];
   pagination: {
     current_page: number;
@@ -23,12 +38,16 @@ export const fetchOrders = async ({
 }> => {
   setDefaultHeaders();
   isAuthTokenExpired();
+  const normalizedTrackingId = tracking_id ?? search;
+
   const { data } = await axios.get(
     `${baseUrl}/admin/orders?limit=${limit}${page ? `&page=${page}` : ""}${
       startDate ? `&minCreateDate=${startDate}` : ""
     }${endDate ? `&maxCreateDate=${endDate}` : ""}${
       lastLoginDate ? `&lastLoginDate=${lastLoginDate}` : ""
-    }${status ? `&status=${status}` : ""}${search ? `&search=${search}` : ""}`
+    }${status ? `&status=${status}` : ""}${
+      normalizedTrackingId ? `&tracking_id=${encodeURIComponent(normalizedTrackingId)}` : ""
+    }`
   );
 
   return data;

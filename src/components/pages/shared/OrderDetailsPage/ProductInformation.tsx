@@ -16,6 +16,19 @@ type Props = {
   selectedOrder: OrderType;
 };
 
+const getProductImageUrl = (product?: OrderType["order_items"][number]["product"] | null) => {
+  const productAny = product as any;
+  const media = Array.isArray(productAny?.media) ? productAny.media : [];
+  const images = Array.isArray(productAny?.images) ? productAny.images : [];
+
+  return (
+    media[0]?.original_url ||
+    images[0]?.url ||
+    images[0]?.original_url ||
+    Logo
+  );
+};
+
 const headCells = [
   "S/N",
   "Image",
@@ -93,7 +106,7 @@ function ProductInformation({ selectedOrder }: Props) {
                   <TableCell>
                     <Box>
                       <img
-                        src={row?.product?.media[0]?.original_url || Logo}
+                        src={getProductImageUrl(row?.product)}
                         alt={"Product"}
                         style={{
                           width: "42px",

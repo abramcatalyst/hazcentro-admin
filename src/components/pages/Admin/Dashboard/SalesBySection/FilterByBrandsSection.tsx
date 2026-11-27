@@ -1,17 +1,29 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { currencyFormater } from "src/utils";
+import { SalesInsightBrandType } from "src/types/admin";
+import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import { cardColors, renderRank, SalesByCard } from "./SalesBySectionWrapper";
-const FilterByBrandsSection = () => {
+
+type Props = {
+  data: SalesInsightBrandType[];
+};
+
+const FilterByBrandsSection = ({ data }: Props) => {
   return (
     <Box my={1}>
-      {[1, 2, 3, 4].map((item, idx) => (
-        <SalesByCard
-          num={idx}
-          key={`${item}nb`}
-          title="Oriano"
-          subTitle="User ID: 1497HYT"
-        />
-      ))}
+      {data?.length > 0 ? (
+        data.map((item, idx) => (
+          <SalesByCard
+            num={idx}
+            key={item.id}
+            title={item.name}
+            subTitle={`Revenue: ₦${currencyFormater(item.total_revenue, 2)}`}
+          />
+        ))
+      ) : (
+        <EmptyTable subText="No brand sales data yet" />
+      )}
       <Box
         sx={{
           my: 1,
@@ -25,8 +37,10 @@ const FilterByBrandsSection = () => {
           Ranks:
         </Typography>
         {cardColors.map((item, idx) => (
-          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            {" "}
+          <Box
+            key={item}
+            sx={{ display: "flex", gap: 1, alignItems: "center" }}
+          >
             <Box
               sx={{
                 background: item,
@@ -34,8 +48,8 @@ const FilterByBrandsSection = () => {
                 width: "12px",
                 borderRadius: "2px",
               }}
-            />{" "}
-            <Typography>{renderRank(idx)}</Typography>{" "}
+            />
+            <Typography>{renderRank(idx)}</Typography>
           </Box>
         ))}
       </Box>

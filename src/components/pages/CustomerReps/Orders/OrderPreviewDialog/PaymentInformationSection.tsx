@@ -29,36 +29,41 @@ const InfoBox = ({
   addUnderline,
   addCurrency,
 }: InfoBoxProps) => {
+  const displayValue = value?.toString().trim() || "N/A";
+
   return (
-    <Box
+    <Typography
       sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 1,
+        fontSize: "13px",
         mb: 1,
+        lineHeight: 1.5,
       }}
     >
-      <Typography sx={{ fontSize: "13px", minWidth: "100px" }}>
-        {title}
-      </Typography>
-      <Typography
+      <Box component="span" sx={{ color: "text.secondary" }}>
+        {title}:
+      </Box>{" "}
+      <Box
+        component="span"
         sx={{
-          fontSize: "13px",
-
           fontWeight: addBoldness ? 600 : 400,
           textDecoration: addUnderline ? "underline" : "none",
         }}
       >
-        {addCurrency ? <> &#8358;{currencyFormater(value)}</> : value}
-      </Typography>
-    </Box>
+        {addCurrency ? (
+          <>
+            &#8358;{currencyFormater(displayValue)}
+          </>
+        ) : (
+          displayValue
+        )}
+      </Box>
+    </Typography>
   );
 };
 const Payment = ({ selectedOrder }: Props) => {
   return (
     <Box>
-      <InfoBox title="Order Number" value={selectedOrder?.id} />
+      <InfoBox title="Tracking ID" value={selectedOrder?.tracking_id} addBoldness />
       <InfoBox
         title="Order Date"
         value={dayjs(selectedOrder?.created_at).format("HH:MMa, DD MMM YYYY")}
@@ -73,7 +78,6 @@ const Payment = ({ selectedOrder }: Props) => {
         value={selectedOrder?.payment_status}
         addBoldness
       />
-      <InfoBox title="Tracking ID" value={selectedOrder?.tracking_id} />
     </Box>
   );
 };
@@ -105,7 +109,9 @@ const Delivery = ({ selectedOrder }: Props) => {
 };
 
 function PaymentInformationSection({ selectedOrder }: Props) {
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [selectedOption, setSelectedOption] = useState<string>(
+    optionsObj.DELIVERY
+  );
 
   return (
     <Box
@@ -118,30 +124,32 @@ function PaymentInformationSection({ selectedOrder }: Props) {
     >
       <Box
         sx={{
-          my: 1,
+          mb: 1,
+          p: 0.5,
           background: "#FFFCF6",
-          maxWidth: "381px",
+          borderRadius: "8px",
           display: "flex",
-          alignItems: "center",
-          gap: 0.7,
+          width: "100%",
+          gap: 0.5,
         }}
       >
         {options.map((item) => {
+          const isActive = selectedOption === item;
+
           return (
             <Box
               key={item}
               sx={{
+                flex: 1,
                 borderRadius: "6px",
-                py: 0.5,
-                width: { xs: "100%", sm: "105px" },
-                height: "33px",
-                background: selectedOption === item ? "#FEF7E3" : "#F8F8F9",
-                border:
-                  selectedOption === item
-                    ? `1px solid ${GLOBAL_COLORS.PRIMARY_LIGHT}`
-                    : "none",
+                py: 0.75,
+                px: 1,
+                minHeight: 36,
+                background: isActive ? "#FEF7E3" : "#F8F8F9",
+                border: isActive
+                  ? `1px solid ${GLOBAL_COLORS.PRIMARY_LIGHT}`
+                  : "1px solid transparent",
                 cursor: "pointer",
-                textAlign: "center",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -150,7 +158,16 @@ function PaymentInformationSection({ selectedOrder }: Props) {
                 setSelectedOption(item);
               }}
             >
-              <Typography variant="body2">{item}</Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: "0.82rem",
+                  fontWeight: isActive ? 600 : 400,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {item}
+              </Typography>
             </Box>
           );
         })}

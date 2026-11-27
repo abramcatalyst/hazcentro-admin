@@ -9,7 +9,7 @@ import { UserDetailsPageProps } from "src/pages/admin/AdminUserDetailsPage";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "src/components/shared/ErrorFallback/ErrorFallback";
 import SubscriptionWrapper from "./Subscriptions/SubscriptionWrapper";
-// import FullPortfoliosWrapper from "./FullPortfolios/FullPortfoliosWrapper";
+import FullPortfoliosWrapper from "./FullPortfolios/FullPortfoliosWrapper";
 // import FollowingsWrapper from "./Followings/FollowingsWrapper";
 // import OrdersWrapper from "./Orders/OrdersWrapper";
 
@@ -30,10 +30,10 @@ export const profileTabOptions = [
     title: "Profile",
     value: usersPageTabOptionsObj.PROFILE,
   },
-  // {
-  //   title: "Portfolios",
-  //   value: usersPageTabOptionsObj.PORTFOLIOS,
-  // },
+  {
+    title: "Portfolios",
+    value: usersPageTabOptionsObj.PORTFOLIOS,
+  },
   {
     title: "Request",
     value: usersPageTabOptionsObj.REQUEST,
@@ -68,12 +68,11 @@ const SkilledWorkerUserDetailsPage = ({ data }: UserDetailsPageProps) => {
                 <ProfileWrapper data={data} />
               ) : null}
             </ErrorBoundary>
-            {/* 
             <ErrorBoundary FallbackComponent={ErrorFallBack}>
               {selectedTab === usersPageTabOptionsObj.PORTFOLIOS ? (
                 <FullPortfoliosWrapper userData={data} />
               ) : null}
-            </ErrorBoundary> */}
+            </ErrorBoundary>
 
             <ErrorBoundary FallbackComponent={ErrorFallBack}>
               {selectedTab === usersPageTabOptionsObj.REQUEST ? (

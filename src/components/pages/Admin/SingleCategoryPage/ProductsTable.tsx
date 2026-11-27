@@ -15,9 +15,9 @@ import dayjs from "dayjs";
 import { currencyFormater, tableMenuStyles } from "src/utils";
 import StyledTableRow from "src/components/shared/StyledTableRow/StyledTableRow";
 import StyledTableCell from "src/components/shared/StyledTableCell/StyledTableCell";
-import ProductImg from "src/assets/images/logo.png";
 
 import advancedFormat from "dayjs/plugin/advancedFormat"; // ES 2015
+import { useTheme } from "@mui/material/styles";
 import { ProductTableProps } from "./SingleCategoryWrapper";
 
 dayjs.extend(advancedFormat);
@@ -52,7 +52,13 @@ function EnhancedTableHead() {
   );
 }
 
-function ProductsTable({ data, handleOpenPreview }: ProductTableProps) {
+function ProductsTable({
+  data,
+  handleOpenPreview,
+  handleOpenDelete,
+}: ProductTableProps) {
+  const theme = useTheme();
+
   return (
     <Box sx={{ width: "100%", my: 1 }}>
       <TableContainer>
@@ -85,7 +91,7 @@ function ProductsTable({ data, handleOpenPreview }: ProductTableProps) {
                   <StyledTableCell>
                     {row?.media && row?.media[0]?.original_url ? (
                       <img
-                        src={row?.media[0]?.original_url || ProductImg}
+                        src={row?.media[0]?.original_url}
                         alt="product"
                         style={{
                           width: "50px",
@@ -128,11 +134,15 @@ function ProductsTable({ data, handleOpenPreview }: ProductTableProps) {
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
+                                handleOpenDelete(row);
                                 popupState.close();
                               }}
-                              sx={tableMenuStyles}
+                              sx={{
+                                ...tableMenuStyles,
+                                color: theme.palette.error.main,
+                              }}
                             >
-                              Activate
+                              Delete
                             </MenuItem>
                           </Menu>
                         </Fragment>

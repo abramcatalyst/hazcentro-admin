@@ -27,6 +27,8 @@ import { AgentType } from "src/types/agents";
 import renderStatus from "src/components/shared/RenderStatus/renderStatus";
 import EmptyTable from "src/components/shared/EmptyTable/EmptyTable";
 import EditAgentDialog from "./EditAgentDialog";
+import CustomTableFilter from "src/components/shared/CustomTableFilter/CustomTableFilter";
+import useUserListSearch from "src/hooks/useUserListSearch";
 
 type AgentCardProps = {
   data: AgentType;
@@ -77,6 +79,9 @@ const AgentCard = ({
         >
           {name}
         </Typography>
+        <Typography sx={{ fontSize: "11px", color: "GrayText" }}>
+          User ID: {data.unique_user_id}
+        </Typography>
         <Box sx={{ display: "none" }}>
           <Chip size="small" label={state} />
         </Box>
@@ -121,6 +126,17 @@ const AgentCard = ({
   );
 };
 const AgentsTable = () => {
+  const {
+    search,
+    searchId,
+    effectiveSearch,
+    debouncedSearchId,
+    handleChangeSearch,
+    handleChangeSearchId,
+    handleDeleteSearch,
+    handleDeleteSearchId,
+    handleClearFilters,
+  } = useUserListSearch();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<AgentType | null>(null);
@@ -131,8 +147,12 @@ const AgentsTable = () => {
   const limit = Number(searchParams.get(sLimit)) || rowsPerPageOptions[0];
   const page = Number(searchParams.get(sPage)) || 1;
   const { isPending, error, data, isError } = useQuery({
-    queryKey: [TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENTS, { limit, page }],
-    queryFn: () => fetchAgents({ limit: limit, page }),
+    queryKey: [
+      TANSTACK_REQUEST_CACHE_TAGS.FETCH_AGENTS,
+      { limit, page, effectiveSearch, debouncedSearchId },
+    ],
+    queryFn: () =>
+      fetchAgents({ limit: limit, page, search: effectiveSearch }),
   });
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -141,12 +161,12 @@ const AgentsTable = () => {
         params.set(sPage, `${newPage + 1}`);
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchParams(
       (params) => {
@@ -154,16 +174,10 @@ const AgentsTable = () => {
         params.set(sPage, "0");
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
-  if (isError) {
-    return <HalfScreenError text={formatErrorMessage(error)} />;
-  }
-  if (isPending) {
-    return <HalfScreenLoader />;
-  }
   const handleOpenDeleteDialog = (info: AgentType) => {
     setSelectedAgent(info);
     setOpenDeleteDialog(true);
@@ -198,19 +212,44 @@ const AgentsTable = () => {
             handleClose={handleCloseEditDialog}
           />
         )}
-        {data?.total <= 0 && <EmptyTable subText="No agent found" />}
-        <Grid container spacing={1}>
-          {data?.total > 0 &&
-            data?.data?.map((row) => (
-              <Grid size={sizing}>
-                <AgentCard
-                  data={row}
-                  handleOpenDeleteDialog={handleOpenDeleteDialog}
-                  handleOpenEditDialog={handleOpenEditDialog}
-                />
+        <Box>
+          <CustomTableFilter
+            search={search}
+            searchId={searchId}
+            handleChangeSearch={handleChangeSearch}
+            handleChangeSearchId={handleChangeSearchId}
+            handleDeleteSearch={handleDeleteSearch}
+            handleDeleteSearchId={handleDeleteSearchId}
+            showDownloadButton={false}
+            hideFilter
+            handleClearFilters={handleClearFilters}
+            searchLabel="Search name or email"
+          />
+        </Box>
+        {isError ? (
+          <HalfScreenError text={formatErrorMessage(error)} />
+        ) : isPending ? (
+          <HalfScreenLoader />
+        ) : (
+          <>
+            {data && data?.total > 0 ? (
+              <Grid container spacing={1}>
+                {data?.total > 0 &&
+                  data?.data?.map((row) => (
+                    <Grid size={sizing}>
+                      <AgentCard
+                        data={row}
+                        handleOpenDeleteDialog={handleOpenDeleteDialog}
+                        handleOpenEditDialog={handleOpenEditDialog}
+                      />
+                    </Grid>
+                  ))}
               </Grid>
-            ))}
-        </Grid>
+            ) : (
+              <EmptyTable subText="No agent found" />
+            )}
+          </>
+        )}
       </Box>
       <TablePagination
         component="div"

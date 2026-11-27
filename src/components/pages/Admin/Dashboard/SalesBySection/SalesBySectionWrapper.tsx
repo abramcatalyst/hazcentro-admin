@@ -7,6 +7,10 @@ import { MdMoreVert } from "react-icons/md";
 import UserImage from "src/assets/tempimages/machine1.jpg";
 import FilterByBrandsSection from "./FilterByBrandsSection";
 import FilterByDistributorsSection from "./FilterByDistributorsSection";
+import {
+  SalesInsightBrandType,
+  SalesInsightVendorType,
+} from "src/types/admin";
 import { useQuery } from "@tanstack/react-query";
 import { TANSTACK_REQUEST_CACHE_TAGS } from "src/utils/queryTags";
 import { fetchAdminDashboardSalesInsights } from "src/services/admins";
@@ -149,8 +153,6 @@ const SalesBySectionWrapper = () => {
     return <HalfScreenError text={formatErrorMessage(error)} />;
   }
 
-  console.log("ddddddddddddddd", data);
-
   return (
     <Box
       sx={{
@@ -207,9 +209,13 @@ const SalesBySectionWrapper = () => {
         </Box>
       </Box>
       {selectedView === optionsObject.PRODUCT_CAT && <ProductCategoryChart />}
-      {selectedView === optionsObject.BRANDS && <FilterByBrandsSection />}
+      {selectedView === optionsObject.BRANDS && (
+        <FilterByBrandsSection data={(data as SalesInsightBrandType[]) ?? []} />
+      )}
       {selectedView === optionsObject.DISTRIBUTORS && (
-        <FilterByDistributorsSection />
+        <FilterByDistributorsSection
+          data={(data as SalesInsightVendorType[]) ?? []}
+        />
       )}
     </Box>
   );

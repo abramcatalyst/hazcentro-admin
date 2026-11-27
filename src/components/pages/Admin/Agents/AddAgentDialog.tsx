@@ -18,7 +18,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import DialogCloseButtonWrapper from "src/components/shared/DialogCloseButtonWrapper/DialogCloseButtonWrapper";
 import { nigeriaStatesOnly } from "src/utils/nigeriaStatesOnly";
-import { GrStatusInfo } from "react-icons/gr";
 import StyledDialog from "src/components/shared/StyledDialog/StyledDialog";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
@@ -61,14 +60,14 @@ function AddAgentDialog({ open, handleClose }: Props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const queryClient = useQueryClient();
   const handleChangeState = (
-    event: SelectChangeEvent<typeof selectedStates>
+    event: SelectChangeEvent<typeof selectedStates>,
   ) => {
     const {
       target: { value },
     } = event;
     setSelectedStates(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      typeof value === "string" ? value.split(",") : value,
     );
   };
 
@@ -261,15 +260,6 @@ function AddAgentDialog({ open, handleClose }: Props) {
                 <FormHelperText error>{errors.password}</FormHelperText>
               )}
             </FormControl>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Box>
-              <GrStatusInfo style={{ color: theme.palette.info.main }} />
-            </Box>
-            <Typography fontSize={"13px"}>
-              Note: All changes or modifications made to this effect will be
-              available in the next launch of the User App.
-            </Typography>
           </Box>
 
           <Box

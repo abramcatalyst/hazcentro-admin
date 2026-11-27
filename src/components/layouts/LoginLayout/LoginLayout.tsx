@@ -2,24 +2,43 @@ import { ReactNode, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Logo from "src/assets/images/logo2.png";
-// import useAuthStore from "src/store/authStore";
-import { getAuthToken, isAuthTokenExpired } from "src/utils";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTE_LINKS } from "src/utils/routeLinks";
+import {
+  ADMIN_ROUTE_LINKS,
+  CUSTOMER_ROUTE_LINKS,
+} from "src/utils/routeLinks";
+import { restoreAuthSession } from "src/services/authSession";
+import useAuthStore from "src/store/authStore";
+
 type Props = {
   title: string;
   children: ReactNode;
 };
+
 const LoginLayout = ({ children, title }: Props) => {
-  // const { handleLogin } = useAuthStore();
   const navigate = useNavigate();
+  const { handleLogin } = useAuthStore();
 
   useEffect(() => {
-    const token = getAuthToken();
-    if (token && !isAuthTokenExpired()) {
-      navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW, { replace: true });
-    }
-  }, []);
+    const redirectIfAuthenticated = async () => {
+      const result = await restoreAuthSession();
+      if (!result.ok) {
+        return;
+      }
+
+      handleLogin({ userProfile: result.profile });
+
+      if (result.profile.role === "admin") {
+        navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW, { replace: true });
+        return;
+      }
+
+      navigate(CUSTOMER_ROUTE_LINKS.CUSTOMER_OVERVIEW, { replace: true });
+    };
+
+    void redirectIfAuthenticated();
+  }, [handleLogin, navigate]);
+
   return (
     <Box
       sx={{

@@ -40,12 +40,12 @@ const CategoriesWrapper = () => {
         params.set(sPage, `${newPage + 1}`);
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchParams(
       (params) => {
@@ -53,7 +53,7 @@ const CategoriesWrapper = () => {
         params.set(sPage, "1");
         return params;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -70,7 +70,7 @@ const CategoriesWrapper = () => {
   const handleOpenAddAgentDialog = () => {
     setOpenAddAgentDialog(true);
   };
-
+  console.log("pagination", data);
   return (
     <Box>
       {openAddAgentDialog && (

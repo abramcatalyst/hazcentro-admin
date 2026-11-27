@@ -23,6 +23,8 @@ export const ADMIN_ROUTE_SUB_LINKS = {
   ADS_CATEGORY_DETAILS: "ads-category/details",
   ADD_ADS_CATEGORY: "ads-management/add-ads-category",
   EDIT_ADS_CATEGORY: "ads-management/edit-ads-category",
+  broadcast_message: "broadcast-message",
+  skill_categories: "skills-categories",
 };
 export const ADMIN_ROUTE_LINKS = {
   ADMIN_OVERVIEW: `/admin/${ADMIN_ROUTE_SUB_LINKS.OVERVIEW}`,
@@ -48,6 +50,8 @@ export const ADMIN_ROUTE_LINKS = {
   ADMIN_EDIT_ADS_CATEGORY: `/admin/${ADMIN_ROUTE_SUB_LINKS.EDIT_ADS_CATEGORY}`,
   ADMIN_ADS_CATEGORY_ADD_PRODUCT: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADS_CATEGORY_ADD_PRODUCT}`,
   ADMIN_ADS_CATEGORY_DETAILS: `/admin/${ADMIN_ROUTE_SUB_LINKS.ADS_CATEGORY_DETAILS}`,
+  admin_broadcast_message: `/admin/${ADMIN_ROUTE_SUB_LINKS.broadcast_message}`,
+  admin_skill_categories: `/admin/${ADMIN_ROUTE_SUB_LINKS.skill_categories}`,
 };
 
 export const CUSTOMER_ROUTE_SUB_LINKS = {

@@ -19,6 +19,29 @@ type ProductInfoBoxProps = {
   caption2?: string;
   direction?: "row" | "column";
 };
+
+const getOrderFirstImage = (row?: {
+  order_items?: Array<{
+    product?: {
+      media?: Array<{ original_url?: string }>;
+      images?: Array<{ url?: string; original_url?: string }>;
+      name?: string;
+    };
+  }>;
+}) => {
+  const firstItem = row?.order_items?.[0];
+  const productAny = firstItem?.product as any;
+  const media = Array.isArray(productAny?.media) ? productAny.media : [];
+  const images = Array.isArray(productAny?.images) ? productAny.images : [];
+
+  return (
+    media[0]?.original_url ||
+    images[0]?.url ||
+    images[0]?.original_url ||
+    MachineImg
+  );
+};
+
 const ProductInfoBox = ({
   image,
   title,
@@ -131,11 +154,8 @@ const ActiveOrders = () => {
             }}
           >
             <ProductInfoBox
-              image={
-                row?.order_items[0]?.product?.media[0]?.original_url ||
-                MachineImg
-              }
-              title={row?.order_items[0]?.product?.name}
+              image={getOrderFirstImage(row)}
+              title={row?.order_items?.[0]?.product?.name}
               caption1={row?.total_price}
             />
             <Button size="small" color="success" sx={{ color: "#47B48E" }}>

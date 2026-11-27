@@ -198,6 +198,9 @@ const ProfileInformation = ({
             <InfoBox title="Full Name" value={data?.name} />
           </Grid>
           <Grid size={sizing}>
+            <InfoBox title="User ID" value={data?.unique_user_id} />
+          </Grid>
+          <Grid size={sizing}>
             <InfoBox
               title="State/Region"
               value={`${data?.state}/${data?.country}`}

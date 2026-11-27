@@ -27,7 +27,7 @@ import useAuthStore from "src/store/authStore";
 import { ADMIN_ROUTE_LINKS, CUSTOMER_ROUTE_LINKS } from "src/utils/routeLinks";
 
 const headCells = [
-  "Order ID",
+  "Tracking ID",
   "Assigned Agent",
   "Amount",
   "Date",

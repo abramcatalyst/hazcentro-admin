@@ -1,29 +1,18 @@
-import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-
-// import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import navigation from "./navigation";
-// import RequireAuth from "src/components/auth/RequireAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 import useIsUserAuthorized from "src/hooks/useIsUserAuthorized";
-import {
-  GLOBAL_COLORS,
-  removeTokenFromStorage,
-  getAuthToken,
-  getProfileFromStorage,
-  isAuthTokenExpired,
-} from "src/utils";
+import { GLOBAL_COLORS, removeTokenFromStorage } from "src/utils";
 import { FiLogOut } from "react-icons/fi";
-import { ADMIN_ROUTE_LINKS, GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
+import { GLOBAL_ROUTE_LINKS } from "src/utils/routeLinks";
 import useAuthStore from "src/store/authStore";
 import { useMediaQuery, useTheme } from "@mui/material";
 
@@ -35,33 +24,12 @@ export default function AppNavigation({
   handleDrawerClose: () => void;
 }) {
   const { isAuthorized } = useIsUserAuthorized();
-  const { profile, handleLogout, handleLogin } = useAuthStore();
+  const { profile, handleLogout } = useAuthStore();
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
-  useEffect(() => {
-    const token = getAuthToken();
-
-    if (!token || isAuthTokenExpired()) {
-      removeTokenFromStorage();
-      navigate(`${GLOBAL_ROUTE_LINKS.LOGIN}?prevPath=${pathname}`);
-    }
-    if (token && !isAuthTokenExpired()) {
-      const fetchedProfile = getProfileFromStorage();
-      if (fetchedProfile) {
-        const parsedData = JSON.parse(fetchedProfile);
-        if (fetchedProfile) {
-          handleLogin({ userProfile: parsedData });
-        }
-        if (parsedData?.role && parsedData?.role === "admin") {
-          navigate(ADMIN_ROUTE_LINKS.ADMIN_OVERVIEW);
-        }
-      }
-    }
-  }, [isAuthTokenExpired]);
-  // useEffect(() => {
 
   const isLinkActive = (link: string): boolean => {
     const count = pathname?.split("/")?.length;
